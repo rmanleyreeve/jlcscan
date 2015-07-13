@@ -24,11 +24,11 @@ namespace SDK.English {
 	}
 	public class SystemHelper {
 		/// <summary>
-		/// The Device Type is know
+		/// The Device Type is known
 		/// </summary>
 		public static bool DeviceTypeIsKnown = false;
 		/// <summary>
-		/// Get Device Type(only run after the 2012-5-15 Operate System)
+		/// Get Device Type(only run after the 2012-5-15 Operating System)
 		/// </summary>
 		/// <returns></returns>
 		public static bool GetDeviceType() {

@@ -13,11 +13,8 @@ namespace SDK.English.JlcScan {
 		/// </summary>
 		[MTAThread]
 		static void Main() {
-			if (!SystemHelper.GetDeviceType()) {
-				//set default device type is C5000
-				SystemHelper.CurrentDeviceType = DeviceType.C5000;
-			}
-			Application.Run(new JlcScanUi());
+			SystemHelper.CurrentDeviceType = DeviceType.C2000;
+			Application.Run(new UI());
 		}
 	}
 }

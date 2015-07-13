@@ -90,6 +90,7 @@ namespace SDK.English.JlcScan {
 
 
 		private const string filePath = @"\windows\Barcodebeep.wav";
+		private const string filePathX = @"\windows\Barcodebeep.wav";
 
 		public static bool PlaySound() {
 			try {
