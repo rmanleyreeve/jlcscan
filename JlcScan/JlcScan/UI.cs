@@ -27,6 +27,8 @@ namespace REMedia.JlcScan {
 		private string eventID;
 		private string eventTitle;
 		private int numScans;
+		private static List<int> regScanned_OnList = new List<int>();
+		private static List<int> regScanned_NotOnList = new List<int>();
 
 		public UI() {
 			InitializeComponent();
@@ -66,6 +68,21 @@ namespace REMedia.JlcScan {
 		private void Ui_KeyPress(object sender, KeyPressEventArgs e) {
 			//logLine("KEY PRESS");
 		}
+		private void UpdateText(string txt) {
+			lblScanResult.Text = txt;
+		}
+		private void ScanIncrement() {
+			numScans++;
+			lblScanSum.Text = "Scanned: " + Convert.ToString(numScans);
+		}
+		public static void log(string msg) {
+			System.Diagnostics.Debug.Write(msg);
+		}
+		private void UpdateIcon(string str) {
+			iconBox.Invalidate();
+			iconBox.Image = (Image) new System.ComponentModel.ComponentResourceManager(typeof(UI)).GetObject(str);
+			iconBox.Refresh();
+		}
 
 
 		private void btnLoadFile_Click(object sender, EventArgs e) {
@@ -102,7 +119,7 @@ namespace REMedia.JlcScan {
 			if (!string.IsNullOrEmpty(barCode)) {
 				ScanIncrement();
 				//CommonClass.PlaySound(@"\windows\beep.wav");
-				lblScanResult.Text = barCode;
+				//lblScanResult.Text = barCode;
 				log(barCode);
 				string evID = "";
 				int regID = 0;
@@ -121,22 +138,21 @@ namespace REMedia.JlcScan {
 						Registration reg = registrations.FirstOrDefault(r => r.id == regID);
 						if (reg != null) {
 							// on the list 
-							CommonClass.PlaySound(@"\windows\beep.wav");
-							UpdateText(reg.first_name + " " + reg.last_name + " ON THE LIST");
+							regOk(reg);
 						} else {
 							// not on the list
-							CommonClass.PlaySound(@"\windows\critical.wav");
-							UpdateText("NOT ON THE LIST");
+							regNotOk(regID);
 						}
 					}
 				} catch (Exception ex) {
 					CommonClass.PlaySound(@"\windows\critical.wav");
+					UpdateIcon("no");
 					UpdateText("ERROR - WRONG BARCODE FORMAT");
 				}
 
 			} else {
-
 				CommonClass.PlaySound(@"\windows\critical.wav");
+				UpdateIcon("no");
 				UpdateText("Failed to scan");
 
 			}
@@ -158,15 +174,17 @@ namespace REMedia.JlcScan {
 			}
 		}
 
-		private void UpdateText(string txt) {
-			lblScanResult.Text = txt;
+		public void regOk(Registration reg) {
+			regScanned_OnList.Add(reg.id);
+			CommonClass.PlaySound(@"\windows\beep.wav");
+			UpdateIcon("ok");
+			UpdateText(reg.first_name + " " + reg.last_name + " ON THE LIST");
 		}
-		private void ScanIncrement() {
-			numScans++;
-			lblScanSum.Text = "Scanned: " + Convert.ToString(numScans);
-		}
-		public static void log(string msg) {
-			System.Diagnostics.Debug.Write(msg);
+		public void regNotOk(int r) {
+			regScanned_NotOnList.Add(r);
+			CommonClass.PlaySound(@"\windows\critical.wav");
+			UpdateIcon("no");
+			UpdateText("NOT ON THE LIST");
 		}
 
 	}
