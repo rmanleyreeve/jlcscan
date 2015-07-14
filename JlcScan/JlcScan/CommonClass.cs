@@ -90,17 +90,14 @@ namespace REMedia.JlcScan {
 
 
 		private const string filePath = @"\windows\Barcodebeep.wav";
-		private const string filePathX = @"\windows\Barcodebeep.wav";
 
 		public static bool PlaySound() {
 			try {
 				if (File.Exists(filePath)) {
 					SoundPlayer player = new SoundPlayer(filePath);
-
 					player.Play();
 				}
 				return true;
-
 			} catch (System.Exception) {
 				return false;
 			}
@@ -112,15 +109,12 @@ namespace REMedia.JlcScan {
 			try {
 				if (File.Exists(wavPath)) {
 					SoundPlayer player = new SoundPlayer(wavPath);
-
 					player.Play();
 				}
 				return true;
-
 			} catch (System.Exception) {
 				return false;
 			}
-
 		}
 
 		public static string OS_Version {
@@ -142,22 +136,6 @@ namespace REMedia.JlcScan {
 		}
 		public static void PowerOffSystem() {
 			GwesPowerOffSystem();
-		}
-
-
-		/// <summary>
-		/// Read registry information, judge whether REMedia OS
-		/// </summary>
-		public static bool isEnglish() {
-			try {
-				RegistryKey RegKey = Registry.CurrentUser.OpenSubKey(@"ControlPanel\Appearance");
-				if ("Windows 标准" == RegKey.GetValue("Current").ToString())
-					return false;
-				else
-					return true;
-			} catch (Exception) {
-				return true;
-			}
 		}
 
 		public static int ByteArrayToInt(byte[] bRefArr) {
