@@ -8,7 +8,7 @@ using Microsoft.Win32;
 using System.Drawing;
 using System.Runtime.InteropServices;
 
-namespace SDK.English.JlcScan {
+namespace REMedia.JlcScan {
 
 	public class CommonClass {
 		#region SerialPort Switch
@@ -146,7 +146,7 @@ namespace SDK.English.JlcScan {
 
 
 		/// <summary>
-		/// Read registry information, judge whether English OS
+		/// Read registry information, judge whether REMedia OS
 		/// </summary>
 		public static bool isEnglish() {
 			try {

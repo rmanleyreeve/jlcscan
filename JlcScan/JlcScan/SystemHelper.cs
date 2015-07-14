@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.Win32;
 
-namespace SDK.English {
+namespace REMedia {
 	/// <summary>
 	/// DeviceType
 	/// </summary>

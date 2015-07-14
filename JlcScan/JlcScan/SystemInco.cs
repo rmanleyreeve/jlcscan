@@ -3,7 +3,8 @@ using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
-namespace SDK.English.JlcScan {
+namespace REMedia.JlcScan {
+
 	public class SystemInco {
 		private const int GW_HWNDFIRST = 0;
 		private const int GW_HWNDNEXT = 2;
