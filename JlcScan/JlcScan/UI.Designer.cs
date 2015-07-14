@@ -34,6 +34,7 @@
 			this.lblScanSum = new System.Windows.Forms.Label();
 			this.btnScan = new System.Windows.Forms.Button();
 			this.labelScanInfo = new System.Windows.Forms.Label();
+			this.btnScanDone = new System.Windows.Forms.Button();
 			this.containerPanel.SuspendLayout();
 			this.loadPanel.SuspendLayout();
 			this.scanPanel.SuspendLayout();
@@ -81,7 +82,7 @@
 			// 
 			// btnLoadFile
 			// 
-			this.btnLoadFile.Location = new System.Drawing.Point(56, 64);
+			this.btnLoadFile.Location = new System.Drawing.Point(56, 56);
 			this.btnLoadFile.Name = "btnLoadFile";
 			this.btnLoadFile.Size = new System.Drawing.Size(124, 20);
 			this.btnLoadFile.TabIndex = 2;
@@ -90,7 +91,8 @@
 			// 
 			// scanPanel
 			// 
-			this.scanPanel.BackColor = System.Drawing.Color.RoyalBlue;
+			this.scanPanel.BackColor = System.Drawing.Color.CadetBlue;
+			this.scanPanel.Controls.Add(this.btnScanDone);
 			this.scanPanel.Controls.Add(this.labelScanInfo);
 			this.scanPanel.Controls.Add(this.btnScan);
 			this.scanPanel.Controls.Add(this.lblScanResult);
@@ -102,16 +104,16 @@
 			// 
 			// lblScanResult
 			// 
-			this.lblScanResult.BackColor = System.Drawing.Color.RoyalBlue;
-			this.lblScanResult.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular);
-			this.lblScanResult.ForeColor = System.Drawing.Color.White;
+			this.lblScanResult.BackColor = System.Drawing.Color.CadetBlue;
+			this.lblScanResult.Font = new System.Drawing.Font("Tahoma", 11F, System.Drawing.FontStyle.Regular);
+			this.lblScanResult.ForeColor = System.Drawing.Color.Black;
 			this.lblScanResult.Location = new System.Drawing.Point(0, 152);
 			this.lblScanResult.Name = "lblScanResult";
 			this.lblScanResult.Size = new System.Drawing.Size(238, 50);
 			// 
 			// lblScanSum
 			// 
-			this.lblScanSum.BackColor = System.Drawing.Color.RoyalBlue;
+			this.lblScanSum.BackColor = System.Drawing.Color.CadetBlue;
 			this.lblScanSum.Location = new System.Drawing.Point(0, 224);
 			this.lblScanSum.Name = "lblScanSum";
 			this.lblScanSum.Size = new System.Drawing.Size(120, 20);
@@ -119,16 +121,17 @@
 			// 
 			// btnScan
 			// 
+			this.btnScan.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold);
 			this.btnScan.Location = new System.Drawing.Point(56, 32);
 			this.btnScan.Name = "btnScan";
-			this.btnScan.Size = new System.Drawing.Size(124, 50);
+			this.btnScan.Size = new System.Drawing.Size(124, 48);
 			this.btnScan.TabIndex = 2;
 			this.btnScan.Text = "Scan";
 			this.btnScan.Click += new System.EventHandler(this.btnScan_Click);
 			// 
 			// labelScanInfo
 			// 
-			this.labelScanInfo.BackColor = System.Drawing.Color.RoyalBlue;
+			this.labelScanInfo.BackColor = System.Drawing.Color.CadetBlue;
 			this.labelScanInfo.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular);
 			this.labelScanInfo.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
 			this.labelScanInfo.Location = new System.Drawing.Point(0, 0);
@@ -136,6 +139,14 @@
 			this.labelScanInfo.Size = new System.Drawing.Size(238, 42);
 			this.labelScanInfo.Text = "Ready to Scan";
 			this.labelScanInfo.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			// 
+			// btnScanDone
+			// 
+			this.btnScanDone.Location = new System.Drawing.Point(160, 224);
+			this.btnScanDone.Name = "btnScanDone";
+			this.btnScanDone.Size = new System.Drawing.Size(72, 20);
+			this.btnScanDone.TabIndex = 4;
+			this.btnScanDone.Text = "Done";
 			// 
 			// UI
 			// 
@@ -174,5 +185,6 @@
 		private System.Windows.Forms.Button btnScan;
 		private System.Windows.Forms.Label lblScanSum;
 		private System.Windows.Forms.Label lblScanResult;
+		private System.Windows.Forms.Button btnScanDone;
 	}
 }
