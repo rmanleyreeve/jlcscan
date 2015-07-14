@@ -105,6 +105,7 @@
 			this.lblScanResult.Location = new System.Drawing.Point(0, 152);
 			this.lblScanResult.Name = "lblScanResult";
 			this.lblScanResult.Size = new System.Drawing.Size(238, 50);
+			this.lblScanResult.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
 			// iconBox
 			// 
