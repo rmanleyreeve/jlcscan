@@ -44,7 +44,7 @@
 			// lblLogo
 			// 
 			this.lblLogo.Font = new System.Drawing.Font("Tahoma", 14F, System.Drawing.FontStyle.Regular);
-			this.lblLogo.ForeColor = System.Drawing.Color.CadetBlue;
+			this.lblLogo.ForeColor = System.Drawing.Color.DarkCyan;
 			this.lblLogo.Location = new System.Drawing.Point(0, 0);
 			this.lblLogo.Name = "lblLogo";
 			this.lblLogo.Size = new System.Drawing.Size(238, 24);
@@ -64,7 +64,7 @@
 			// 
 			// scanPanel
 			// 
-			this.scanPanel.BackColor = System.Drawing.Color.CadetBlue;
+			this.scanPanel.BackColor = System.Drawing.Color.DarkCyan;
 			this.scanPanel.Controls.Add(this.labelScanInfo);
 			this.scanPanel.Controls.Add(this.btnScan);
 			this.scanPanel.Controls.Add(this.lblScanResult);
@@ -78,7 +78,7 @@
 			// 
 			// labelScanInfo
 			// 
-			this.labelScanInfo.BackColor = System.Drawing.Color.CadetBlue;
+			this.labelScanInfo.BackColor = System.Drawing.Color.DarkCyan;
 			this.labelScanInfo.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular);
 			this.labelScanInfo.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
 			this.labelScanInfo.Location = new System.Drawing.Point(0, 0);
@@ -99,9 +99,9 @@
 			// 
 			// lblScanResult
 			// 
-			this.lblScanResult.BackColor = System.Drawing.Color.CadetBlue;
+			this.lblScanResult.BackColor = System.Drawing.Color.DarkCyan;
 			this.lblScanResult.Font = new System.Drawing.Font("Tahoma", 11F, System.Drawing.FontStyle.Regular);
-			this.lblScanResult.ForeColor = System.Drawing.Color.Black;
+			this.lblScanResult.ForeColor = System.Drawing.Color.White;
 			this.lblScanResult.Location = new System.Drawing.Point(0, 152);
 			this.lblScanResult.Name = "lblScanResult";
 			this.lblScanResult.Size = new System.Drawing.Size(238, 50);
@@ -115,7 +115,7 @@
 			// 
 			// lblScanSum
 			// 
-			this.lblScanSum.BackColor = System.Drawing.Color.CadetBlue;
+			this.lblScanSum.BackColor = System.Drawing.Color.DarkCyan;
 			this.lblScanSum.Location = new System.Drawing.Point(0, 224);
 			this.lblScanSum.Name = "lblScanSum";
 			this.lblScanSum.Size = new System.Drawing.Size(120, 20);
@@ -128,10 +128,11 @@
 			this.btnScanDone.Size = new System.Drawing.Size(72, 20);
 			this.btnScanDone.TabIndex = 4;
 			this.btnScanDone.Text = "Done";
+			this.btnScanDone.Click += new System.EventHandler(this.btnScanDone_Click);
 			// 
 			// loadPanel
 			// 
-			this.loadPanel.BackColor = System.Drawing.Color.CadetBlue;
+			this.loadPanel.BackColor = System.Drawing.Color.DarkCyan;
 			this.loadPanel.Controls.Add(this.lblLoadInfo);
 			this.loadPanel.Controls.Add(this.btnLoadFile);
 			this.loadPanel.Location = new System.Drawing.Point(0, 24);
@@ -161,7 +162,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-			this.BackColor = System.Drawing.Color.White;
+			this.BackColor = System.Drawing.Color.DarkCyan;
 			this.ClientSize = new System.Drawing.Size(238, 295);
 			this.Controls.Add(this.containerPanel);
 			this.ForeColor = System.Drawing.Color.White;
