@@ -43,6 +43,7 @@ namespace REMedia.JlcScan {
 				UpdateText("");
 				numScans = -1;
 				ScanIncrement();
+				iconBox.Invalidate();
 				Barcode1D_init();
 			}
 		}
@@ -138,23 +139,22 @@ namespace REMedia.JlcScan {
 						Registration reg = registrations.FirstOrDefault(r => r.id == regID);
 						if (reg != null) {
 							// on the list 
-							regOk(reg);
+							if (regScanned_OnList.Contains(regID)) {
+								regDuplicate();
+							} else {
+								regOk(reg);
+							}
 						} else {
 							// not on the list
 							regNotOk(regID);
 						}
 					}
 				} catch (Exception ex) {
-					CommonClass.PlaySound(@"\windows\critical.wav");
-					UpdateIcon("no");
-					UpdateText("ERROR - WRONG BARCODE FORMAT");
+					badFormat();
 				}
 
 			} else {
-				CommonClass.PlaySound(@"\windows\critical.wav");
-				UpdateIcon("no");
-				UpdateText("Failed to scan");
-
+				scanFail();
 			}
 		}
 
@@ -178,13 +178,28 @@ namespace REMedia.JlcScan {
 			regScanned_OnList.Add(reg.id);
 			CommonClass.PlaySound(@"\windows\beep.wav");
 			UpdateIcon("ok");
-			UpdateText(reg.first_name + " " + reg.last_name + " ON THE LIST");
+			UpdateText(reg.first_name + " " + reg.last_name + "\nVALID REGISTRATION");
 		}
 		public void regNotOk(int r) {
 			regScanned_NotOnList.Add(r);
 			CommonClass.PlaySound(@"\windows\critical.wav");
 			UpdateIcon("no");
-			UpdateText("NOT ON THE LIST");
+			UpdateText("REGISTRATION NOT VALID");
+		}
+		public void regDuplicate() {
+			CommonClass.PlaySound(@"\windows\critical.wav");
+			UpdateIcon("fail");
+			UpdateText("BADGE WAS ALREADY SCANNED");
+		}
+		public void badFormat() {
+			CommonClass.PlaySound(@"\windows\critical.wav");
+			UpdateIcon("fail");
+			UpdateText("ERROR - WRONG BARCODE FORMAT");
+		}
+		public void scanFail() {
+			CommonClass.PlaySound(@"\windows\critical.wav");
+			UpdateIcon("fail");
+			UpdateText("FAILED TO SCAN\nTRY AGAIN");
 		}
 
 	}
