@@ -36,6 +36,7 @@
 			this.loadPanel = new System.Windows.Forms.Panel();
 			this.lblLoadInfo = new System.Windows.Forms.Label();
 			this.btnLoadFile = new System.Windows.Forms.Button();
+			this.btnLoadFromWeb = new System.Windows.Forms.Button();
 			this.containerPanel.SuspendLayout();
 			this.scanPanel.SuspendLayout();
 			this.loadPanel.SuspendLayout();
@@ -55,8 +56,8 @@
 			// 
 			this.containerPanel.BackColor = System.Drawing.Color.Lavender;
 			this.containerPanel.Controls.Add(this.lblLogo);
-			this.containerPanel.Controls.Add(this.scanPanel);
 			this.containerPanel.Controls.Add(this.loadPanel);
+			this.containerPanel.Controls.Add(this.scanPanel);
 			this.containerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.containerPanel.Location = new System.Drawing.Point(0, 0);
 			this.containerPanel.Name = "containerPanel";
@@ -135,6 +136,7 @@
 			this.loadPanel.BackColor = System.Drawing.Color.DarkCyan;
 			this.loadPanel.Controls.Add(this.lblLoadInfo);
 			this.loadPanel.Controls.Add(this.btnLoadFile);
+			this.loadPanel.Controls.Add(this.btnLoadFromWeb);
 			this.loadPanel.Location = new System.Drawing.Point(0, 24);
 			this.loadPanel.Name = "loadPanel";
 			this.loadPanel.Size = new System.Drawing.Size(238, 246);
@@ -157,6 +159,15 @@
 			this.btnLoadFile.TabIndex = 2;
 			this.btnLoadFile.Text = "Select Data File";
 			this.btnLoadFile.Click += new System.EventHandler(this.btnLoadFile_Click);
+			// 
+			// btnLoadFromWeb
+			// 
+			this.btnLoadFromWeb.Location = new System.Drawing.Point(56, 128);
+			this.btnLoadFromWeb.Name = "btnLoadFromWeb";
+			this.btnLoadFromWeb.Size = new System.Drawing.Size(124, 20);
+			this.btnLoadFromWeb.TabIndex = 3;
+			this.btnLoadFromWeb.Text = "Load from Venture";
+			this.btnLoadFromWeb.Click += new System.EventHandler(this.btnLoadFromWeb_Click);
 			// 
 			// UI
 			// 
@@ -197,5 +208,6 @@
 		private System.Windows.Forms.Label lblScanResult;
 		private System.Windows.Forms.Button btnScanDone;
 		private System.Windows.Forms.PictureBox iconBox;
+		private System.Windows.Forms.Button btnLoadFromWeb;
 	}
 }

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
+using System.Net;
 
 namespace REMedia.JlcScan {
 
@@ -213,6 +214,51 @@ namespace REMedia.JlcScan {
 				regScanned_OnList.ForEach(x => writer.WriteLine(Convert.ToString(x)));
 			}
 		}
+
+		private void btnLoadFromWeb_Click(object sender, EventArgs e) {
+			try {
+
+				StringBuilder sb = new StringBuilder();
+				byte[] buf = new byte[8192];
+				HttpWebRequest request = (HttpWebRequest) WebRequest.Create("http://jlcventure.com/test/139.xml");
+				HttpWebResponse response = (HttpWebResponse) request.GetResponse();
+				Stream resStream = response.GetResponseStream();
+				string tempString = null;
+				int count = 0;
+				do {
+					count = resStream.Read(buf, 0, buf.Length);
+					if (count != 0) {
+						tempString = Encoding.ASCII.GetString(buf, 0, count);
+						sb.Append(tempString);
+					}
+				}
+				while (count > 0); 
+
+				log(sb.ToString());
+
+				System.Xml.Linq.XDocument xdoc = System.Xml.Linq.XDocument.Parse(sb.ToString());
+				eventID = (String)xdoc.Element("event").Attribute("id");
+				eventTitle = (String)xdoc.Element("event").Element("title");
+				registrations = (
+					from r in xdoc.Descendants("registration") select new Registration() {
+						id = Convert.ToInt16(r.Attribute("id").Value),
+						first_name = r.Element("first_name").Value,
+						last_name = r.Element("last_name").Value
+					}
+				).ToList<Registration>();
+				log(registrations.ToString());
+				int numReg = registrations.Count();
+				MessageBox.Show("Event Data Loaded for " + eventTitle.ToUpper() + "(" + numReg + " registrations)");
+				this.loadPanel.Hide();
+				this.scanPanel.Show();
+
+
+			} catch (Exception ex) {
+				log(ex.StackTrace);
+			}
+		}
+
+
 	}
 
 	public class Registration {
