@@ -94,6 +94,9 @@
     <Content Include="DLLs\CeReader.dll" />
     <Content Include="DLLs\CeReader.XML" />
     <Content Include="DLLs\DeviceAPI.dll" />
+    <None Include="Resources\ok.png" />
+    <None Include="Resources\no.png" />
+    <None Include="Resources\fail.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />
   <ProjectExtensions>

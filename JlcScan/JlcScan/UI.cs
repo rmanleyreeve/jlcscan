@@ -38,9 +38,9 @@ namespace REMedia.JlcScan {
 				MessageBox.Show("repeated start");
 				this.Close();
 			} else {
-				lblScanResult.Text = "";
-				lblScanSum.Text = "0";
-				numScans = 0;
+				UpdateText("");
+				numScans = -1;
+				ScanIncrement();
 				Barcode1D_init();
 			}
 		}
