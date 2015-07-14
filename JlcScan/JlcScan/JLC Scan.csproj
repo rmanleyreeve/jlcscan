@@ -75,6 +75,8 @@
     <EmbeddedResource Include="UI.resx">
       <DependentUpon>UI.cs</DependentUpon>
       <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>UI1.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -89,14 +91,19 @@
     <Compile Include="UI.Designer.cs">
       <DependentUpon>UI.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UI.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="DLLs\CeReader.dll" />
     <Content Include="DLLs\CeReader.XML" />
     <Content Include="DLLs\DeviceAPI.dll" />
-    <None Include="Resources\ok.png" />
-    <None Include="Resources\no.png" />
-    <None Include="Resources\fail.png" />
+    <EmbeddedResource Include="Resources\ok.png" />
+    <EmbeddedResource Include="Resources\no.png" />
+    <EmbeddedResource Include="Resources\fail.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />
   <ProjectExtensions>
