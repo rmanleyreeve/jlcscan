@@ -132,8 +132,7 @@ namespace REMedia.JlcScan {
 					regID = Convert.ToInt32(parts[1]);
 					// check event code matches
 					if (evID != eventID) {
-						CommonClass.PlaySound(@"\windows\critical.wav");
-						UpdateText("ERROR - WRONG EVENT");
+						badEvent();
 					} else {
 						// event ok, check reg id against list
 						Registration reg = registrations.FirstOrDefault(r => r.id == regID);
@@ -184,22 +183,27 @@ namespace REMedia.JlcScan {
 			regScanned_NotOnList.Add(r);
 			CommonClass.PlaySound(@"\windows\critical.wav");
 			UpdateIcon("no");
-			UpdateText("REGISTRATION NOT VALID");
+			UpdateText("ERROR\nREGISTRATION NOT VALID");
 		}
 		public void regDuplicate() {
 			CommonClass.PlaySound(@"\windows\critical.wav");
 			UpdateIcon("fail");
-			UpdateText("BADGE WAS ALREADY SCANNED");
+			UpdateText("ERROR\nBADGE WAS ALREADY SCANNED");
+		}
+		public void badEventCode() {
+			CommonClass.PlaySound(@"\windows\critical.wav");
+			UpdateIcon("fail");
+			UpdateText("ERROR\nWRONG EVENT CODE");
 		}
 		public void badFormat() {
 			CommonClass.PlaySound(@"\windows\critical.wav");
 			UpdateIcon("fail");
-			UpdateText("ERROR - WRONG BARCODE FORMAT");
+			UpdateText("ERROR\nWRONG BARCODE FORMAT");
 		}
 		public void scanFail() {
 			CommonClass.PlaySound(@"\windows\critical.wav");
 			UpdateIcon("fail");
-			UpdateText("FAILED TO SCAN\nTRY AGAIN");
+			UpdateText("ERROR\nFAILED TO SCAN\nTRY AGAIN");
 		}
 
 	}
