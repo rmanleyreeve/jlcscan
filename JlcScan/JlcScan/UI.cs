@@ -165,6 +165,11 @@ namespace REMedia.JlcScan {
 				return String.Empty;
 			}
 		}
+		private void btnScanDone_Click(object sender, EventArgs e) {
+			MessageBox.Show(regScanned_OnList.Count + " valid registrations saved");
+			saveFile();
+			this.Close();
+		}
 
 		public void regOk(Registration reg) {
 			regScanned_OnList.Add(reg.id);
@@ -177,6 +182,7 @@ namespace REMedia.JlcScan {
 			CommonClass.PlaySound(@"\windows\critical.wav");
 			UpdateIcon("no");
 			UpdateText("ERROR\nREGISTRATION NOT VALID");
+			// show override screen
 		}
 		public void regDuplicate() {
 			CommonClass.PlaySound(@"\windows\critical.wav");
@@ -199,18 +205,12 @@ namespace REMedia.JlcScan {
 			UpdateText("ERROR\nFAILED TO SCAN\nTRY AGAIN");
 		}
 
-		private void btnScanDone_Click(object sender, EventArgs e) {
-			saveFile();
-			MessageBox.Show(regScanned_OnList.Count + " valid registrations saved");
-			this.Close();
-
-		}
 		private void saveFile() {
 			string filePath = "\\My Documents\\" + eventID + ".csv";
 			File.Create(filePath).Close();
-			string delimter = ",";
 			using (TextWriter writer = File.CreateText(filePath)) {
-				regScanned_OnList.ForEach(x => writer.WriteLine(Convert.ToString(x)+delimter));
+				writer.WriteLine("File Saved: " + DateTime.Now.ToString());
+				regScanned_OnList.ForEach(x => writer.WriteLine(Convert.ToString(x)));
 			}
 		}
 	}
