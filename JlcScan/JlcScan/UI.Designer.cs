@@ -1,11 +1,10 @@
-﻿namespace SDK.English.JlcScan {
+﻿namespace REMedia.JlcScan {
 
 	partial class UI {
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
 		private System.ComponentModel.IContainer components = null;
-		private System.Windows.Forms.MainMenu mainMenu1;
 
 		/// <summary>
 		/// Clean up any resources being used.
@@ -25,7 +24,6 @@
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			this.mainMenu1 = new System.Windows.Forms.MainMenu();
 			this.lblLogo = new System.Windows.Forms.Label();
 			this.containerPanel = new System.Windows.Forms.Panel();
 			this.scanPanel = new System.Windows.Forms.Panel();
@@ -34,7 +32,7 @@
 			this.labelScanInfo = new System.Windows.Forms.Label();
 			this.btnScan = new System.Windows.Forms.Button();
 			this.loadPanel = new System.Windows.Forms.Panel();
-			this.lblInfo = new System.Windows.Forms.Label();
+			this.lblLoadInfo = new System.Windows.Forms.Label();
 			this.btnLoadFile = new System.Windows.Forms.Button();
 			this.containerPanel.SuspendLayout();
 			this.scanPanel.SuspendLayout();
@@ -69,36 +67,38 @@
 			this.scanPanel.Controls.Add(this.lblScanSum);
 			this.scanPanel.Controls.Add(this.labelScanInfo);
 			this.scanPanel.Controls.Add(this.btnScan);
-			this.scanPanel.Location = new System.Drawing.Point(0, 31);
+			this.scanPanel.Location = new System.Drawing.Point(0, 32);
 			this.scanPanel.Name = "scanPanel";
-			this.scanPanel.Size = new System.Drawing.Size(238, 236);
+			this.scanPanel.Size = new System.Drawing.Size(238, 238);
 			this.scanPanel.Visible = false;
 			// 
 			// lblScanResult
 			// 
 			this.lblScanResult.BackColor = System.Drawing.Color.RoyalBlue;
+			this.lblScanResult.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular);
+			this.lblScanResult.ForeColor = System.Drawing.Color.White;
 			this.lblScanResult.Location = new System.Drawing.Point(8, 112);
 			this.lblScanResult.Name = "lblScanResult";
-			this.lblScanResult.Size = new System.Drawing.Size(224, 44);
+			this.lblScanResult.Size = new System.Drawing.Size(224, 72);
 			// 
 			// lblScanSum
 			// 
 			this.lblScanSum.BackColor = System.Drawing.Color.RoyalBlue;
-			this.lblScanSum.Location = new System.Drawing.Point(36, 181);
+			this.lblScanSum.Location = new System.Drawing.Point(64, 192);
 			this.lblScanSum.Name = "lblScanSum";
-			this.lblScanSum.Size = new System.Drawing.Size(44, 20);
-			this.lblScanSum.Text = "0";
+			this.lblScanSum.Size = new System.Drawing.Size(120, 20);
+			this.lblScanSum.Text = "Scanned: 0";
 			// 
 			// labelScanInfo
 			// 
 			this.labelScanInfo.BackColor = System.Drawing.Color.RoyalBlue;
+			this.labelScanInfo.Font = new System.Drawing.Font("Tahoma", 14F, System.Drawing.FontStyle.Regular);
 			this.labelScanInfo.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
 			this.labelScanInfo.Location = new System.Drawing.Point(0, 20);
 			this.labelScanInfo.Name = "labelScanInfo";
-			this.labelScanInfo.Size = new System.Drawing.Size(235, 45);
+			this.labelScanInfo.Size = new System.Drawing.Size(235, 36);
 			this.labelScanInfo.Text = "Scan the Badge";
 			this.labelScanInfo.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			this.labelScanInfo.ParentChanged += new System.EventHandler(this.labelScanInfo_ParentChanged);
 			// 
 			// btnScan
 			// 
@@ -112,20 +112,20 @@
 			// loadPanel
 			// 
 			this.loadPanel.BackColor = System.Drawing.Color.CadetBlue;
-			this.loadPanel.Controls.Add(this.lblInfo);
+			this.loadPanel.Controls.Add(this.lblLoadInfo);
 			this.loadPanel.Controls.Add(this.btnLoadFile);
-			this.loadPanel.Location = new System.Drawing.Point(0, 35);
+			this.loadPanel.Location = new System.Drawing.Point(0, 32);
 			this.loadPanel.Name = "loadPanel";
-			this.loadPanel.Size = new System.Drawing.Size(265, 232);
+			this.loadPanel.Size = new System.Drawing.Size(238, 238);
 			// 
-			// lblInfo
+			// lblLoadInfo
 			// 
-			this.lblInfo.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-			this.lblInfo.Location = new System.Drawing.Point(0, 20);
-			this.lblInfo.Name = "lblInfo";
-			this.lblInfo.Size = new System.Drawing.Size(238, 45);
-			this.lblInfo.Text = "Select the Venture Event Data File for this event:";
-			this.lblInfo.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			this.lblLoadInfo.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+			this.lblLoadInfo.Location = new System.Drawing.Point(0, 20);
+			this.lblLoadInfo.Name = "lblLoadInfo";
+			this.lblLoadInfo.Size = new System.Drawing.Size(238, 45);
+			this.lblLoadInfo.Text = "Select the Venture Event Data File for this event:";
+			this.lblLoadInfo.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
 			// btnLoadFile
 			// 
@@ -144,6 +144,7 @@
 			this.ClientSize = new System.Drawing.Size(238, 295);
 			this.Controls.Add(this.containerPanel);
 			this.ForeColor = System.Drawing.Color.White;
+			this.KeyPreview = true;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "UI";
@@ -166,7 +167,7 @@
 		private System.Windows.Forms.Panel containerPanel;
 		private System.Windows.Forms.Panel loadPanel;
 		private System.Windows.Forms.Button btnLoadFile;
-		private System.Windows.Forms.Label lblInfo;
+		private System.Windows.Forms.Label lblLoadInfo;
 		private System.Windows.Forms.Panel scanPanel;
 		private System.Windows.Forms.Label labelScanInfo;
 		private System.Windows.Forms.Button btnScan;

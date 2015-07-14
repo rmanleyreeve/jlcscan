@@ -4,11 +4,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using CeReader;
 using System.Text;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using REMedia;
 
-namespace SDK.English.JlcScan {
+namespace REMedia.JlcScan {
 
 	public partial class UI : Form {
 
@@ -21,24 +23,34 @@ namespace SDK.English.JlcScan {
 		[DllImport("DeviceAPI.dll", EntryPoint = "Barcode1D_free")]
 		private static extern void Barcode1D_free();
 
+		private List<Registration> registrations = new List<Registration>();
+		private string eventID;
+		private string eventTitle;
+		private int numScans;
 
 		public UI() {
 			InitializeComponent();
 		}
 
 		private void Ui_Load(object sender, EventArgs e) {
-			System.Diagnostics.Debug.WriteLine("LOADED");
-			Barcode1D_init();
-			lblScanResult.Text = "";
-			lblScanSum.Text = "0";
+			//logLine("LOADED");
+			if (SystemInco.alreadyRun(this.Text, this.Handle.ToInt32())) {
+				MessageBox.Show("repeated start");
+				this.Close();
+			} else {
+				lblScanResult.Text = "";
+				lblScanSum.Text = "0";
+				numScans = 0;
+				Barcode1D_init();
+			}
 		}
 		private void Ui_Closed(object sender, EventArgs e) {
-			System.Diagnostics.Debug.WriteLine("CLOSED");
+			//logLine("CLOSED");
 			Barcode1D_free();
 			GC.Collect();
 		}
 		private void Ui_KeyDown(object sender, KeyEventArgs e) {
-			System.Diagnostics.Debug.WriteLine("KEY DOWN");
+			//logLine("KEY DOWN");
 			if (e.KeyValue == (int)ConstantKeyValue.Scan) {
 				this.btnScan_Click(null, null);
 			}
@@ -47,19 +59,14 @@ namespace SDK.English.JlcScan {
 			}
 		}
 		private void Ui_KeyUp(object sender, KeyEventArgs e) {
-			System.Diagnostics.Debug.WriteLine("KEY UP");
+			//logLine("KEY UP");
 			if (e.KeyValue == 118)
 				this.Close();
 		}
 		private void Ui_KeyPress(object sender, KeyPressEventArgs e) {
-			System.Diagnostics.Debug.WriteLine("KEY PRESS");
+			//logLine("KEY PRESS");
 		}
 
-
-		public List<Registration> registrations = new List<Registration>();
-		public List<int> regIdList = new List<int>();
-		public string eventID;
-		public string eventTitle;
 
 		private void btnLoadFile_Click(object sender, EventArgs e) {
 			OpenFileDialog ofd = new OpenFileDialog();
@@ -77,17 +84,13 @@ namespace SDK.English.JlcScan {
 						first_name = r.Element("first_name").Value,
 						last_name = r.Element("last_name").Value
 					}
-						).ToList<Registration>();
+				).ToList<Registration>();
+
 				int numReg = registrations.Count();
 
-				foreach (Registration r in registrations) {
-					regIdList.Add(r.id);
-					System.Diagnostics.Debug.WriteLine(r.id);
-				}
 				MessageBox.Show("Event Data Loaded for " + eventTitle.ToUpper() + "(" + numReg + " registrations)");
 				this.loadPanel.Hide();
 				this.scanPanel.Show();
-
 
 			} else {
 				MessageBox.Show("Please select an Event Data file");
@@ -96,40 +99,45 @@ namespace SDK.English.JlcScan {
 
 		private void btnScan_Click(object sender, EventArgs e) {
 			string barCode = Scan();
-			int sum = Convert.ToInt16(lblScanSum.Text);
-			lblScanSum.Text = Convert.ToString( sum + 1);
 			if (!string.IsNullOrEmpty(barCode)) {
+				ScanIncrement();
 				//CommonClass.PlaySound(@"\windows\beep.wav");
 				lblScanResult.Text = barCode;
-				System.Diagnostics.Debug.WriteLine(barCode);
-				String[] parts = barCode.Split(' ');
-				System.Diagnostics.Debug.WriteLine(parts[0]);
-				System.Diagnostics.Debug.WriteLine(parts[1]);
-				string evID = parts[0];
-				int regID = Convert.ToInt32(parts[1]);
-
-				if (evID != eventID) {
-					CommonClass.PlaySound(@"\windows\critical.wav");
-					lblScanResult.Text = "ERROR - Wrong event";
-				} else {
-
-					//bool ok = registrations.Any(r => r.id == regID);
-					Registration reg = registrations.FirstOrDefault(r => r.id == regID);
-					if(reg != null) {
-						// ok 
-						CommonClass.PlaySound(@"\windows\beep.wav");
-						lblScanResult.Text = reg.first_name + " " + reg.last_name + " IS ON THE LIST";
-					} else {
-						// not ok
+				log(barCode);
+				string evID = "";
+				int regID = 0;
+				try {
+					String[] parts = barCode.Split(' ');
+					log(parts[0]);
+					log(parts[1]);
+					evID = parts[0];
+					regID = Convert.ToInt32(parts[1]);
+					// check event code matches
+					if (evID != eventID) {
 						CommonClass.PlaySound(@"\windows\critical.wav");
-						lblScanResult.Text = "NOT ON THE LIST";
+						UpdateText("ERROR - WRONG EVENT");
+					} else {
+						// event ok, check reg id against list
+						Registration reg = registrations.FirstOrDefault(r => r.id == regID);
+						if (reg != null) {
+							// on the list 
+							CommonClass.PlaySound(@"\windows\beep.wav");
+							UpdateText(reg.first_name + " " + reg.last_name + " ON THE LIST");
+						} else {
+							// not on the list
+							CommonClass.PlaySound(@"\windows\critical.wav");
+							UpdateText("NOT ON THE LIST");
+						}
 					}
+				} catch (Exception ex) {
+					CommonClass.PlaySound(@"\windows\critical.wav");
+					UpdateText("ERROR - WRONG BARCODE FORMAT");
 				}
 
 			} else {
 
 				CommonClass.PlaySound(@"\windows\critical.wav");
-				lblScanResult.Text = "Failed to scan";
+				UpdateText("Failed to scan");
 
 			}
 		}
@@ -138,25 +146,28 @@ namespace SDK.English.JlcScan {
 			int ibarLen = 0;
 			byte[] pszData = new byte[2048];
 			string barcode = string.Empty;
-
 			try {
 				ibarLen = Barcode1D_scan(pszData);
-
 				if (ibarLen > 0) {
 					barcode = Encoding.ASCII.GetString(pszData, 0, ibarLen).Trim();
 				}
 				return barcode;
 			} catch (System.Exception ex) {
-				System.Diagnostics.Debug.Write(ex.Message);
+				log(ex.Message);
 				return String.Empty;
 			}
-
 		}
 
-		private void labelScanInfo_ParentChanged(object sender, EventArgs e) {
-
+		private void UpdateText(string txt) {
+			lblScanResult.Text = txt;
 		}
-
+		private void ScanIncrement() {
+			numScans++;
+			lblScanSum.Text = "Scanned: " + Convert.ToString(numScans);
+		}
+		public static void log(string msg) {
+			System.Diagnostics.Debug.Write(msg);
+		}
 
 	}
 

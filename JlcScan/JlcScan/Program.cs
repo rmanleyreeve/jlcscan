@@ -2,19 +2,14 @@
 using System.Linq;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using SDK.English.UI;
-using SDK.English;
+using REMedia;
 
-namespace SDK.English.JlcScan {
+namespace REMedia.JlcScan {
 
 	static class Program {
-		/// <summary>
-		/// The App Entry Point
-		/// </summary>
 		[MTAThread]
 		static void Main() {
-			SystemHelper.CurrentDeviceType = DeviceType.C2000;
-			Application.Run(new UI());
+			Application.Run( new UI() );
 		}
 	}
 }

@@ -7,7 +7,7 @@
     <ProjectGuid>{F3364CF6-2DC6-41F3-9B33-60E714E81898}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SDK.English.JlcScan</RootNamespace>
+    <RootNamespace>SDK.REMedia.JlcScan</RootNamespace>
     <AssemblyName>JlcScan</AssemblyName>
     <ProjectTypeGuids>{4D628B5B-2FBC-4AA6-8C16-197242AEB884};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <PlatformFamilyName>WindowsCE</PlatformFamilyName>
@@ -18,7 +18,7 @@
     <NativePlatformName>Windows CE</NativePlatformName>
     <FormFactorID>
     </FormFactorID>
-    <StartupObject>SDK.English.JlcScan.Program</StartupObject>
+    <StartupObject>REMedia.JlcScan.Program</StartupObject>
     <SccProjectName>Svn</SccProjectName>
     <SccLocalPath>Svn</SccLocalPath>
     <SccAuxPath>Svn</SccAuxPath>
