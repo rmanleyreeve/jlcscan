@@ -52,9 +52,9 @@
 			// containerPanel
 			// 
 			this.containerPanel.BackColor = System.Drawing.Color.Lavender;
-			this.containerPanel.Controls.Add(this.loadPanel);
-			this.containerPanel.Controls.Add(this.scanPanel);
 			this.containerPanel.Controls.Add(this.lblLogo);
+			this.containerPanel.Controls.Add(this.scanPanel);
+			this.containerPanel.Controls.Add(this.loadPanel);
 			this.containerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.containerPanel.Location = new System.Drawing.Point(0, 0);
 			this.containerPanel.Name = "containerPanel";
@@ -65,22 +65,23 @@
 			this.loadPanel.BackColor = System.Drawing.Color.CadetBlue;
 			this.loadPanel.Controls.Add(this.lblLoadInfo);
 			this.loadPanel.Controls.Add(this.btnLoadFile);
-			this.loadPanel.Location = new System.Drawing.Point(0, 32);
+			this.loadPanel.Location = new System.Drawing.Point(0, 24);
 			this.loadPanel.Name = "loadPanel";
-			this.loadPanel.Size = new System.Drawing.Size(238, 238);
+			this.loadPanel.Size = new System.Drawing.Size(238, 246);
 			// 
 			// lblLoadInfo
 			// 
+			this.lblLoadInfo.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular);
 			this.lblLoadInfo.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-			this.lblLoadInfo.Location = new System.Drawing.Point(0, 20);
+			this.lblLoadInfo.Location = new System.Drawing.Point(0, 0);
 			this.lblLoadInfo.Name = "lblLoadInfo";
-			this.lblLoadInfo.Size = new System.Drawing.Size(238, 45);
+			this.lblLoadInfo.Size = new System.Drawing.Size(238, 42);
 			this.lblLoadInfo.Text = "Select the Venture Event Data File for this event:";
 			this.lblLoadInfo.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
 			// btnLoadFile
 			// 
-			this.btnLoadFile.Location = new System.Drawing.Point(56, 68);
+			this.btnLoadFile.Location = new System.Drawing.Point(56, 64);
 			this.btnLoadFile.Name = "btnLoadFile";
 			this.btnLoadFile.Size = new System.Drawing.Size(124, 20);
 			this.btnLoadFile.TabIndex = 2;
@@ -90,13 +91,13 @@
 			// scanPanel
 			// 
 			this.scanPanel.BackColor = System.Drawing.Color.RoyalBlue;
+			this.scanPanel.Controls.Add(this.labelScanInfo);
+			this.scanPanel.Controls.Add(this.btnScan);
 			this.scanPanel.Controls.Add(this.lblScanResult);
 			this.scanPanel.Controls.Add(this.lblScanSum);
-			this.scanPanel.Controls.Add(this.btnScan);
-			this.scanPanel.Controls.Add(this.labelScanInfo);
-			this.scanPanel.Location = new System.Drawing.Point(0, 32);
+			this.scanPanel.Location = new System.Drawing.Point(0, 24);
 			this.scanPanel.Name = "scanPanel";
-			this.scanPanel.Size = new System.Drawing.Size(238, 238);
+			this.scanPanel.Size = new System.Drawing.Size(238, 246);
 			this.scanPanel.Visible = false;
 			// 
 			// lblScanResult
@@ -104,23 +105,23 @@
 			this.lblScanResult.BackColor = System.Drawing.Color.RoyalBlue;
 			this.lblScanResult.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular);
 			this.lblScanResult.ForeColor = System.Drawing.Color.White;
-			this.lblScanResult.Location = new System.Drawing.Point(8, 112);
+			this.lblScanResult.Location = new System.Drawing.Point(0, 152);
 			this.lblScanResult.Name = "lblScanResult";
-			this.lblScanResult.Size = new System.Drawing.Size(224, 72);
+			this.lblScanResult.Size = new System.Drawing.Size(238, 50);
 			// 
 			// lblScanSum
 			// 
 			this.lblScanSum.BackColor = System.Drawing.Color.RoyalBlue;
-			this.lblScanSum.Location = new System.Drawing.Point(64, 192);
+			this.lblScanSum.Location = new System.Drawing.Point(0, 224);
 			this.lblScanSum.Name = "lblScanSum";
 			this.lblScanSum.Size = new System.Drawing.Size(120, 20);
 			this.lblScanSum.Text = "Scanned: 0";
 			// 
 			// btnScan
 			// 
-			this.btnScan.Location = new System.Drawing.Point(56, 68);
+			this.btnScan.Location = new System.Drawing.Point(56, 32);
 			this.btnScan.Name = "btnScan";
-			this.btnScan.Size = new System.Drawing.Size(124, 20);
+			this.btnScan.Size = new System.Drawing.Size(124, 50);
 			this.btnScan.TabIndex = 2;
 			this.btnScan.Text = "Scan";
 			this.btnScan.Click += new System.EventHandler(this.btnScan_Click);
@@ -128,12 +129,12 @@
 			// labelScanInfo
 			// 
 			this.labelScanInfo.BackColor = System.Drawing.Color.RoyalBlue;
-			this.labelScanInfo.Font = new System.Drawing.Font("Tahoma", 14F, System.Drawing.FontStyle.Regular);
+			this.labelScanInfo.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular);
 			this.labelScanInfo.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-			this.labelScanInfo.Location = new System.Drawing.Point(0, 20);
+			this.labelScanInfo.Location = new System.Drawing.Point(0, 0);
 			this.labelScanInfo.Name = "labelScanInfo";
-			this.labelScanInfo.Size = new System.Drawing.Size(235, 36);
-			this.labelScanInfo.Text = "Scan the Badge";
+			this.labelScanInfo.Size = new System.Drawing.Size(238, 42);
+			this.labelScanInfo.Text = "Ready to Scan";
 			this.labelScanInfo.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
 			// UI
