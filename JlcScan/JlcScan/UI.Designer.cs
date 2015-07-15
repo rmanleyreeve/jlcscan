@@ -26,6 +26,12 @@
 		private void InitializeComponent() {
 			this.lblLogo = new System.Windows.Forms.Label();
 			this.containerPanel = new System.Windows.Forms.Panel();
+			this.loadPanel = new System.Windows.Forms.Panel();
+			this.lblLoadFile = new System.Windows.Forms.Label();
+			this.btnLoadFile = new System.Windows.Forms.Button();
+			this.labelLoadWeb = new System.Windows.Forms.Label();
+			this.menuEvents = new System.Windows.Forms.ComboBox();
+			this.btnLoadFromWeb = new System.Windows.Forms.Button();
 			this.scanPanel = new System.Windows.Forms.Panel();
 			this.labelScanInfo = new System.Windows.Forms.Label();
 			this.btnScan = new System.Windows.Forms.Button();
@@ -33,13 +39,9 @@
 			this.iconBox = new System.Windows.Forms.PictureBox();
 			this.lblScanSum = new System.Windows.Forms.Label();
 			this.btnScanDone = new System.Windows.Forms.Button();
-			this.loadPanel = new System.Windows.Forms.Panel();
-			this.lblLoadInfo = new System.Windows.Forms.Label();
-			this.btnLoadFile = new System.Windows.Forms.Button();
-			this.btnLoadFromWeb = new System.Windows.Forms.Button();
 			this.containerPanel.SuspendLayout();
-			this.scanPanel.SuspendLayout();
 			this.loadPanel.SuspendLayout();
+			this.scanPanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// lblLogo
@@ -62,6 +64,66 @@
 			this.containerPanel.Location = new System.Drawing.Point(0, 0);
 			this.containerPanel.Name = "containerPanel";
 			this.containerPanel.Size = new System.Drawing.Size(238, 295);
+			// 
+			// loadPanel
+			// 
+			this.loadPanel.BackColor = System.Drawing.Color.DarkCyan;
+			this.loadPanel.Controls.Add(this.lblLoadFile);
+			this.loadPanel.Controls.Add(this.btnLoadFile);
+			this.loadPanel.Controls.Add(this.labelLoadWeb);
+			this.loadPanel.Controls.Add(this.menuEvents);
+			this.loadPanel.Controls.Add(this.btnLoadFromWeb);
+			this.loadPanel.Location = new System.Drawing.Point(0, 24);
+			this.loadPanel.Name = "loadPanel";
+			this.loadPanel.Size = new System.Drawing.Size(238, 246);
+			// 
+			// lblLoadFile
+			// 
+			this.lblLoadFile.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular);
+			this.lblLoadFile.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+			this.lblLoadFile.Location = new System.Drawing.Point(0, 0);
+			this.lblLoadFile.Name = "lblLoadFile";
+			this.lblLoadFile.Size = new System.Drawing.Size(238, 42);
+			this.lblLoadFile.Text = "Select the Venture Event Data File for this event:";
+			this.lblLoadFile.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			// 
+			// btnLoadFile
+			// 
+			this.btnLoadFile.Location = new System.Drawing.Point(56, 48);
+			this.btnLoadFile.Name = "btnLoadFile";
+			this.btnLoadFile.Size = new System.Drawing.Size(124, 20);
+			this.btnLoadFile.TabIndex = 2;
+			this.btnLoadFile.Text = "Select Data File";
+			this.btnLoadFile.Click += new System.EventHandler(this.btnLoadFile_Click);
+			// 
+			// labelLoadWeb
+			// 
+			this.labelLoadWeb.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular);
+			this.labelLoadWeb.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+			this.labelLoadWeb.Location = new System.Drawing.Point(0, 124);
+			this.labelLoadWeb.Name = "labelLoadWeb";
+			this.labelLoadWeb.Size = new System.Drawing.Size(238, 42);
+			this.labelLoadWeb.Text = "Load Event Data from Venture server:";
+			this.labelLoadWeb.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			// 
+			// menuEvents
+			// 
+			this.menuEvents.Font = new System.Drawing.Font("Tahoma", 8F, System.Drawing.FontStyle.Regular);
+			this.menuEvents.Location = new System.Drawing.Point(4, 172);
+			this.menuEvents.Name = "menuEvents";
+			this.menuEvents.Size = new System.Drawing.Size(228, 19);
+			this.menuEvents.TabIndex = 0;
+			this.menuEvents.Visible = false;
+			// 
+			// btnLoadFromWeb
+			// 
+			this.btnLoadFromWeb.Location = new System.Drawing.Point(60, 208);
+			this.btnLoadFromWeb.Name = "btnLoadFromWeb";
+			this.btnLoadFromWeb.Size = new System.Drawing.Size(120, 20);
+			this.btnLoadFromWeb.TabIndex = 3;
+			this.btnLoadFromWeb.Text = "Load from Venture";
+			this.btnLoadFromWeb.Visible = false;
+			this.btnLoadFromWeb.Click += new System.EventHandler(this.btnLoadFromWeb_Click);
 			// 
 			// scanPanel
 			// 
@@ -131,44 +193,6 @@
 			this.btnScanDone.Text = "Done";
 			this.btnScanDone.Click += new System.EventHandler(this.btnScanDone_Click);
 			// 
-			// loadPanel
-			// 
-			this.loadPanel.BackColor = System.Drawing.Color.DarkCyan;
-			this.loadPanel.Controls.Add(this.lblLoadInfo);
-			this.loadPanel.Controls.Add(this.btnLoadFile);
-			this.loadPanel.Controls.Add(this.btnLoadFromWeb);
-			this.loadPanel.Location = new System.Drawing.Point(0, 24);
-			this.loadPanel.Name = "loadPanel";
-			this.loadPanel.Size = new System.Drawing.Size(238, 246);
-			// 
-			// lblLoadInfo
-			// 
-			this.lblLoadInfo.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular);
-			this.lblLoadInfo.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-			this.lblLoadInfo.Location = new System.Drawing.Point(0, 0);
-			this.lblLoadInfo.Name = "lblLoadInfo";
-			this.lblLoadInfo.Size = new System.Drawing.Size(238, 42);
-			this.lblLoadInfo.Text = "Select the Venture Event Data File for this event:";
-			this.lblLoadInfo.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			// 
-			// btnLoadFile
-			// 
-			this.btnLoadFile.Location = new System.Drawing.Point(56, 56);
-			this.btnLoadFile.Name = "btnLoadFile";
-			this.btnLoadFile.Size = new System.Drawing.Size(124, 20);
-			this.btnLoadFile.TabIndex = 2;
-			this.btnLoadFile.Text = "Select Data File";
-			this.btnLoadFile.Click += new System.EventHandler(this.btnLoadFile_Click);
-			// 
-			// btnLoadFromWeb
-			// 
-			this.btnLoadFromWeb.Location = new System.Drawing.Point(56, 128);
-			this.btnLoadFromWeb.Name = "btnLoadFromWeb";
-			this.btnLoadFromWeb.Size = new System.Drawing.Size(124, 20);
-			this.btnLoadFromWeb.TabIndex = 3;
-			this.btnLoadFromWeb.Text = "Load from Venture";
-			this.btnLoadFromWeb.Click += new System.EventHandler(this.btnLoadFromWeb_Click);
-			// 
 			// UI
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -187,8 +211,8 @@
 			this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Ui_KeyUp);
 			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Ui_KeyDown);
 			this.containerPanel.ResumeLayout(false);
-			this.scanPanel.ResumeLayout(false);
 			this.loadPanel.ResumeLayout(false);
+			this.scanPanel.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -199,7 +223,7 @@
 		private System.Windows.Forms.Panel containerPanel;
 		private System.Windows.Forms.Panel loadPanel;
 		private System.Windows.Forms.Button btnLoadFile;
-		private System.Windows.Forms.Label lblLoadInfo;
+		private System.Windows.Forms.Label lblLoadFile;
 		private System.Windows.Forms.Panel scanPanel;
 		private System.Windows.Forms.Label labelScanInfo;
 		private System.Windows.Forms.Button btnScan;
@@ -208,5 +232,7 @@
 		private System.Windows.Forms.Button btnScanDone;
 		private System.Windows.Forms.PictureBox iconBox;
 		private System.Windows.Forms.Button btnLoadFromWeb;
+		private System.Windows.Forms.Label labelLoadWeb;
+		private System.Windows.Forms.ComboBox menuEvents;
 	}
 }

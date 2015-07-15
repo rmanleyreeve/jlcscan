@@ -7,6 +7,7 @@ using System.Net;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace REMedia.JlcScan {
 
@@ -23,16 +24,20 @@ namespace REMedia.JlcScan {
 		private static extern void Barcode1D_free();
 
 		private List<Registration> registrations = new List<Registration>();
+		private List<Event> events = new List<Event>();
 		private string eventID;
 		private string eventTitle;
-		private int numScans;
+		private int numTotalScans;
+		private int numEvents = 0;
 		private static List<int> regScanned_OnList = new List<int>();
 		private static List<int> regScanned_NotOnList = new List<int>();
+		public bool Online = false;
 
 		public UI() {
 			InitializeComponent();
 		}
 
+		// UTILITY METHODS =====================================================================
 		private void Ui_Load(object sender, EventArgs e) {
 			//Log("PROGRAM LOADED");
 			if (SystemInco.alreadyRun(this.Text, this.Handle.ToInt32())) {
@@ -41,11 +46,20 @@ namespace REMedia.JlcScan {
 			} else {
 				// set up UI
 				UpdateScanResult(String.Empty);
-				numScans = -1;
-				ScanIncrement();
+				numTotalScans = 0;
+				UpdateTotalScanCount();
 				iconBox.Invalidate();
-				if(IsServerAvailable()) {
-					btnLoadFromWeb.Show();
+				// check if web services available
+				Online = IsServerAvailable();
+				if (Online) {
+					GetEventListFromServer();
+					if (numEvents > 0) {
+						menuEvents.Show();
+						populateDropdown();
+						btnLoadFromWeb.Show();
+					} else {
+						DisplayOfflineText();
+					}
 				}
 				Barcode1D_init();
 			}
@@ -70,16 +84,22 @@ namespace REMedia.JlcScan {
 				this.Close();
 			}
 		}
+		public static void Log(String msg) {
+			System.Diagnostics.Debug.WriteLine(msg);
+		}
+		public string FixNull(string s) {
+			return (s != null) ? s : String.Empty;
+		}
 
-		// UI METHODS =====================================================
+		// UI METHODS ============================================================================
 		private void UpdateScanResult(string txt) {
 			lblScanResult.Text = txt;
 		}
 		private void UpdateTotalScanCount() {
-			lblScanSum.Text = "Scanned: " + Convert.ToString(numScans);
+			lblScanSum.Text = "Scanned: " + Convert.ToString(numTotalScans);
 		}
 		private void ScanIncrement() {
-			numScans++;
+			numTotalScans++;
 			UpdateTotalScanCount();
 		}
 		private void UpdateIcon(string str) {
@@ -87,10 +107,18 @@ namespace REMedia.JlcScan {
 			iconBox.Image = (Image)new System.ComponentModel.ComponentResourceManager(typeof(UI)).GetObject(str);
 			iconBox.Refresh();
 		}
-		public static void Log(String msg) {
-			System.Diagnostics.Debug.WriteLine(msg);
+		private void populateDropdown() {
+			events.Insert(0, new Event() { id = 139, display_name = "TEST" });
+			events.Insert(0, new Event() { id = 0, display_name = "Select..." });
+			menuEvents.DataSource = events;
+			menuEvents.ValueMember = "id";
+			menuEvents.DisplayMember = "display_name";
 		}
-		// SCANNING RELATED METHODS ============================================
+		private void DisplayOfflineText() {
+			labelLoadWeb.Text = "No Internet Connection";
+		}
+
+		// SCANNING RELATED METHODS ================================================================
 		public static string Scan() {
 			int ibarLen = 0;
 			byte[] pszData = new byte[2048];
@@ -139,21 +167,49 @@ namespace REMedia.JlcScan {
 			UpdateIcon("fail");
 			UpdateScanResult(C.SCAN_FAIL_MSG);
 		}
-		// DATA FILE METHODS ======================================
-		private int ReadXML(System.Xml.Linq.XDocument xdoc) {
+
+		// DATA FILE METHODS ============================================================================
+		private int ReadXMLRegistrations(XDocument xdoc) {
+			int count = (int)xdoc.Element("event").Element("registrations").Attribute("count");
 			eventID = (String)xdoc.Element("event").Attribute("id");
 			eventTitle = (String)xdoc.Element("event").Element("title");
-			registrations = (
-				from r in xdoc.Descendants("registration") select new Registration() {
-					id = Convert.ToInt16(r.Attribute("id").Value),
-					first_name = r.Element("first_name").Value,
-					last_name = r.Element("last_name").Value
+			foreach (XElement el in xdoc.Descendants("registration")) {
+				try {
+					Log(String.Format("Added {0}->{1}",Convert.ToInt32(el.Attribute("num").Value), Convert.ToInt32(el.Attribute("id").Value)));
+					Registration r = new Registration() {
+						id = Convert.ToInt32(el.Attribute("id").Value),
+						first_name = FixNull(el.Element("first_name").Value),
+						last_name = FixNull(el.Element("last_name").Value)
+					};
+					registrations.Add(r);
+				} catch (Exception ex) {
+					Log(ex.StackTrace);
+					Log(el.ToString());
 				}
-			).ToList<Registration>();
+			}
+			Log("count=" + count + " actual=" + registrations.Count()); // DEBUG
 			return registrations.Count();
 		}
+		private int ReadXMLEvents(XDocument xdoc) {
+			foreach (XElement el in xdoc.Descendants("event")) {
+				try {
+					Event ev = new Event() {
+						id = Convert.ToInt32(el.Attribute("id").Value),
+						name = FixNull(el.Attribute("name").Value),
+						city = FixNull(el.Attribute("city").Value),
+						event_code = FixNull(el.Attribute("event_code").Value),
+						display_name = FixNull(el.Attribute("name").Value) + " " + FixNull(el.Attribute("city").Value)
+					};
+					events.Add(ev);
+				} catch (Exception ex) {
+					Log(ex.StackTrace);
+					Log(el.ToString());
+				}
+			}
+			return events.Count();
+		}
 		private void SaveCsvFile() {
-			string filePath = String.Format("{0}\\{1}.csv",C.INITIAL_DIR,eventID);
+			string filePath = String.Format("{0}\\{1}.csv", C.INITIAL_DIR, eventID);
 			File.Create(filePath).Close();
 			using (TextWriter writer = File.CreateText(filePath)) {
 				writer.WriteLine("File Saved: " + DateTime.Now.ToString());
@@ -161,26 +217,36 @@ namespace REMedia.JlcScan {
 			}
 		}
 
-		// NETWORK METHODS ========================================================================
+		// NETWORK METHODS ===========================================================================
 		private bool IsServerAvailable() {
 			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(C.CHECK_URL);
-			request.Timeout = 5000;
+			request.Timeout = 10000;
 			//request.Credentials = CredentialCache.DefaultNetworkCredentials;
 			HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 			if (response.StatusCode == HttpStatusCode.OK) {
 				Log("IsServerAvailable: " + response.StatusCode);
+				response.Close();
 				return true;
 			} else {
+				response.Close();
 				return false;
 			}
 		}
-		private string GetDataFromServer() {
+		private string GetDataFromServer(string url) {
+			Log("URL: " + url);
+			Cursor.Current = Cursors.WaitCursor;
 			StringBuilder sb = new StringBuilder();
+			HttpWebRequest request;
+			HttpWebResponse response;
+			Stream resStream;
 			try {
 				byte[] buf = new byte[8192];
-				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(C.WEBSVC_ENDPOINT);
-				HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-				Stream resStream = response.GetResponseStream();
+				request = (HttpWebRequest)WebRequest.Create(url);
+				request.Timeout = 30000;
+				request.UserAgent = "Mozilla/4.0 (compatible; MSIE 6.01; Windows NT 5.0)";
+				response = (HttpWebResponse)request.GetResponse();
+				Log("cLen: "+response.ContentLength.ToString());
+				resStream = response.GetResponseStream();
 				string tempString = null;
 				int count = 0;
 				do {
@@ -191,13 +257,27 @@ namespace REMedia.JlcScan {
 					}
 				}
 				while (count > 0);
-			} catch (Exception ex) { }
+				resStream.Close();
+				response.Close();
+				Cursor.Current = Cursors.Default;
+			} catch (WebException ex) {
+				Log(ex.Response.ToString());
+				Log(ex.Status.ToString());
+				Log(ex.StackTrace);
+			} finally {
+				Cursor.Current = Cursors.Default;
+			}
 			return (sb.ToString());
 		}
-		private Dictionary<int, string> GetEventListFromServer() {
-			Dictionary<int, string> eventList = new Dictionary<int, string>();
-			// TODO - connect to server & get data of IDs & event titles
-			return eventList;
+		private void GetEventListFromServer() {
+			try {
+				string data = GetDataFromServer(C.WEBSVC_EVENTS);
+				XDocument xdoc = XDocument.Parse(data.ToString());
+				numEvents = ReadXMLEvents(xdoc);
+			} catch (Exception ex) {
+				Log(ex.StackTrace);
+				numEvents = 0;
+			}
 		}
 
 		// BUTTON CLICK HANDLERS ====================================================================
@@ -207,8 +287,8 @@ namespace REMedia.JlcScan {
 			ofd.InitialDirectory = C.INITIAL_DIR;
 			if (DialogResult.OK == ofd.ShowDialog()) {
 				// load xml file
-				System.Xml.Linq.XDocument xdoc = System.Xml.Linq.XDocument.Load(ofd.FileName);
-				int numReg = ReadXML(xdoc);
+				XDocument xdoc = XDocument.Load(ofd.FileName);
+				int numReg = ReadXMLRegistrations(xdoc);
 				MessageBox.Show(String.Format(C.DATA_LOADED_MSG, eventTitle.ToUpper(), numReg));
 				this.loadPanel.Hide();
 				this.scanPanel.Show();
@@ -216,11 +296,35 @@ namespace REMedia.JlcScan {
 				MessageBox.Show(C.SELECT_FILE_MSG);
 			}
 		}
+		private void btnLoadFromWeb_Click(object sender, EventArgs e) {
+			registrations.Clear();
+			if (Online) {
+				try {
+					int id = (int)menuEvents.SelectedValue;
+					if (id > 0) {
+						string url = C.WEBSVC_ENDPOINT + "?id=" + id;
+						string data = GetDataFromServer(url);
+						XDocument xdoc = XDocument.Parse(data.ToString());
+						int numReg = ReadXMLRegistrations(xdoc);
+						MessageBox.Show(String.Format(C.DATA_LOADED_MSG, eventTitle.ToUpper(), numReg));
+						//this.loadPanel.Hide();
+						//this.scanPanel.Show();
+					} else {
+						MessageBox.Show("No event selected!");
+					}
+				} catch (Exception ex) {
+					Log(ex.StackTrace);
+					MessageBox.Show(C.WEBSVC_FAIL_MSG);
+				}
+			} else {
+				MessageBox.Show(C.NO_CONNECTION_MSG);
+			}
+		}
 		private void btnScan_Click(object sender, EventArgs e) {
 			string barCode = Scan();
 			if (!string.IsNullOrEmpty(barCode)) {
 				ScanIncrement();
-				Log("Scanned "+barCode);
+				Log("Scanned " + barCode);
 				string evID = "";
 				int regID = 0;
 				try {
@@ -248,6 +352,7 @@ namespace REMedia.JlcScan {
 						}
 					}
 				} catch (Exception ex) {
+					Log(ex.Message);
 					BadFormat();
 				}
 			} else {
@@ -263,23 +368,6 @@ namespace REMedia.JlcScan {
 			}
 			this.Close();
 		}
-		private void btnLoadFromWeb_Click(object sender, EventArgs e) {
-			if (IsServerAvailable()) {
-				try {
-					string data = GetDataFromServer();
-					System.Xml.Linq.XDocument xdoc = System.Xml.Linq.XDocument.Parse(data.ToString());
-					int numReg = ReadXML(xdoc);
-					MessageBox.Show( String.Format(C.DATA_LOADED_MSG, eventTitle.ToUpper(),numReg) );
-					this.loadPanel.Hide();
-					this.scanPanel.Show();
-				} catch (Exception ex) {
-					Log(ex.StackTrace);
-					MessageBox.Show(C.NO_CONNECTION_MSG);
-				}
-			} else {
-				MessageBox.Show(C.NO_CONNECTION_MSG);
-			}
-		}
 
 
 	}
@@ -293,7 +381,14 @@ namespace REMedia.JlcScan {
 		public string suffix { get; set; }
 	}
 
-
+	// events class populated from Venture
+	public class Event {
+		public int id { get; set; }
+		public string name { get; set; }
+		public string city { get; set; }
+		public string event_code { get; set; }
+		public string display_name { get; set; }
+	}
 
 
 
