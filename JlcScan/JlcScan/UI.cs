@@ -40,11 +40,11 @@ namespace REMedia.JlcScan {
 				this.Close();
 			} else {
 				// set up UI
-				UpdateText("");
+				UpdateScanResult(String.Empty);
 				numScans = -1;
 				ScanIncrement();
 				iconBox.Invalidate();
-				if(IsServerAvailable() {
+				if(IsServerAvailable()) {
 					btnLoadFromWeb.Show();
 				}
 				Barcode1D_init();
@@ -194,8 +194,10 @@ namespace REMedia.JlcScan {
 			} catch (Exception ex) { }
 			return (sb.ToString());
 		}
-		private List<int, string> GetEventListFromServer() {
-
+		private Dictionary<int, string> GetEventListFromServer() {
+			Dictionary<int, string> eventList = new Dictionary<int, string>();
+			// TODO - connect to server & get data of IDs & event titles
+			return eventList;
 		}
 
 		// BUTTON CLICK HANDLERS ====================================================================
