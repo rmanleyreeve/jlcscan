@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
-using System.Net;
 
 namespace REMedia.JlcScan {
 
+	// main interface form
 	public partial class UI : Form {
 
 		[DllImport("DeviceAPI.dll", EntryPoint = "Barcode1D_init")]
@@ -33,25 +34,29 @@ namespace REMedia.JlcScan {
 		}
 
 		private void Ui_Load(object sender, EventArgs e) {
-			//logLine("LOADED");
+			//Log("PROGRAM LOADED");
 			if (SystemInco.alreadyRun(this.Text, this.Handle.ToInt32())) {
 				MessageBox.Show("repeated start");
 				this.Close();
 			} else {
+				// set up UI
 				UpdateText("");
 				numScans = -1;
 				ScanIncrement();
 				iconBox.Invalidate();
+				if(IsServerAvailable() {
+					btnLoadFromWeb.Show();
+				}
 				Barcode1D_init();
 			}
 		}
 		private void Ui_Closed(object sender, EventArgs e) {
-			//logLine("CLOSED");
+			//Log("PROGRAM CLOSED");
 			Barcode1D_free();
 			GC.Collect();
 		}
 		private void Ui_KeyDown(object sender, KeyEventArgs e) {
-			//logLine("KEY DOWN");
+			//Log("KEY DOWN");
 			if (e.KeyValue == (int)ConstantKeyValue.Scan) {
 				this.btnScan_Click(null, null);
 			}
@@ -60,97 +65,32 @@ namespace REMedia.JlcScan {
 			}
 		}
 		private void Ui_KeyUp(object sender, KeyEventArgs e) {
-			//logLine("KEY UP");
-			if (e.KeyValue == 118)
+			//Log("KEY UP");
+			if (e.KeyValue == 118) { // F7 ??
 				this.Close();
+			}
 		}
-		private void Ui_KeyPress(object sender, KeyPressEventArgs e) {
-			//logLine("KEY PRESS");
-		}
-		private void UpdateText(string txt) {
+
+		// UI METHODS =====================================================
+		private void UpdateScanResult(string txt) {
 			lblScanResult.Text = txt;
+		}
+		private void UpdateTotalScanCount() {
+			lblScanSum.Text = "Scanned: " + Convert.ToString(numScans);
 		}
 		private void ScanIncrement() {
 			numScans++;
-			lblScanSum.Text = "Scanned: " + Convert.ToString(numScans);
-		}
-		public static void log(string msg) {
-			System.Diagnostics.Debug.Write(msg);
+			UpdateTotalScanCount();
 		}
 		private void UpdateIcon(string str) {
 			iconBox.Invalidate();
-			iconBox.Image = (Image) new System.ComponentModel.ComponentResourceManager(typeof(UI)).GetObject(str);
+			iconBox.Image = (Image)new System.ComponentModel.ComponentResourceManager(typeof(UI)).GetObject(str);
 			iconBox.Refresh();
 		}
-
-
-		private void btnLoadFile_Click(object sender, EventArgs e) {
-			OpenFileDialog ofd = new OpenFileDialog();
-			ofd.Filter = "XML File|*.xml";
-			ofd.InitialDirectory = "\\My Documents";
-			if (DialogResult.OK == ofd.ShowDialog()) {
-				// load xml file
-				System.Xml.Linq.XDocument xdoc = System.Xml.Linq.XDocument.Load(ofd.FileName);
-				eventID = (String)xdoc.Element("event").Attribute("id");
-				eventTitle = (String)xdoc.Element("event").Element("title");
-				registrations = (
-					from r in xdoc.Descendants("registration") select new Registration() {
-						id = Convert.ToInt16(r.Attribute("id").Value),
-						first_name = r.Element("first_name").Value,
-						last_name = r.Element("last_name").Value
-					}
-				).ToList<Registration>();
-				int numReg = registrations.Count();
-				MessageBox.Show("Event Data Loaded for " + eventTitle.ToUpper() + "(" + numReg + " registrations)");
-				this.loadPanel.Hide();
-				this.scanPanel.Show();
-			} else {
-				MessageBox.Show("Please select an Event Data file");
-			}
+		public static void Log(String msg) {
+			System.Diagnostics.Debug.WriteLine(msg);
 		}
-
-		private void btnScan_Click(object sender, EventArgs e) {
-			string barCode = Scan();
-			if (!string.IsNullOrEmpty(barCode)) {
-				ScanIncrement();
-				//CommonClass.PlaySound(@"\windows\beep.wav");
-				//lblScanResult.Text = barCode;
-				log(barCode);
-				string evID = "";
-				int regID = 0;
-				try {
-					String[] parts = barCode.Split(' ');
-					log(parts[0]);
-					log(parts[1]);
-					evID = parts[0];
-					regID = Convert.ToInt32(parts[1]);
-					// check event code matches
-					if (evID != eventID) {
-						badEventCode();
-					} else {
-						// event ok, check reg id against list
-						Registration reg = registrations.FirstOrDefault(r => r.id == regID);
-						if (reg != null) {
-							// on the list 
-							if (regScanned_OnList.Contains(regID)) {
-								regDuplicate();
-							} else {
-								regOk(reg);
-							}
-						} else {
-							// not on the list
-							regNotOk(regID);
-						}
-					}
-				} catch (Exception ex) {
-					badFormat();
-				}
-
-			} else {
-				scanFail();
-			}
-		}
-
+		// SCANNING RELATED METHODS ============================================
 		public static string Scan() {
 			int ibarLen = 0;
 			byte[] pszData = new byte[2048];
@@ -162,52 +102,58 @@ namespace REMedia.JlcScan {
 				}
 				return barcode;
 			} catch (System.Exception ex) {
-				log(ex.Message);
+				Log(ex.Message);
 				return String.Empty;
 			}
 		}
-		private void btnScanDone_Click(object sender, EventArgs e) {
-			MessageBox.Show(regScanned_OnList.Count + " valid registrations saved");
-			saveFile();
-			this.Close();
-		}
-
-		public void regOk(Registration reg) {
+		public void RegOk(Registration reg) {
 			regScanned_OnList.Add(reg.id);
-			CommonClass.PlaySound(@"\windows\beep.wav");
+			C.PlaySound(@"\windows\beep.wav");
 			UpdateIcon("ok");
-			UpdateText(reg.first_name + " " + reg.last_name + "\nVALID REGISTRATION");
+			UpdateScanResult(reg.first_name + " " + reg.last_name + "\n" + C.VALID_REG_MSG);
 		}
-		public void regNotOk(int r) {
+		public void RegNotOk(int r) {
 			regScanned_NotOnList.Add(r);
-			CommonClass.PlaySound(@"\windows\critical.wav");
+			C.PlaySound(@"\windows\critical.wav");
 			UpdateIcon("no");
-			UpdateText("ERROR\nREGISTRATION NOT VALID");
-			// show override screen
+			UpdateScanResult(C.INVALID_REG_MSG);
+			// TODO show override screen
 		}
-		public void regDuplicate() {
-			CommonClass.PlaySound(@"\windows\critical.wav");
+		public void RegAlreadyScanned() {
+			C.PlaySound(@"\windows\critical.wav");
 			UpdateIcon("fail");
-			UpdateText("ERROR\nBADGE WAS ALREADY SCANNED");
+			UpdateScanResult(C.DUPLICATE_SCAN_MSG);
 		}
-		public void badEventCode() {
-			CommonClass.PlaySound(@"\windows\critical.wav");
+		public void BadEventCode() {
+			C.PlaySound(@"\windows\critical.wav");
 			UpdateIcon("fail");
-			UpdateText("ERROR\nWRONG EVENT CODE");
+			UpdateScanResult(C.BAD_EVENT_MSG);
 		}
-		public void badFormat() {
-			CommonClass.PlaySound(@"\windows\critical.wav");
+		public void BadFormat() {
+			C.PlaySound(@"\windows\critical.wav");
 			UpdateIcon("fail");
-			UpdateText("ERROR\nWRONG BARCODE FORMAT");
+			UpdateScanResult(C.BAD_FORMAT_MSG);
 		}
-		public void scanFail() {
-			CommonClass.PlaySound(@"\windows\critical.wav");
+		public void ScanFail() {
+			C.PlaySound(@"\windows\critical.wav");
 			UpdateIcon("fail");
-			UpdateText("ERROR\nFAILED TO SCAN\nTRY AGAIN");
+			UpdateScanResult(C.SCAN_FAIL_MSG);
 		}
-
-		private void saveFile() {
-			string filePath = "\\My Documents\\" + eventID + ".csv";
+		// DATA FILE METHODS ======================================
+		private int ReadXML(System.Xml.Linq.XDocument xdoc) {
+			eventID = (String)xdoc.Element("event").Attribute("id");
+			eventTitle = (String)xdoc.Element("event").Element("title");
+			registrations = (
+				from r in xdoc.Descendants("registration") select new Registration() {
+					id = Convert.ToInt16(r.Attribute("id").Value),
+					first_name = r.Element("first_name").Value,
+					last_name = r.Element("last_name").Value
+				}
+			).ToList<Registration>();
+			return registrations.Count();
+		}
+		private void SaveCsvFile() {
+			string filePath = String.Format("{0}\\{1}.csv",C.INITIAL_DIR,eventID);
 			File.Create(filePath).Close();
 			using (TextWriter writer = File.CreateText(filePath)) {
 				writer.WriteLine("File Saved: " + DateTime.Now.ToString());
@@ -215,56 +161,134 @@ namespace REMedia.JlcScan {
 			}
 		}
 
-		private void btnLoadFromWeb_Click(object sender, EventArgs e) {
+		// NETWORK METHODS ========================================================================
+		private bool IsServerAvailable() {
+			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(C.CHECK_URL);
+			request.Timeout = 5000;
+			//request.Credentials = CredentialCache.DefaultNetworkCredentials;
+			HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+			if (response.StatusCode == HttpStatusCode.OK) {
+				Log("IsServerAvailable: " + response.StatusCode);
+				return true;
+			} else {
+				return false;
+			}
+		}
+		private string GetDataFromServer() {
+			StringBuilder sb = new StringBuilder();
 			try {
-
-				StringBuilder sb = new StringBuilder();
 				byte[] buf = new byte[8192];
-				HttpWebRequest request = (HttpWebRequest) WebRequest.Create("http://jlcventure.com/test/139.xml");
-				HttpWebResponse response = (HttpWebResponse) request.GetResponse();
+				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(C.WEBSVC_ENDPOINT);
+				HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 				Stream resStream = response.GetResponseStream();
 				string tempString = null;
 				int count = 0;
 				do {
 					count = resStream.Read(buf, 0, buf.Length);
 					if (count != 0) {
-						tempString = Encoding.ASCII.GetString(buf, 0, count);
+						tempString = Encoding.UTF8.GetString(buf, 0, count);
 						sb.Append(tempString);
 					}
 				}
-				while (count > 0); 
+				while (count > 0);
+			} catch (Exception ex) { }
+			return (sb.ToString());
+		}
+		private List<int, string> GetEventListFromServer() {
 
-				log(sb.ToString());
+		}
 
-				System.Xml.Linq.XDocument xdoc = System.Xml.Linq.XDocument.Parse(sb.ToString());
-				eventID = (String)xdoc.Element("event").Attribute("id");
-				eventTitle = (String)xdoc.Element("event").Element("title");
-				registrations = (
-					from r in xdoc.Descendants("registration") select new Registration() {
-						id = Convert.ToInt16(r.Attribute("id").Value),
-						first_name = r.Element("first_name").Value,
-						last_name = r.Element("last_name").Value
-					}
-				).ToList<Registration>();
-				log(registrations.ToString());
-				int numReg = registrations.Count();
-				MessageBox.Show("Event Data Loaded for " + eventTitle.ToUpper() + "(" + numReg + " registrations)");
+		// BUTTON CLICK HANDLERS ====================================================================
+		private void btnLoadFile_Click(object sender, EventArgs e) {
+			OpenFileDialog ofd = new OpenFileDialog();
+			ofd.Filter = "XML File|*.xml";
+			ofd.InitialDirectory = C.INITIAL_DIR;
+			if (DialogResult.OK == ofd.ShowDialog()) {
+				// load xml file
+				System.Xml.Linq.XDocument xdoc = System.Xml.Linq.XDocument.Load(ofd.FileName);
+				int numReg = ReadXML(xdoc);
+				MessageBox.Show(String.Format(C.DATA_LOADED_MSG, eventTitle.ToUpper(), numReg));
 				this.loadPanel.Hide();
 				this.scanPanel.Show();
-
-
-			} catch (Exception ex) {
-				log(ex.StackTrace);
+			} else {
+				MessageBox.Show(C.SELECT_FILE_MSG);
+			}
+		}
+		private void btnScan_Click(object sender, EventArgs e) {
+			string barCode = Scan();
+			if (!string.IsNullOrEmpty(barCode)) {
+				ScanIncrement();
+				Log("Scanned "+barCode);
+				string evID = "";
+				int regID = 0;
+				try {
+					String[] parts = barCode.Split(' ');
+					Log(parts[0]);
+					Log(parts[1]);
+					evID = parts[0];
+					regID = Convert.ToInt32(parts[1]);
+					// check event code matches
+					if (evID != eventID) {
+						BadEventCode();
+					} else {
+						// event ok, check reg id against list
+						Registration reg = registrations.FirstOrDefault(r => r.id == regID);
+						if (reg != null) {
+							// on the list 
+							if (regScanned_OnList.Contains(regID)) {
+								RegAlreadyScanned();
+							} else {
+								RegOk(reg);
+							}
+						} else {
+							// not on the list
+							RegNotOk(regID);
+						}
+					}
+				} catch (Exception ex) {
+					BadFormat();
+				}
+			} else {
+				ScanFail();
+			}
+		}
+		private void btnScanDone_Click(object sender, EventArgs e) {
+			if (regScanned_OnList.Count > 0) {
+				MessageBox.Show(String.Format(C.REG_SAVED_MSG, regScanned_OnList.Count));
+				SaveCsvFile();
+			} else {
+				MessageBox.Show(C.NO_REG_SAVED_MSG);
+			}
+			this.Close();
+		}
+		private void btnLoadFromWeb_Click(object sender, EventArgs e) {
+			if (IsServerAvailable()) {
+				try {
+					string data = GetDataFromServer();
+					System.Xml.Linq.XDocument xdoc = System.Xml.Linq.XDocument.Parse(data.ToString());
+					int numReg = ReadXML(xdoc);
+					MessageBox.Show( String.Format(C.DATA_LOADED_MSG, eventTitle.ToUpper(),numReg) );
+					this.loadPanel.Hide();
+					this.scanPanel.Show();
+				} catch (Exception ex) {
+					Log(ex.StackTrace);
+					MessageBox.Show(C.NO_CONNECTION_MSG);
+				}
+			} else {
+				MessageBox.Show(C.NO_CONNECTION_MSG);
 			}
 		}
 
 
 	}
 
+	// registration class for each registered delegate
 	public class Registration {
 		public int id { get; set; }
+		public string title { get; set; }
 		public string first_name { get; set; }
 		public string last_name { get; set; }
+		public string suffix { get; set; }
 	}
 
 
