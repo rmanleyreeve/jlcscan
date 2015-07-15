@@ -14,15 +14,15 @@ namespace REMedia.JlcScan {
 
 
 		//UI messages
-		public const string NO_CONNECTION_MSG = "No Internet connection.\nPlease load data file from PDA";
-		public const string WEBSVC_FAIL_MSG = "Cannot connect to Venture server.\nPlease load data file from PDA";
-		public const string CHECK_URL = "http://jlcventure.com/websvc/check.html";
 		public const string VALID_REG_MSG = "VALID REGISTRATION";
 		public const string INVALID_REG_MSG = "ERROR\nREGISTRATION NOT VALID";
 		public const string BAD_FORMAT_MSG = "ERROR\nWRONG BARCODE FORMAT";
 		public const string SCAN_FAIL_MSG = "ERROR\nFAILED TO SCAN\nTRY AGAIN";
 		public const string DUPLICATE_SCAN_MSG = "ERROR\nBADGE WAS ALREADY SCANNED";
 		public const string BAD_EVENT_MSG = "ERROR\nWRONG EVENT CODE";
+		public const string NO_CONNECTION_MSG = "No Internet connection.\nPlease load data file from PDA";
+		public const string WEBSVC_FAIL_MSG = "Cannot get data from Venture server.\nPlease load data file from PDA";
+		public const string CHECK_URL = "http://jlcventure.com/websvc/check.html";
 		public const string SELECT_FILE_MSG = "Please select an Event Data file";
 		public const string DATA_LOADED_MSG = "Event Data Loaded for {0} ({1} registrations)";
 		public const string NO_REG_SAVED_MSG = "No valid registrations to save";
@@ -30,8 +30,8 @@ namespace REMedia.JlcScan {
 
 		// constant vars
 		public const string INITIAL_DIR = "\\My Documents";
-		public const string WEBSVC_ENDPOINT = "http://jlcventure.com/websvc/pda_event.php";
-		public const string WEBSVC_EVENTS = "http://jlcventure.com/websvc/pda_events.php";
+		public const string WEBSVC_EVENTS_ENDPOINT = "http://jlcventure.com/websvc/pda_event.php";
+		public const string WEBSVC_EVENT_ENDPOINT = "http://jlcventure.com/websvc/pda_events.php";
 
 
 

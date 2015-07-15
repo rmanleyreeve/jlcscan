@@ -273,7 +273,7 @@ namespace REMedia.JlcScan {
 		}
 		private void GetEventListFromServer() {
 			try {
-				string data = GetDataFromServer(C.WEBSVC_EVENTS);
+				string data = GetDataFromServer(C.WEBSVC_EVENT_ENDPOINT);
 				XDocument xdoc = XDocument.Parse(data.ToString());
 				numEvents = ReadXMLEvents(xdoc);
 			} catch (Exception ex) {
@@ -304,7 +304,7 @@ namespace REMedia.JlcScan {
 				try {
 					int id = (int)menuEvents.SelectedValue;
 					if (id > 0) {
-						string url = C.WEBSVC_ENDPOINT + "?id=" + id;
+						string url = C.WEBSVC_EVENTS_ENDPOINT + "?id=" + id;
 						string data = GetDataFromServer(url);
 						XDocument xdoc = XDocument.Parse(data.ToString());
 						int numReg = ReadXMLRegistrations(xdoc);
