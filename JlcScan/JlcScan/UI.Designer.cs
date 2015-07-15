@@ -184,7 +184,6 @@
 			this.Text = "JLC Scan";
 			this.Load += new System.EventHandler(this.Ui_Load);
 			this.Closed += new System.EventHandler(this.Ui_Closed);
-			this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Ui_KeyPress);
 			this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Ui_KeyUp);
 			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Ui_KeyDown);
 			this.containerPanel.ResumeLayout(false);
