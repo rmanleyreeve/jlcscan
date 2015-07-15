@@ -75,6 +75,7 @@
     <EmbeddedResource Include="UI.resx">
       <DependentUpon>UI.cs</DependentUpon>
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
