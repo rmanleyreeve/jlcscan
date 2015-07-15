@@ -108,7 +108,7 @@ namespace REMedia.JlcScan {
 			iconBox.Refresh();
 		}
 		private void populateDropdown() {
-			events.Insert(0, new Event() { id = 139, display_name = "TEST" });
+			events.Insert(0, new Event() { id = 139, display_name = "TEST" }); // HACK
 			events.Insert(0, new Event() { id = 0, display_name = "Select..." });
 			menuEvents.DataSource = events;
 			menuEvents.ValueMember = "id";
@@ -145,7 +145,9 @@ namespace REMedia.JlcScan {
 			C.PlaySound(@"\windows\critical.wav");
 			UpdateIcon("no");
 			UpdateScanResult(C.INVALID_REG_MSG);
-			// TODO show override screen
+			// TODO show override screen here
+
+
 		}
 		public void RegAlreadyScanned() {
 			C.PlaySound(@"\windows\critical.wav");
@@ -175,7 +177,7 @@ namespace REMedia.JlcScan {
 			eventTitle = (String)xdoc.Element("event").Element("title");
 			foreach (XElement el in xdoc.Descendants("registration")) {
 				try {
-					Log(String.Format("Added {0}->{1}",Convert.ToInt32(el.Attribute("num").Value), Convert.ToInt32(el.Attribute("id").Value)));
+					Log(String.Format("Added #{0}->{1}",Convert.ToInt32(el.Attribute("num").Value), Convert.ToInt32(el.Attribute("id").Value))); // DEBUG
 					Registration r = new Registration() {
 						id = Convert.ToInt32(el.Attribute("id").Value),
 						first_name = FixNull(el.Element("first_name").Value),
@@ -187,7 +189,7 @@ namespace REMedia.JlcScan {
 					Log(el.ToString());
 				}
 			}
-			Log("count=" + count + " actual=" + registrations.Count()); // DEBUG
+			Log("XML count=" + count + ", read=" + registrations.Count()); // DEBUG
 			return registrations.Count();
 		}
 		private int ReadXMLEvents(XDocument xdoc) {
@@ -245,7 +247,7 @@ namespace REMedia.JlcScan {
 				request.Timeout = 30000;
 				request.UserAgent = "Mozilla/4.0 (compatible; MSIE 6.01; Windows NT 5.0)";
 				response = (HttpWebResponse)request.GetResponse();
-				Log("cLen: "+response.ContentLength.ToString());
+				Log("Got " + response.ContentLength.ToString() + " bytes"); // DEBUG
 				resStream = response.GetResponseStream();
 				string tempString = null;
 				int count = 0;
@@ -307,8 +309,8 @@ namespace REMedia.JlcScan {
 						XDocument xdoc = XDocument.Parse(data.ToString());
 						int numReg = ReadXMLRegistrations(xdoc);
 						MessageBox.Show(String.Format(C.DATA_LOADED_MSG, eventTitle.ToUpper(), numReg));
-						//this.loadPanel.Hide();
-						//this.scanPanel.Show();
+						this.loadPanel.Hide();
+						this.scanPanel.Show();
 					} else {
 						MessageBox.Show("No event selected!");
 					}
@@ -324,13 +326,13 @@ namespace REMedia.JlcScan {
 			string barCode = Scan();
 			if (!string.IsNullOrEmpty(barCode)) {
 				ScanIncrement();
-				Log("Scanned " + barCode);
+				Log("Scanned: " + barCode);
 				string evID = "";
 				int regID = 0;
 				try {
 					String[] parts = barCode.Split(' ');
-					Log(parts[0]);
-					Log(parts[1]);
+					Log("Event Code: "+parts[0]);
+					Log("Reg ID: "+parts[1]);
 					evID = parts[0];
 					regID = Convert.ToInt32(parts[1]);
 					// check event code matches
