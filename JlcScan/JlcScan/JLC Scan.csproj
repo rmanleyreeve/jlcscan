@@ -83,7 +83,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="SystemHelper.cs" />
-    <Compile Include="SystemInco.cs" />
+    <Compile Include="SystemInfo.cs" />
     <Compile Include="UI.cs">
       <SubType>Form</SubType>
     </Compile>

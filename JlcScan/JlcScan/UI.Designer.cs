@@ -39,6 +39,9 @@
 			this.iconBox = new System.Windows.Forms.PictureBox();
 			this.lblScanSum = new System.Windows.Forms.Label();
 			this.btnScanDone = new System.Windows.Forms.Button();
+			this.btnSelect = new System.Windows.Forms.Button();
+			this.lblValid = new System.Windows.Forms.Label();
+			this.lblScanFail = new System.Windows.Forms.Label();
 			this.containerPanel.SuspendLayout();
 			this.loadPanel.SuspendLayout();
 			this.scanPanel.SuspendLayout();
@@ -58,8 +61,8 @@
 			// 
 			this.containerPanel.BackColor = System.Drawing.Color.Lavender;
 			this.containerPanel.Controls.Add(this.lblLogo);
-			this.containerPanel.Controls.Add(this.loadPanel);
 			this.containerPanel.Controls.Add(this.scanPanel);
+			this.containerPanel.Controls.Add(this.loadPanel);
 			this.containerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.containerPanel.Location = new System.Drawing.Point(0, 0);
 			this.containerPanel.Name = "containerPanel";
@@ -128,12 +131,15 @@
 			// scanPanel
 			// 
 			this.scanPanel.BackColor = System.Drawing.Color.DarkCyan;
-			this.scanPanel.Controls.Add(this.labelScanInfo);
+			this.scanPanel.Controls.Add(this.lblScanFail);
+			this.scanPanel.Controls.Add(this.lblValid);
 			this.scanPanel.Controls.Add(this.btnScan);
-			this.scanPanel.Controls.Add(this.lblScanResult);
-			this.scanPanel.Controls.Add(this.iconBox);
-			this.scanPanel.Controls.Add(this.lblScanSum);
+			this.scanPanel.Controls.Add(this.btnSelect);
 			this.scanPanel.Controls.Add(this.btnScanDone);
+			this.scanPanel.Controls.Add(this.labelScanInfo);
+			this.scanPanel.Controls.Add(this.iconBox);
+			this.scanPanel.Controls.Add(this.lblScanResult);
+			this.scanPanel.Controls.Add(this.lblScanSum);
 			this.scanPanel.Location = new System.Drawing.Point(0, 24);
 			this.scanPanel.Name = "scanPanel";
 			this.scanPanel.Size = new System.Drawing.Size(238, 246);
@@ -146,16 +152,15 @@
 			this.labelScanInfo.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
 			this.labelScanInfo.Location = new System.Drawing.Point(0, 0);
 			this.labelScanInfo.Name = "labelScanInfo";
-			this.labelScanInfo.Size = new System.Drawing.Size(238, 42);
+			this.labelScanInfo.Size = new System.Drawing.Size(238, 28);
 			this.labelScanInfo.Text = "Ready to Scan";
 			this.labelScanInfo.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
 			// btnScan
 			// 
-			this.btnScan.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold);
-			this.btnScan.Location = new System.Drawing.Point(56, 32);
+			this.btnScan.Location = new System.Drawing.Point(4, 32);
 			this.btnScan.Name = "btnScan";
-			this.btnScan.Size = new System.Drawing.Size(124, 48);
+			this.btnScan.Size = new System.Drawing.Size(72, 20);
 			this.btnScan.TabIndex = 2;
 			this.btnScan.Text = "Scan";
 			this.btnScan.Click += new System.EventHandler(this.btnScan_Click);
@@ -165,33 +170,59 @@
 			this.lblScanResult.BackColor = System.Drawing.Color.DarkCyan;
 			this.lblScanResult.Font = new System.Drawing.Font("Tahoma", 11F, System.Drawing.FontStyle.Regular);
 			this.lblScanResult.ForeColor = System.Drawing.Color.White;
-			this.lblScanResult.Location = new System.Drawing.Point(0, 152);
+			this.lblScanResult.Location = new System.Drawing.Point(0, 128);
 			this.lblScanResult.Name = "lblScanResult";
-			this.lblScanResult.Size = new System.Drawing.Size(238, 50);
+			this.lblScanResult.Size = new System.Drawing.Size(238, 76);
 			this.lblScanResult.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
 			// iconBox
 			// 
-			this.iconBox.Location = new System.Drawing.Point(96, 88);
+			this.iconBox.Location = new System.Drawing.Point(96, 68);
 			this.iconBox.Name = "iconBox";
 			this.iconBox.Size = new System.Drawing.Size(48, 48);
 			// 
 			// lblScanSum
 			// 
 			this.lblScanSum.BackColor = System.Drawing.Color.DarkCyan;
+			this.lblScanSum.Font = new System.Drawing.Font("Tahoma", 8F, System.Drawing.FontStyle.Regular);
 			this.lblScanSum.Location = new System.Drawing.Point(0, 224);
 			this.lblScanSum.Name = "lblScanSum";
-			this.lblScanSum.Size = new System.Drawing.Size(120, 20);
+			this.lblScanSum.Size = new System.Drawing.Size(76, 20);
 			this.lblScanSum.Text = "Scanned: 0";
 			// 
 			// btnScanDone
 			// 
-			this.btnScanDone.Location = new System.Drawing.Point(160, 224);
+			this.btnScanDone.Location = new System.Drawing.Point(160, 32);
 			this.btnScanDone.Name = "btnScanDone";
 			this.btnScanDone.Size = new System.Drawing.Size(72, 20);
 			this.btnScanDone.TabIndex = 4;
 			this.btnScanDone.Text = "Done";
 			this.btnScanDone.Click += new System.EventHandler(this.btnScanDone_Click);
+			// 
+			// btnSelect
+			// 
+			this.btnSelect.Location = new System.Drawing.Point(82, 32);
+			this.btnSelect.Name = "btnSelect";
+			this.btnSelect.Size = new System.Drawing.Size(72, 20);
+			this.btnSelect.TabIndex = 6;
+			this.btnSelect.Text = "Options";
+			this.btnSelect.Click += new System.EventHandler(this.btnSelect_Click);
+			// 
+			// lblValid
+			// 
+			this.lblValid.Font = new System.Drawing.Font("Tahoma", 8F, System.Drawing.FontStyle.Regular);
+			this.lblValid.Location = new System.Drawing.Point(92, 224);
+			this.lblValid.Name = "lblValid";
+			this.lblValid.Size = new System.Drawing.Size(60, 20);
+			this.lblValid.Text = "Valid:";
+			// 
+			// lblScanFail
+			// 
+			this.lblScanFail.Font = new System.Drawing.Font("Tahoma", 8F, System.Drawing.FontStyle.Regular);
+			this.lblScanFail.Location = new System.Drawing.Point(168, 224);
+			this.lblScanFail.Name = "lblScanFail";
+			this.lblScanFail.Size = new System.Drawing.Size(68, 20);
+			this.lblScanFail.Text = "Failed:";
 			// 
 			// UI
 			// 
@@ -234,5 +265,8 @@
 		private System.Windows.Forms.Button btnLoadFromWeb;
 		private System.Windows.Forms.Label labelLoadWeb;
 		private System.Windows.Forms.ComboBox menuEvents;
+		private System.Windows.Forms.Button btnSelect;
+		private System.Windows.Forms.Label lblValid;
+		private System.Windows.Forms.Label lblScanFail;
 	}
 }
