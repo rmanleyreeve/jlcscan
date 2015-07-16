@@ -69,9 +69,9 @@
 			// 
 			this.containerPanel.BackColor = System.Drawing.Color.Lavender;
 			this.containerPanel.Controls.Add(this.lblLogo);
-			this.containerPanel.Controls.Add(this.optionsPanel);
 			this.containerPanel.Controls.Add(this.scanPanel);
 			this.containerPanel.Controls.Add(this.loadPanel);
+			this.containerPanel.Controls.Add(this.optionsPanel);
 			this.containerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.containerPanel.Location = new System.Drawing.Point(0, 0);
 			this.containerPanel.Name = "containerPanel";
@@ -154,18 +154,22 @@
 			// 
 			// lblScanFail
 			// 
+			this.lblScanFail.BackColor = System.Drawing.Color.Lavender;
 			this.lblScanFail.Font = new System.Drawing.Font("Tahoma", 8F, System.Drawing.FontStyle.Regular);
+			this.lblScanFail.ForeColor = System.Drawing.Color.Black;
 			this.lblScanFail.Location = new System.Drawing.Point(168, 224);
 			this.lblScanFail.Name = "lblScanFail";
-			this.lblScanFail.Size = new System.Drawing.Size(68, 20);
+			this.lblScanFail.Size = new System.Drawing.Size(72, 20);
 			this.lblScanFail.Text = "Failed:";
 			// 
 			// lblValid
 			// 
+			this.lblValid.BackColor = System.Drawing.Color.Lavender;
 			this.lblValid.Font = new System.Drawing.Font("Tahoma", 8F, System.Drawing.FontStyle.Regular);
+			this.lblValid.ForeColor = System.Drawing.Color.Black;
 			this.lblValid.Location = new System.Drawing.Point(92, 224);
 			this.lblValid.Name = "lblValid";
-			this.lblValid.Size = new System.Drawing.Size(60, 20);
+			this.lblValid.Size = new System.Drawing.Size(76, 20);
 			this.lblValid.Text = "Valid:";
 			// 
 			// btnScan
@@ -224,12 +228,13 @@
 			// 
 			// lblScanSum
 			// 
-			this.lblScanSum.BackColor = System.Drawing.Color.DarkCyan;
+			this.lblScanSum.BackColor = System.Drawing.Color.Lavender;
 			this.lblScanSum.Font = new System.Drawing.Font("Tahoma", 8F, System.Drawing.FontStyle.Regular);
+			this.lblScanSum.ForeColor = System.Drawing.Color.Black;
 			this.lblScanSum.Location = new System.Drawing.Point(0, 224);
 			this.lblScanSum.Name = "lblScanSum";
-			this.lblScanSum.Size = new System.Drawing.Size(76, 20);
-			this.lblScanSum.Text = "Scanned: 0";
+			this.lblScanSum.Size = new System.Drawing.Size(92, 20);
+			this.lblScanSum.Text = "Scanned:";
 			// 
 			// loadPanel
 			// 
