@@ -50,21 +50,15 @@ namespace REMedia.JlcScan {
 				this.Close();
 			} else {
 				// set up UI
-				UpdateScanResult(String.Empty);
-				numTotalScans = 0;
-				numValidScans = 0;
-				numFailedScans = 0;
-				UpdateScanCounts();
-				iconBox.Invalidate();
-				SelectedSocialEventId = 0;
+				ClearData();
 				ScannerActive = false;
 				// check if web services available
 				Online = IsServerAvailable();
 				if (Online) {
 					GetEventListFromServer();
 					if (numEvents > 0) {
-						menuEvents.Show();
 						PopulateEventsDropdown();
+						menuEvents.Show();
 						btnLoadFromWeb.Show();
 					} else {
 						DisplayOfflineText();
@@ -72,6 +66,19 @@ namespace REMedia.JlcScan {
 				}
 				Barcode1D_init();
 			}
+		}
+		private void ClearData() {
+			UpdateScanResult(String.Empty);
+			numTotalScans = 0;
+			numValidScans = 0;
+			numFailedScans = 0;
+			UpdateScanCounts();
+			iconBox.Invalidate();
+			iconBox.Image = null;
+			iconBox.Refresh();
+			SelectedSocialEventId = 0;
+			regScanned_OnList.Clear();
+			regScanned_NotOnList.Clear();
 		}
 		private void Ui_Closed(object sender, EventArgs e) {
 			//Log("PROGRAM CLOSED");
@@ -138,7 +145,7 @@ namespace REMedia.JlcScan {
 			menuEvents.DisplayMember = "display_name";
 		}
 		private void PopulateSocialEventsOptionsDropdown() {
-			se_options.Insert (0, new SocialEventOption() {id = 0, display_name = "Choose Social Event..."});
+			se_options.Insert(0, new SocialEventOption() { id = 0, display_name = "Choose Social Event..." });
 			menuSocialEvents.DataSource = se_options;
 			menuSocialEvents.ValueMember = "id";
 			menuSocialEvents.DisplayMember = "display_name";
@@ -165,7 +172,7 @@ namespace REMedia.JlcScan {
 		}
 		public void CheckSEAccess(Registration reg) {
 			int seoId = GetSelectedSocialEventId();
-			Log("Selected SE: "+seoId); // DEBUG
+			Log("Selected SE: " + seoId); // DEBUG
 			if (reg.social_events_booked.Contains(seoId)) {
 				SE_RegOk(reg);
 			} else {
@@ -248,7 +255,7 @@ namespace REMedia.JlcScan {
 				}
 			}
 			Log("XML count=" + count + ", read=" + registrations.Count()); // DEBUG
-			
+
 			// read in social events
 			foreach (XElement el_se in xdoc.Descendants("socialevent")) {
 				try {
@@ -264,13 +271,13 @@ namespace REMedia.JlcScan {
 								display_name = FixNull(el_se.Attribute("name").Value) + ": " + FixNull(el_seo.Attribute("name").Value)
 							};
 							se_options.Add(seo);
-							foreach (XElement el_seb in el_seo.Descendants("reg")) {
+							foreach (XElement el_seb in el_seo.Descendants("booking")) {
 								try {
-									int booked_reg = Convert.ToInt32(el_seb.Attribute("id").Value);
+									int booked_reg = Convert.ToInt32(el_seb.Value);
 									Log("Booked: " + booked_reg); // DEBUG
 									Registration regBooked = registrations.FirstOrDefault(r => r.id == booked_reg);
 									if (regBooked != null) {
-										regBooked.social_events_booked.Add(Convert.ToInt32(el_seo.Attribute("id").Value) );
+										regBooked.social_events_booked.Add(Convert.ToInt32(el_seo.Attribute("id").Value));
 									}
 								} catch (Exception ex) {
 									Log(ex.StackTrace);
@@ -390,8 +397,10 @@ namespace REMedia.JlcScan {
 		}
 		private void GotoOptionsScreen() {
 			ScannerActive = false;
+			ClearData();
 			this.loadPanel.Hide();
 			this.scanPanel.Hide();
+			menuSocialEvents.SelectedIndex = 0;
 			this.optionsPanel.Show();
 		}
 		private void GotoScanScreen() {
@@ -499,7 +508,7 @@ namespace REMedia.JlcScan {
 			this.Close();
 		}
 		private void btnSelect_Click(object sender, EventArgs e) {
-			// TODO show choose option screen here
+			GotoOptionsScreen();
 		}
 		private void btnScanRegOnly_Click(object sender, EventArgs e) {
 			GotoScanScreen();
@@ -510,7 +519,7 @@ namespace REMedia.JlcScan {
 				SelectedSocialEventId = id;
 				GotoScanScreen();
 			} else {
-				MessageBox.Show("No event selected!");
+				MessageBox.Show("No social event selected!");
 			}
 		}
 
