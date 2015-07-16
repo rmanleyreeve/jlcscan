@@ -157,7 +157,7 @@
 			this.lblScanFail.BackColor = System.Drawing.Color.Lavender;
 			this.lblScanFail.Font = new System.Drawing.Font("Tahoma", 8F, System.Drawing.FontStyle.Regular);
 			this.lblScanFail.ForeColor = System.Drawing.Color.Black;
-			this.lblScanFail.Location = new System.Drawing.Point(168, 224);
+			this.lblScanFail.Location = new System.Drawing.Point(168, 228);
 			this.lblScanFail.Name = "lblScanFail";
 			this.lblScanFail.Size = new System.Drawing.Size(72, 20);
 			this.lblScanFail.Text = "Failed:";
@@ -167,7 +167,7 @@
 			this.lblValid.BackColor = System.Drawing.Color.Lavender;
 			this.lblValid.Font = new System.Drawing.Font("Tahoma", 8F, System.Drawing.FontStyle.Regular);
 			this.lblValid.ForeColor = System.Drawing.Color.Black;
-			this.lblValid.Location = new System.Drawing.Point(92, 224);
+			this.lblValid.Location = new System.Drawing.Point(92, 228);
 			this.lblValid.Name = "lblValid";
 			this.lblValid.Size = new System.Drawing.Size(76, 20);
 			this.lblValid.Text = "Valid:";
@@ -231,7 +231,7 @@
 			this.lblScanSum.BackColor = System.Drawing.Color.Lavender;
 			this.lblScanSum.Font = new System.Drawing.Font("Tahoma", 8F, System.Drawing.FontStyle.Regular);
 			this.lblScanSum.ForeColor = System.Drawing.Color.Black;
-			this.lblScanSum.Location = new System.Drawing.Point(0, 224);
+			this.lblScanSum.Location = new System.Drawing.Point(0, 228);
 			this.lblScanSum.Name = "lblScanSum";
 			this.lblScanSum.Size = new System.Drawing.Size(92, 20);
 			this.lblScanSum.Text = "Scanned:";
