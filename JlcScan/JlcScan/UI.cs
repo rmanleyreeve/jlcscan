@@ -35,7 +35,8 @@ namespace REMedia.JlcScan {
 		private static List<int> regScanned_OnList = new List<int>();
 		private static List<int> regScanned_NotOnList = new List<int>();
 		public bool Online = false;
-		public bool ScannerActive = false;
+		public bool ScannerActive;
+		private int SelectedSocialEventId;
 
 		public UI() {
 			InitializeComponent();
@@ -55,13 +56,15 @@ namespace REMedia.JlcScan {
 				numFailedScans = 0;
 				UpdateScanCounts();
 				iconBox.Invalidate();
+				SelectedSocialEventId = 0;
+				ScannerActive = false;
 				// check if web services available
 				Online = IsServerAvailable();
 				if (Online) {
 					GetEventListFromServer();
 					if (numEvents > 0) {
 						menuEvents.Show();
-						populateDropdown();
+						PopulateEventsDropdown();
 						btnLoadFromWeb.Show();
 					} else {
 						DisplayOfflineText();
@@ -77,7 +80,7 @@ namespace REMedia.JlcScan {
 		}
 		private void Ui_KeyDown(object sender, KeyEventArgs e) {
 			//Log("KEY DOWN");
-			if (ScannerActive && e.KeyValue == (int)ConstantKeyValue.Scan) {
+			if (IsScannerActive() && e.KeyValue == (int)ConstantKeyValue.Scan) {
 				this.btnScan_Click(null, null);
 			}
 			if (e.KeyValue == (int)ConstantKeyValue.ESC) {
@@ -95,6 +98,12 @@ namespace REMedia.JlcScan {
 		}
 		public string FixNull(string s) {
 			return (s != null) ? s : String.Empty;
+		}
+		public bool IsScannerActive() {
+			return ScannerActive;
+		}
+		public int GetSelectedSocialEventId() {
+			return SelectedSocialEventId;
 		}
 
 		// UI METHODS ============================================================================
@@ -121,12 +130,18 @@ namespace REMedia.JlcScan {
 			iconBox.Image = (Image)new System.ComponentModel.ComponentResourceManager(typeof(UI)).GetObject(str);
 			iconBox.Refresh();
 		}
-		private void populateDropdown() {
-			events.Insert(0, new Event() { id = 139, display_name = "TEST" }); // HACK
-			events.Insert(0, new Event() { id = 0, display_name = "Select..." });
+		private void PopulateEventsDropdown() {
+			events.Insert(0, new Event() { id = 139, display_name = "RE MEDIA TEST EVENT" }); // HACK
+			events.Insert(0, new Event() { id = 0, display_name = "Choose Event..." });
 			menuEvents.DataSource = events;
 			menuEvents.ValueMember = "id";
 			menuEvents.DisplayMember = "display_name";
+		}
+		private void PopulateSocialEventsOptionsDropdown() {
+			se_options.Insert (0, new SocialEventOption() {id = 0, display_name = "Choose Social Event..."});
+			menuSocialEvents.DataSource = se_options;
+			menuSocialEvents.ValueMember = "id";
+			menuSocialEvents.DisplayMember = "display_name";
 		}
 		private void DisplayOfflineText() {
 			labelLoadWeb.Text = "No Internet Connection";
@@ -134,19 +149,35 @@ namespace REMedia.JlcScan {
 
 		// SCANNING RELATED METHODS ================================================================
 		public static string Scan() {
-			int ibarLen = 0;
-			byte[] pszData = new byte[2048];
+			int barLen = 0;
+			byte[] bcData = new byte[2048];
 			string barcode = string.Empty;
 			try {
-				ibarLen = Barcode1D_scan(pszData);
-				if (ibarLen > 0) {
-					barcode = Encoding.ASCII.GetString(pszData, 0, ibarLen).Trim();
+				barLen = Barcode1D_scan(bcData);
+				if (barLen > 0) {
+					barcode = Encoding.ASCII.GetString(bcData, 0, barLen).Trim();
 				}
 				return barcode;
 			} catch (System.Exception ex) {
 				Log(ex.Message);
 				return String.Empty;
 			}
+		}
+		public void CheckSEAccess(Registration reg) {
+			int seoId = GetSelectedSocialEventId();
+			Log("Selected SE: "+seoId); // DEBUG
+			if (reg.social_events_booked.Contains(seoId)) {
+				SE_RegOk(reg);
+			} else {
+				SE_RegNotOk(reg.id);
+			}
+		}
+		public void SE_RegOk(Registration reg) {
+			regScanned_OnList.Add(reg.id);
+			C.PlaySound(@"\windows\beep.wav");
+			UpdateIcon("ok");
+			UpdateScanResult(reg.first_name + " " + reg.last_name + "\n" + C.VALID_SE_REG_MSG);
+			ScanIncrementValid();
 		}
 		public void RegOk(Registration reg) {
 			regScanned_OnList.Add(reg.id);
@@ -162,8 +193,14 @@ namespace REMedia.JlcScan {
 			UpdateScanResult(C.INVALID_REG_MSG);
 			ScanIncrementFail();
 			// TODO show override screen here
-
-
+		}
+		public void SE_RegNotOk(int r) {
+			regScanned_NotOnList.Add(r);
+			C.PlaySound(@"\windows\critical.wav");
+			UpdateIcon("no");
+			UpdateScanResult(C.INVALID_SE_REG_MSG);
+			ScanIncrementFail();
+			// TODO show Social Events override screen here
 		}
 		public void RegAlreadyScanned() {
 			C.PlaySound(@"\windows\critical.wav");
@@ -229,11 +266,11 @@ namespace REMedia.JlcScan {
 							se_options.Add(seo);
 							foreach (XElement el_seb in el_seo.Descendants("reg")) {
 								try {
-									int booked = Convert.ToInt32(el_seb.Attribute("id").Value);
-									Log("Booked: " + booked); // DEBUG
-									Registration regBooked = registrations.FirstOrDefault(r => r.id == booked);
+									int booked_reg = Convert.ToInt32(el_seb.Attribute("id").Value);
+									Log("Booked: " + booked_reg); // DEBUG
+									Registration regBooked = registrations.FirstOrDefault(r => r.id == booked_reg);
 									if (regBooked != null) {
-										regBooked.social_events_booked.Add(booked);
+										regBooked.social_events_booked.Add(Convert.ToInt32(el_seo.Attribute("id").Value) );
 									}
 								} catch (Exception ex) {
 									Log(ex.StackTrace);
@@ -342,6 +379,37 @@ namespace REMedia.JlcScan {
 			}
 		}
 
+		// NAVIGATION ==================================================================================
+		private void LoadComplete() {
+			if (se_options.Count > 0) {
+				PopulateSocialEventsOptionsDropdown();
+				GotoOptionsScreen();
+			} else {
+				GotoScanScreen();
+			}
+		}
+		private void GotoOptionsScreen() {
+			ScannerActive = false;
+			this.loadPanel.Hide();
+			this.scanPanel.Hide();
+			this.optionsPanel.Show();
+		}
+		private void GotoScanScreen() {
+			ScannerActive = true;
+			this.loadPanel.Hide();
+			this.optionsPanel.Hide();
+			this.scanPanel.Show();
+		}
+		private void GotoSaveScreen() {
+			// TODO show data file export options here
+			ScannerActive = false;
+			this.loadPanel.Hide();
+			this.optionsPanel.Hide();
+			this.scanPanel.Hide();
+			MessageBox.Show(String.Format(C.REG_SAVED_MSG, regScanned_OnList.Count));
+			SaveCsvFile();
+		}
+
 		// BUTTON CLICK HANDLERS ====================================================================
 		private void btnLoadFile_Click(object sender, EventArgs e) {
 			OpenFileDialog ofd = new OpenFileDialog();
@@ -403,7 +471,11 @@ namespace REMedia.JlcScan {
 							if (regScanned_OnList.Contains(regID)) {
 								RegAlreadyScanned();
 							} else {
-								RegOk(reg);
+								if (GetSelectedSocialEventId() != 0) {
+									CheckSEAccess(reg);
+								} else {
+									RegOk(reg);
+								}
 							}
 						} else {
 							// not on the list
@@ -426,32 +498,23 @@ namespace REMedia.JlcScan {
 			}
 			this.Close();
 		}
-
 		private void btnSelect_Click(object sender, EventArgs e) {
 			// TODO show choose option screen here
-
 		}
-
-		// NAVIGATION ==================================================================================
-		private void LoadComplete() {
-			if (se_options.Count > 0) {
-				this.loadPanel.Hide();
-				// show options screen
-			} else {
+		private void btnScanRegOnly_Click(object sender, EventArgs e) {
+			GotoScanScreen();
+		}
+		private void btnScanSocialEvents_Click(object sender, EventArgs e) {
+			int id = (int)menuSocialEvents.SelectedValue;
+			if (id > 0) {
+				SelectedSocialEventId = id;
 				GotoScanScreen();
+			} else {
+				MessageBox.Show("No event selected!");
 			}
 		}
-		private void GotoScanScreen() {
-			this.loadPanel.Hide();
-			ScannerActive = true;
-			this.scanPanel.Show();
-		}
-		private void GotoSaveScreen() {
-			// TODO show data file export options here
-			ScannerActive = false;
-			MessageBox.Show(String.Format(C.REG_SAVED_MSG, regScanned_OnList.Count));
-			SaveCsvFile();
-		}
+
+
 
 
 	}

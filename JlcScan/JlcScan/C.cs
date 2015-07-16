@@ -16,6 +16,8 @@ namespace REMedia.JlcScan {
 		//UI messages
 		public const string VALID_REG_MSG = "VALID REGISTRATION";
 		public const string INVALID_REG_MSG = "ERROR\nREGISTRATION NOT VALID";
+		public const string VALID_SE_REG_MSG = "VALID SOCIAL EVENT BOOKING";
+		public const string INVALID_SE_REG_MSG = "ERROR\nNOT BOOKED FOR THIS SOCIAL EVENT";
 		public const string BAD_FORMAT_MSG = "ERROR\nWRONG BARCODE FORMAT";
 		public const string SCAN_FAIL_MSG = "ERROR\nFAILED TO SCAN\nTRY AGAIN";
 		public const string DUPLICATE_SCAN_MSG = "ERROR\nBADGE WAS ALREADY SCANNED";
