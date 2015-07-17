@@ -34,9 +34,11 @@ namespace REMedia.JlcScan {
 		private int numEvents = 0;
 		private static List<int> regScanned_OnList = new List<int>();
 		private static List<int> regScanned_NotOnList = new List<int>();
+		private static List<int> regOverrides = new List<int>();
 		public bool Online = false;
 		public bool ScannerActive;
 		private int SelectedSocialEventId;
+		public int LastScannedId;
 
 		public UI() {
 			InitializeComponent();
@@ -74,8 +76,10 @@ namespace REMedia.JlcScan {
 			numFailedScans = 0;
 			UpdateScanCounts();
 			SelectedSocialEventId = 0;
+			LastScannedId = 0;
 			regScanned_OnList.Clear();
 			regScanned_NotOnList.Clear();
+			regOverrides.Clear();
 		}
 		private void Ui_Closed(object sender, EventArgs e) {
 			//Log("PROGRAM CLOSED");
@@ -109,6 +113,9 @@ namespace REMedia.JlcScan {
 		public int GetSelectedSocialEventId() {
 			return SelectedSocialEventId;
 		}
+		public int GetLastScannedId() {
+			return LastScannedId;
+		}
 
 		// UI METHODS ============================================================================
 		private void UpdateScanResult(string txt) {
@@ -133,28 +140,39 @@ namespace REMedia.JlcScan {
 			this.iconBoxFail.Hide();
 			this.iconBoxNo.Hide();
 			this.iconBoxOK.Hide();
+			this.lblOverride.Hide();
+			this.btnOverride.Hide();
+			this.btnNoOverride.Hide();
+			bool ovr = false;
 			switch (str) {
 				case "ok":
 					this.iconBoxOK.Show();
 					break;
 				case "no":
 					this.iconBoxNo.Show();
-					// TODO show override
+					ovr = true;
+					this.lblOverride.Show();
+					this.btnOverride.Show();
+					this.btnNoOverride.Show();
 					break;
 				case "fail":
 					this.iconBoxFail.Show();
 					break;
 			}
 			// show panel for 3 seconds
+			ScannerActive = false;
 			resultPanel.Show();
-			int secs = 0;
-			Timer timer = new Timer { Interval = 1000, Enabled = true };
-			timer.Tick += delegate {
-				secs++;
-				if (secs < 3) { return; }
-				timer.Enabled = false;
-				this.resultPanel.Hide();
-			};
+			if (!ovr) {
+				int secs = 0;
+				Timer timer = new Timer { Interval = 1000, Enabled = true };
+				timer.Tick += delegate {
+					secs++;
+					if (secs < 3) { return; }
+					timer.Enabled = false;
+					this.resultPanel.Hide();
+					ScannerActive = true;
+				};
+			}
 		}
 		private void PopulateEventsDropdown() {
 			events.Insert(0, new Event() { id = 139, display_name = "RE MEDIA TEST EVENT" }); // HACK
@@ -224,7 +242,6 @@ namespace REMedia.JlcScan {
 			ShowResult("no");
 			UpdateScanResult(C.INVALID_REG_MSG);
 			ScanIncrementFail();
-			// TODO show override screen here
 		}
 		public void SE_RegNotOk(int r) {
 			regScanned_NotOnList.Add(r);
@@ -232,7 +249,6 @@ namespace REMedia.JlcScan {
 			ShowResult("no");
 			UpdateScanResult(C.INVALID_SE_REG_MSG);
 			ScanIncrementFail();
-			// TODO show Social Events override screen here
 		}
 		public void RegAlreadyScanned() {
 			C.PlaySound(@"\windows\critical.wav");
@@ -500,6 +516,7 @@ namespace REMedia.JlcScan {
 						BadEventCode();
 					} else {
 						// event ok, check reg id against list
+						this.LastScannedId = regID;
 						Registration reg = registrations.FirstOrDefault(r => r.id == regID);
 						if (reg != null) {
 							// on the list 
@@ -547,6 +564,18 @@ namespace REMedia.JlcScan {
 			} else {
 				MessageBox.Show("No social event selected!");
 			}
+		}
+		private void btnOverride_Click(object sender, EventArgs e) {
+			MessageBox.Show("Confirm to allow access for this registration");
+			regOverrides.Add(GetLastScannedId());
+			regScanned_OnList.Add(GetLastScannedId());
+			this.resultPanel.Hide();
+			ScannerActive = true;
+		}
+
+		private void btnNoOverride_Click(object sender, EventArgs e) {
+			this.resultPanel.Hide();
+			ScannerActive = true;
 		}
 
 
