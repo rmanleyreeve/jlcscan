@@ -29,7 +29,7 @@
 			this.containerPanel = new System.Windows.Forms.Panel();
 			this.imgLogo = new System.Windows.Forms.PictureBox();
 			this.scanPanel = new System.Windows.Forms.Panel();
-			this.labelScanInfo = new System.Windows.Forms.Label();
+			this.lblScanInfo = new System.Windows.Forms.Label();
 			this.btnScan = new System.Windows.Forms.Button();
 			this.btnSelect = new System.Windows.Forms.Button();
 			this.btnScanDone = new System.Windows.Forms.Button();
@@ -49,7 +49,7 @@
 			this.loadPanel = new System.Windows.Forms.Panel();
 			this.lblLoadFile = new System.Windows.Forms.Label();
 			this.btnLoadFile = new System.Windows.Forms.Button();
-			this.labelLoadWeb = new System.Windows.Forms.Label();
+			this.lblLoadWeb = new System.Windows.Forms.Label();
 			this.menuEvents = new System.Windows.Forms.ComboBox();
 			this.btnLoadFromWeb = new System.Windows.Forms.Button();
 			this.optionsPanel = new System.Windows.Forms.Panel();
@@ -101,7 +101,7 @@
 			// scanPanel
 			// 
 			this.scanPanel.BackColor = System.Drawing.Color.DarkCyan;
-			this.scanPanel.Controls.Add(this.labelScanInfo);
+			this.scanPanel.Controls.Add(this.lblScanInfo);
 			this.scanPanel.Controls.Add(this.btnScan);
 			this.scanPanel.Controls.Add(this.btnSelect);
 			this.scanPanel.Controls.Add(this.btnScanDone);
@@ -116,16 +116,16 @@
 			this.scanPanel.Size = new System.Drawing.Size(238, 246);
 			this.scanPanel.Visible = false;
 			// 
-			// labelScanInfo
+			// lblScanInfo
 			// 
-			this.labelScanInfo.BackColor = System.Drawing.Color.DarkCyan;
-			this.labelScanInfo.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular);
-			this.labelScanInfo.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-			this.labelScanInfo.Location = new System.Drawing.Point(0, 0);
-			this.labelScanInfo.Name = "labelScanInfo";
-			this.labelScanInfo.Size = new System.Drawing.Size(238, 28);
-			this.labelScanInfo.Text = "Badge Scanning Mode";
-			this.labelScanInfo.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			this.lblScanInfo.BackColor = System.Drawing.Color.DarkCyan;
+			this.lblScanInfo.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular);
+			this.lblScanInfo.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+			this.lblScanInfo.Location = new System.Drawing.Point(0, 0);
+			this.lblScanInfo.Name = "lblScanInfo";
+			this.lblScanInfo.Size = new System.Drawing.Size(238, 28);
+			this.lblScanInfo.Text = "Scanning Mode";
+			this.lblScanInfo.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
 			// btnScan
 			// 
@@ -283,7 +283,7 @@
 			this.loadPanel.BackColor = System.Drawing.Color.DarkCyan;
 			this.loadPanel.Controls.Add(this.lblLoadFile);
 			this.loadPanel.Controls.Add(this.btnLoadFile);
-			this.loadPanel.Controls.Add(this.labelLoadWeb);
+			this.loadPanel.Controls.Add(this.lblLoadWeb);
 			this.loadPanel.Controls.Add(this.menuEvents);
 			this.loadPanel.Controls.Add(this.btnLoadFromWeb);
 			this.loadPanel.Location = new System.Drawing.Point(0, 24);
@@ -309,15 +309,15 @@
 			this.btnLoadFile.Text = "Select Data File";
 			this.btnLoadFile.Click += new System.EventHandler(this.btnLoadFile_Click);
 			// 
-			// labelLoadWeb
+			// lblLoadWeb
 			// 
-			this.labelLoadWeb.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular);
-			this.labelLoadWeb.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-			this.labelLoadWeb.Location = new System.Drawing.Point(0, 124);
-			this.labelLoadWeb.Name = "labelLoadWeb";
-			this.labelLoadWeb.Size = new System.Drawing.Size(238, 42);
-			this.labelLoadWeb.Text = "Load Event Data from Venture server:";
-			this.labelLoadWeb.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			this.lblLoadWeb.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular);
+			this.lblLoadWeb.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+			this.lblLoadWeb.Location = new System.Drawing.Point(0, 124);
+			this.lblLoadWeb.Name = "lblLoadWeb";
+			this.lblLoadWeb.Size = new System.Drawing.Size(238, 42);
+			this.lblLoadWeb.Text = "Load Event Data from Venture server:";
+			this.lblLoadWeb.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
 			// menuEvents
 			// 
@@ -359,7 +359,7 @@
 			this.lblOptions.Location = new System.Drawing.Point(0, 0);
 			this.lblOptions.Name = "lblOptions";
 			this.lblOptions.Size = new System.Drawing.Size(238, 32);
-			this.lblOptions.Text = "Choose the Scanner Function:";
+			this.lblOptions.Text = "Choose the Scanner Mode:";
 			this.lblOptions.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
 			// lblScanRegOnlyInfo
@@ -440,12 +440,12 @@
 		private System.Windows.Forms.Button btnLoadFile;
 		private System.Windows.Forms.Label lblLoadFile;
 		private System.Windows.Forms.Panel scanPanel;
-		private System.Windows.Forms.Label labelScanInfo;
+		private System.Windows.Forms.Label lblScanInfo;
 		private System.Windows.Forms.Button btnScan;
 		private System.Windows.Forms.Label lblScanSum;
 		private System.Windows.Forms.Button btnScanDone;
 		private System.Windows.Forms.Button btnLoadFromWeb;
-		private System.Windows.Forms.Label labelLoadWeb;
+		private System.Windows.Forms.Label lblLoadWeb;
 		private System.Windows.Forms.ComboBox menuEvents;
 		private System.Windows.Forms.Button btnSelect;
 		private System.Windows.Forms.Label lblValid;

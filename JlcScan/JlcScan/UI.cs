@@ -32,13 +32,13 @@ namespace REMedia.JlcScan {
 		private int numValidScans;
 		private int numFailedScans;
 		private int numEvents = 0;
-		private static List<int> regScanned_OnList = new List<int>();
-		private static List<int> regScanned_NotOnList = new List<int>();
-		private static List<int> regOverrides = new List<int>();
+		private static List<string> regScanned_OnList = new List<string>();
+		private static List<string> regScanned_NotOnList = new List<string>();
+		private static List<string> regOverrides = new List<string>();
 		public bool Online = false;
 		public bool ScannerActive;
 		private int SelectedSocialEventId;
-		public int LastScannedId;
+		public string LastScannedId;
 
 		public UI() {
 			InitializeComponent();
@@ -76,7 +76,7 @@ namespace REMedia.JlcScan {
 			numFailedScans = 0;
 			UpdateScanCounts();
 			SelectedSocialEventId = 0;
-			LastScannedId = 0;
+			LastScannedId = String.Empty;
 			regScanned_OnList.Clear();
 			regScanned_NotOnList.Clear();
 			regOverrides.Clear();
@@ -113,7 +113,7 @@ namespace REMedia.JlcScan {
 		public int GetSelectedSocialEventId() {
 			return SelectedSocialEventId;
 		}
-		public int GetLastScannedId() {
+		public string GetLastScannedId() {
 			return LastScannedId;
 		}
 
@@ -188,7 +188,7 @@ namespace REMedia.JlcScan {
 			menuSocialEvents.DisplayMember = "display_name";
 		}
 		private void DisplayOfflineText() {
-			labelLoadWeb.Text = "No Internet Connection";
+			lblLoadWeb.Text = "No Internet Connection";
 		}
 		private void DrawBorder(object sender, PaintEventArgs e) {
 			e.Graphics.DrawRectangle(
@@ -236,16 +236,16 @@ namespace REMedia.JlcScan {
 			UpdateScanResult(reg.first_name + " " + reg.last_name + "\n" + C.VALID_REG_MSG);
 			ScanIncrementValid();
 		}
-		public void RegNotOk(int r) {
+		public void RegNotOk(string r) {
 			regScanned_NotOnList.Add(r);
-			C.PlaySound(@"\windows\critical.wav");
+			C.PlaySound(@"\windows\exclam.wav");
 			ShowResult("no");
 			UpdateScanResult(C.INVALID_REG_MSG);
 			ScanIncrementFail();
 		}
-		public void SE_RegNotOk(int r) {
-			regScanned_NotOnList.Add(r);
-			C.PlaySound(@"\windows\critical.wav");
+		public void SE_RegNotOk(string rid) {
+			regScanned_NotOnList.Add(rid);
+			C.PlaySound(@"\windows\exclam.wav");
 			ShowResult("no");
 			UpdateScanResult(C.INVALID_SE_REG_MSG);
 			ScanIncrementFail();
@@ -284,7 +284,7 @@ namespace REMedia.JlcScan {
 				try {
 					Log(String.Format("Added Registration #{0}->{1}", el.Attribute("num").Value, el.Attribute("id").Value)); // DEBUG
 					Registration r = new Registration() {
-						id = Convert.ToInt32(el.Attribute("id").Value),
+						id = FixNull(el.Attribute("id").Value),
 						first_name = FixNull(el.Element("first_name").Value),
 						last_name = FixNull(el.Element("last_name").Value),
 						social_events_booked = new List<int>()
@@ -314,7 +314,7 @@ namespace REMedia.JlcScan {
 							se_options.Add(seo);
 							foreach (XElement el_seb in el_seo.Descendants("booking")) {
 								try {
-									int booked_reg = Convert.ToInt32(el_seb.Value);
+									string booked_reg = el_seb.Value;
 									Log("Booked: " + booked_reg); // DEBUG
 									Registration regBooked = registrations.FirstOrDefault(r => r.id == booked_reg);
 									if (regBooked != null) {
@@ -356,6 +356,10 @@ namespace REMedia.JlcScan {
 			return events.Count();
 		}
 		private void SaveCsvFile() {
+			Log("On List:"); // DEBUG
+			regScanned_OnList.ForEach(x => Log(Convert.ToString(x))); // DEBUG
+			Log("Overrides:"); // DEBUG
+			regOverrides.ForEach(x => Log(Convert.ToString(x))); // DEBUG
 			string filePath = String.Format("{0}\\{1}.csv", C.INITIAL_DIR, eventID);
 			File.Create(filePath).Close();
 			using (TextWriter writer = File.CreateText(filePath)) {
@@ -449,6 +453,11 @@ namespace REMedia.JlcScan {
 			this.loadPanel.Hide();
 			this.optionsPanel.Hide();
 			this.resultPanel.Hide();
+			if (GetSelectedSocialEventId() == 0) {
+				lblScanInfo.Text = "Scan Mode: Registration";
+			} else {
+				lblScanInfo.Text = "Scan Mode: Social Event";
+			}
 			this.scanPanel.Show();
 		}
 		private void GotoSaveScreen() {
@@ -489,7 +498,7 @@ namespace REMedia.JlcScan {
 						MessageBox.Show(String.Format(C.DATA_LOADED_MSG, eventTitle.ToUpper(), numReg));
 						LoadComplete();
 					} else {
-						MessageBox.Show("No event selected!");
+						MessageBox.Show(C.NO_EVENT_SELECTED);
 					}
 				} catch (Exception ex) {
 					Log(ex.StackTrace);
@@ -502,15 +511,15 @@ namespace REMedia.JlcScan {
 		private void btnScan_Click(object sender, EventArgs e) {
 			string barCode = Scan();
 			if (!string.IsNullOrEmpty(barCode)) {
-				Log("Scanned: " + barCode);
-				string evID = "";
-				int regID = 0;
+				Log("Scanned: " + barCode); // DEBUG
+				string evID = String.Empty;
+				string regID = String.Empty;
 				try {
 					String[] parts = barCode.Split(' ');
-					Log("Event Code: " + parts[0]);
-					Log("Reg ID: " + parts[1]);
+					Log("Event Code: " + parts[0]); // DEBUG
+					Log("Reg ID: " + parts[1]); // DEBUG
 					evID = parts[0];
-					regID = Convert.ToInt32(parts[1]);
+					regID = parts[1];
 					// check event code matches
 					if (evID != eventID) {
 						BadEventCode();
@@ -530,8 +539,13 @@ namespace REMedia.JlcScan {
 								}
 							}
 						} else {
-							// not on the list
-							RegNotOk(regID);
+							if (regOverrides.Contains(regID)) {
+								// was overridden and allowed in
+								RegAlreadyScanned();
+							} else {
+								// not on the list
+								RegNotOk(regID);
+							}
 						}
 					}
 				} catch (Exception ex) {
@@ -562,13 +576,15 @@ namespace REMedia.JlcScan {
 				SelectedSocialEventId = id;
 				GotoScanScreen();
 			} else {
-				MessageBox.Show("No social event selected!");
+				MessageBox.Show(C.NO_SOCIAL_EVENT_SELECTED);
 			}
 		}
 		private void btnOverride_Click(object sender, EventArgs e) {
-			MessageBox.Show("Confirm to allow access for this registration");
+			MessageBox.Show(C.OVERRIDE_CONFIRM);
+			C.PlaySound(@"\windows\beep.wav");
 			regOverrides.Add(GetLastScannedId());
 			regScanned_OnList.Add(GetLastScannedId());
+			ScanIncrementValid(); 
 			this.resultPanel.Hide();
 			ScannerActive = true;
 		}
@@ -585,7 +601,7 @@ namespace REMedia.JlcScan {
 
 	// registration class for each registered delegate
 	public class Registration {
-		public int id { get; set; }
+		public string id { get; set; }
 		public string title { get; set; }
 		public string first_name { get; set; }
 		public string last_name { get; set; }
