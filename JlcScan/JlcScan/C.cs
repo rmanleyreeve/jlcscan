@@ -22,6 +22,12 @@ namespace REMedia.JlcScan {
 		public const string SCAN_FAIL_MSG = "ERROR\nFAILED TO SCAN\nTRY AGAIN";
 		public const string DUPLICATE_SCAN_MSG = "ERROR\nBADGE WAS ALREADY SCANNED";
 		public const string BAD_EVENT_MSG = "ERROR\nWRONG EVENT CODE";
+
+		public const string NO_EVENT_SELECTED = "No event selected!";
+		public const string NO_SOCIAL_EVENT_SELECTED = "No social event selected!";
+		public const string OVERRIDE_CONFIRM = "Confirm to allow access for this registration";
+
+
 		public const string NO_CONNECTION_MSG = "No Internet connection.\nPlease load data file from PDA";
 		public const string WEBSVC_FAIL_MSG = "Cannot get data from Venture server.\nPlease load data file from PDA";
 		public const string CHECK_URL = "http://jlcventure.com/websvc/check.html";
