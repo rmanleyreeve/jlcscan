@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -370,18 +370,23 @@ namespace REMedia.JlcScan {
 
 		// NETWORK METHODS ===========================================================================
 		private bool IsServerAvailable() {
-			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(C.CHECK_URL);
-			request.Timeout = 10000;
-			//request.Credentials = CredentialCache.DefaultNetworkCredentials;
-			HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-			if (response.StatusCode == HttpStatusCode.OK) {
-				Log("IsServerAvailable: " + response.StatusCode);
-				response.Close();
-				return true;
-			} else {
-				response.Close();
-				return false;
+			bool ok = false;
+			try {
+				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(C.CHECK_URL);
+				request.Timeout = 10000;
+				//request.Credentials = CredentialCache.DefaultNetworkCredentials;
+				HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+				if (response.StatusCode == HttpStatusCode.OK) {
+					ok = true;
+					Log("IsServerAvailable: " + response.StatusCode);
+					response.Close();
+				} else {
+					response.Close();
+				}
+			} catch(Exception ex) {
+				Log(ex.Message);
 			}
+			return ok;
 		}
 		private string GetDataFromServer(string url) {
 			Log("URL: " + url);
@@ -528,7 +533,7 @@ namespace REMedia.JlcScan {
 						this.LastScannedId = regID;
 						Registration reg = registrations.FirstOrDefault(r => r.id == regID);
 						if (reg != null) {
-							// on the list 
+							// on the list
 							if (regScanned_OnList.Contains(regID)) {
 								RegAlreadyScanned();
 							} else {
@@ -584,7 +589,7 @@ namespace REMedia.JlcScan {
 			C.PlaySound(@"\windows\beep.wav");
 			regOverrides.Add(GetLastScannedId());
 			regScanned_OnList.Add(GetLastScannedId());
-			ScanIncrementValid(); 
+			ScanIncrementValid();
 			this.resultPanel.Hide();
 			ScannerActive = true;
 		}
