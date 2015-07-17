@@ -73,9 +73,6 @@ namespace REMedia.JlcScan {
 			numValidScans = 0;
 			numFailedScans = 0;
 			UpdateScanCounts();
-			iconBox.Invalidate();
-			iconBox.Image = null;
-			iconBox.Refresh();
 			SelectedSocialEventId = 0;
 			regScanned_OnList.Clear();
 			regScanned_NotOnList.Clear();
@@ -132,10 +129,32 @@ namespace REMedia.JlcScan {
 			numFailedScans++;
 			UpdateScanCounts();
 		}
-		private void UpdateIcon(string str) {
-			iconBox.Invalidate();
-			iconBox.Image = (Image)new System.ComponentModel.ComponentResourceManager(typeof(UI)).GetObject(str);
-			iconBox.Refresh();
+		private void ShowResult(string str) {
+			this.iconBoxFail.Hide();
+			this.iconBoxNo.Hide();
+			this.iconBoxOK.Hide();
+			switch (str) {
+				case "ok":
+					this.iconBoxOK.Show();
+					break;
+				case "no":
+					this.iconBoxNo.Show();
+					// TODO show override
+					break;
+				case "fail":
+					this.iconBoxFail.Show();
+					break;
+			}
+			// show panel for 3 seconds
+			resultPanel.Show();
+			int secs = 0;
+			Timer timer = new Timer { Interval = 1000, Enabled = true };
+			timer.Tick += delegate {
+				secs++;
+				if (secs < 3) { return; }
+				timer.Enabled = false;
+				this.resultPanel.Hide();
+			};
 		}
 		private void PopulateEventsDropdown() {
 			events.Insert(0, new Event() { id = 139, display_name = "RE MEDIA TEST EVENT" }); // HACK
@@ -153,7 +172,13 @@ namespace REMedia.JlcScan {
 		private void DisplayOfflineText() {
 			labelLoadWeb.Text = "No Internet Connection";
 		}
-
+		private void DrawBorder(object sender, PaintEventArgs e) {
+			e.Graphics.DrawRectangle(
+				new Pen(Color.Black), 0, 0,
+				e.ClipRectangle.Width - 2,
+				e.ClipRectangle.Height - 2
+			);
+		}
 		// SCANNING RELATED METHODS ================================================================
 		public static string Scan() {
 			int barLen = 0;
@@ -182,21 +207,21 @@ namespace REMedia.JlcScan {
 		public void SE_RegOk(Registration reg) {
 			regScanned_OnList.Add(reg.id);
 			C.PlaySound(@"\windows\beep.wav");
-			UpdateIcon("ok");
+			ShowResult("ok");
 			UpdateScanResult(reg.first_name + " " + reg.last_name + "\n" + C.VALID_SE_REG_MSG);
 			ScanIncrementValid();
 		}
 		public void RegOk(Registration reg) {
 			regScanned_OnList.Add(reg.id);
 			C.PlaySound(@"\windows\beep.wav");
-			UpdateIcon("ok");
+			ShowResult("ok");
 			UpdateScanResult(reg.first_name + " " + reg.last_name + "\n" + C.VALID_REG_MSG);
 			ScanIncrementValid();
 		}
 		public void RegNotOk(int r) {
 			regScanned_NotOnList.Add(r);
 			C.PlaySound(@"\windows\critical.wav");
-			UpdateIcon("no");
+			ShowResult("no");
 			UpdateScanResult(C.INVALID_REG_MSG);
 			ScanIncrementFail();
 			// TODO show override screen here
@@ -204,32 +229,32 @@ namespace REMedia.JlcScan {
 		public void SE_RegNotOk(int r) {
 			regScanned_NotOnList.Add(r);
 			C.PlaySound(@"\windows\critical.wav");
-			UpdateIcon("no");
+			ShowResult("no");
 			UpdateScanResult(C.INVALID_SE_REG_MSG);
 			ScanIncrementFail();
 			// TODO show Social Events override screen here
 		}
 		public void RegAlreadyScanned() {
 			C.PlaySound(@"\windows\critical.wav");
-			UpdateIcon("fail");
+			ShowResult("fail");
 			UpdateScanResult(C.DUPLICATE_SCAN_MSG);
 			ScanIncrementFail();
 		}
 		public void BadEventCode() {
 			C.PlaySound(@"\windows\critical.wav");
-			UpdateIcon("fail");
+			ShowResult("fail");
 			UpdateScanResult(C.BAD_EVENT_MSG);
 			ScanIncrementFail();
 		}
 		public void BadFormat() {
 			C.PlaySound(@"\windows\critical.wav");
-			UpdateIcon("fail");
+			ShowResult("fail");
 			UpdateScanResult(C.BAD_FORMAT_MSG);
 			ScanIncrementFail();
 		}
 		public void ScanFail() {
 			C.PlaySound(@"\windows\critical.wav");
-			UpdateIcon("fail");
+			ShowResult("fail");
 			UpdateScanResult(C.SCAN_FAIL_MSG);
 			ScanIncrementFail();
 		}
@@ -407,6 +432,7 @@ namespace REMedia.JlcScan {
 			ScannerActive = true;
 			this.loadPanel.Hide();
 			this.optionsPanel.Hide();
+			this.resultPanel.Hide();
 			this.scanPanel.Show();
 		}
 		private void GotoSaveScreen() {
@@ -554,5 +580,7 @@ namespace REMedia.JlcScan {
 		public string social_event_name { get; set; }
 		public string display_name { get; set; }
 	}
+
+
 
 }
