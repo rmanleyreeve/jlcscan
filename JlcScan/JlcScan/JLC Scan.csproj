@@ -95,6 +95,7 @@
     <Content Include="DLLs\CeReader.dll" />
     <Content Include="DLLs\CeReader.XML" />
     <Content Include="DLLs\DeviceAPI.dll" />
+    <EmbeddedResource Include="Resources\JLC_logo.png" />
     <EmbeddedResource Include="Resources\ok.png" />
     <EmbeddedResource Include="Resources\no.png" />
     <EmbeddedResource Include="Resources\fail.png" />
