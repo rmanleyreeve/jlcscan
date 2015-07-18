@@ -50,7 +50,7 @@
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CeReader, Version=1.0.2012.619, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="CeReader, Version=1.0.2011.1117, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="mscorlib" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
