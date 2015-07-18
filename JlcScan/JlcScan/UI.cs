@@ -34,7 +34,7 @@ namespace REMedia.JlcScan {
 		private int numEvents = 0;
 		private static List<string> regScanned_OnList = new List<string>();
 		private static List<string> regScanned_NotOnList = new List<string>();
-		private static List<string> regOverrides = new List<string>();
+		private static List<string> regScannedOverrides = new List<string>();
 		public bool Online = false;
 		public bool ScannerActive;
 		private int SelectedSocialEventId;
@@ -56,7 +56,6 @@ namespace REMedia.JlcScan {
 				ScannerActive = false;
 				// check if web services available
 				Online = IsServerAvailable();
-                Log(Online.ToString());
 				if (Online) {
 					GetEventListFromServer();
 					if (numEvents > 0) {
@@ -66,9 +65,9 @@ namespace REMedia.JlcScan {
 					} else {
 						DisplayOfflineText();
 					}
-                } else {
-                    DisplayOfflineText();
-                }
+				} else {
+					DisplayOfflineText();
+				}
 				Barcode1D_init();
 			}
 		}
@@ -82,7 +81,7 @@ namespace REMedia.JlcScan {
 			LastScannedId = String.Empty;
 			regScanned_OnList.Clear();
 			regScanned_NotOnList.Clear();
-			regOverrides.Clear();
+			regScannedOverrides.Clear();
 		}
 		private void Ui_Closed(object sender, EventArgs e) {
 			//Log("PROGRAM CLOSED");
@@ -362,7 +361,7 @@ namespace REMedia.JlcScan {
 			Log("On List:"); // DEBUG
 			regScanned_OnList.ForEach(x => Log(Convert.ToString(x))); // DEBUG
 			Log("Overrides:"); // DEBUG
-			regOverrides.ForEach(x => Log(Convert.ToString(x))); // DEBUG
+			regScannedOverrides.ForEach(x => Log(Convert.ToString(x))); // DEBUG
 			string filePath = String.Format("{0}\\{1}.csv", C.INITIAL_DIR, eventID);
 			File.Create(filePath).Close();
 			using (TextWriter writer = File.CreateText(filePath)) {
@@ -377,7 +376,6 @@ namespace REMedia.JlcScan {
 			try {
 				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(C.CHECK_URL);
 				request.Timeout = 10000;
-				//request.Credentials = CredentialCache.DefaultNetworkCredentials;
 				HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 				if (response.StatusCode == HttpStatusCode.OK) {
 					ok = true;
@@ -386,8 +384,8 @@ namespace REMedia.JlcScan {
 				} else {
 					response.Close();
 				}
-			} catch(Exception ex) {
-				Log("Network error: "+ex.Message);
+			} catch (Exception ex) {
+				Log("Network error: " + ex.Message);
 			}
 			return ok;
 		}
@@ -547,7 +545,7 @@ namespace REMedia.JlcScan {
 								}
 							}
 						} else {
-							if (regOverrides.Contains(regID)) {
+							if (regScannedOverrides.Contains(regID)) {
 								// was overridden and allowed in
 								RegAlreadyScanned();
 							} else {
@@ -590,7 +588,7 @@ namespace REMedia.JlcScan {
 		private void btnOverride_Click(object sender, EventArgs e) {
 			MessageBox.Show(C.OVERRIDE_CONFIRM);
 			C.PlaySound(@"\windows\beep.wav");
-			regOverrides.Add(GetLastScannedId());
+			regScannedOverrides.Add(GetLastScannedId());
 			regScanned_OnList.Add(GetLastScannedId());
 			ScanIncrementValid();
 			this.resultPanel.Hide();
