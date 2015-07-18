@@ -56,6 +56,7 @@ namespace REMedia.JlcScan {
 				ScannerActive = false;
 				// check if web services available
 				Online = IsServerAvailable();
+                Log(Online.ToString());
 				if (Online) {
 					GetEventListFromServer();
 					if (numEvents > 0) {
@@ -65,7 +66,9 @@ namespace REMedia.JlcScan {
 					} else {
 						DisplayOfflineText();
 					}
-				}
+                } else {
+                    DisplayOfflineText();
+                }
 				Barcode1D_init();
 			}
 		}
@@ -384,7 +387,7 @@ namespace REMedia.JlcScan {
 					response.Close();
 				}
 			} catch(Exception ex) {
-				Log(ex.Message);
+				Log("Network error: "+ex.Message);
 			}
 			return ok;
 		}
