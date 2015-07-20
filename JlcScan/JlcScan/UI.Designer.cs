@@ -29,48 +29,50 @@
 			this.containerPanel = new System.Windows.Forms.Panel();
 			this.imgLogo = new System.Windows.Forms.PictureBox();
 			this.savePanel = new System.Windows.Forms.Panel();
-			this.btnSaveToVenture = new System.Windows.Forms.Button();
 			this.lblSaveInfo = new System.Windows.Forms.Label();
 			this.lblScannedInfo = new System.Windows.Forms.Label();
 			this.btnSaveToFile = new System.Windows.Forms.Button();
+			this.btnSaveToVenture = new System.Windows.Forms.Button();
+			this.lblSendToVentureMsg = new System.Windows.Forms.Label();
+			this.lblStartOver = new System.Windows.Forms.Button();
+			this.btnExit = new System.Windows.Forms.Button();
 			this.scanPanel = new System.Windows.Forms.Panel();
 			this.lblScanInfo = new System.Windows.Forms.Label();
 			this.btnScan = new System.Windows.Forms.Button();
 			this.btnOptions = new System.Windows.Forms.Button();
 			this.btnScanDone = new System.Windows.Forms.Button();
 			this.resultPanel = new System.Windows.Forms.Panel();
-			this.btnNoOverride = new System.Windows.Forms.Button();
-			this.lblOverride = new System.Windows.Forms.Label();
-			this.lblScanResult = new System.Windows.Forms.Label();
 			this.iconBoxOK = new System.Windows.Forms.PictureBox();
 			this.iconBoxFail = new System.Windows.Forms.PictureBox();
 			this.iconBoxNo = new System.Windows.Forms.PictureBox();
+			this.lblScanResult = new System.Windows.Forms.Label();
+			this.lblOverride = new System.Windows.Forms.Label();
 			this.btnOverride = new System.Windows.Forms.Button();
+			this.btnNoOverride = new System.Windows.Forms.Button();
 			this.lblScanReady = new System.Windows.Forms.Label();
 			this.imgScanReady = new System.Windows.Forms.PictureBox();
 			this.lblScanSum = new System.Windows.Forms.Label();
 			this.lblValid = new System.Windows.Forms.Label();
 			this.lblScanFail = new System.Windows.Forms.Label();
+			this.optionsPanel = new System.Windows.Forms.Panel();
+			this.lblOptions = new System.Windows.Forms.Label();
+			this.lblScanRegOnlyInfo = new System.Windows.Forms.Label();
+			this.btnScanRegOnly = new System.Windows.Forms.Button();
+			this.lblScanSocEventInfo = new System.Windows.Forms.Label();
+			this.menuSocialEvents = new System.Windows.Forms.ComboBox();
+			this.btnScanSocialEvents = new System.Windows.Forms.Button();
 			this.loadPanel = new System.Windows.Forms.Panel();
 			this.lblLoadFile = new System.Windows.Forms.Label();
 			this.btnLoadFile = new System.Windows.Forms.Button();
 			this.lblLoadFromVenture = new System.Windows.Forms.Label();
 			this.menuEvents = new System.Windows.Forms.ComboBox();
 			this.btnLoadFromVenture = new System.Windows.Forms.Button();
-			this.optionsPanel = new System.Windows.Forms.Panel();
-			this.lblScanRegOnlyInfo = new System.Windows.Forms.Label();
-			this.btnScanRegOnly = new System.Windows.Forms.Button();
-			this.lblScanSocEventInfo = new System.Windows.Forms.Label();
-			this.menuSocialEvents = new System.Windows.Forms.ComboBox();
-			this.btnScanSocialEvents = new System.Windows.Forms.Button();
-			this.lblOptions = new System.Windows.Forms.Label();
-			this.uploadProgress = new System.Windows.Forms.ProgressBar();
 			this.containerPanel.SuspendLayout();
 			this.savePanel.SuspendLayout();
 			this.scanPanel.SuspendLayout();
 			this.resultPanel.SuspendLayout();
-			this.loadPanel.SuspendLayout();
 			this.optionsPanel.SuspendLayout();
+			this.loadPanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// lblLogo
@@ -90,8 +92,9 @@
 			this.containerPanel.BackColor = System.Drawing.Color.Lavender;
 			this.containerPanel.Controls.Add(this.imgLogo);
 			this.containerPanel.Controls.Add(this.lblLogo);
-			this.containerPanel.Controls.Add(this.optionsPanel);
 			this.containerPanel.Controls.Add(this.savePanel);
+			this.containerPanel.Controls.Add(this.scanPanel);
+			this.containerPanel.Controls.Add(this.optionsPanel);
 			this.containerPanel.Controls.Add(this.loadPanel);
 			this.containerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.containerPanel.Location = new System.Drawing.Point(0, 0);
@@ -108,24 +111,17 @@
 			// savePanel
 			// 
 			this.savePanel.BackColor = System.Drawing.Color.DarkCyan;
-			this.savePanel.Controls.Add(this.uploadProgress);
-			this.savePanel.Controls.Add(this.btnSaveToVenture);
 			this.savePanel.Controls.Add(this.lblSaveInfo);
 			this.savePanel.Controls.Add(this.lblScannedInfo);
 			this.savePanel.Controls.Add(this.btnSaveToFile);
+			this.savePanel.Controls.Add(this.btnSaveToVenture);
+			this.savePanel.Controls.Add(this.lblSendToVentureMsg);
+			this.savePanel.Controls.Add(this.lblStartOver);
+			this.savePanel.Controls.Add(this.btnExit);
 			this.savePanel.Location = new System.Drawing.Point(0, 28);
 			this.savePanel.Name = "savePanel";
-			this.savePanel.Size = new System.Drawing.Size(238, 242);
+			this.savePanel.Size = new System.Drawing.Size(238, 246);
 			this.savePanel.Visible = false;
-			// 
-			// btnSaveToVenture
-			// 
-			this.btnSaveToVenture.Location = new System.Drawing.Point(44, 128);
-			this.btnSaveToVenture.Name = "btnSaveToVenture";
-			this.btnSaveToVenture.Size = new System.Drawing.Size(144, 20);
-			this.btnSaveToVenture.TabIndex = 4;
-			this.btnSaveToVenture.Text = "Save data to Venture";
-			this.btnSaveToVenture.Visible = false;
 			// 
 			// lblSaveInfo
 			// 
@@ -155,6 +151,42 @@
 			this.btnSaveToFile.Text = "Save data to PDA";
 			this.btnSaveToFile.Click += new System.EventHandler(this.btnSaveToFile_Click);
 			// 
+			// btnSaveToVenture
+			// 
+			this.btnSaveToVenture.Location = new System.Drawing.Point(44, 116);
+			this.btnSaveToVenture.Name = "btnSaveToVenture";
+			this.btnSaveToVenture.Size = new System.Drawing.Size(144, 20);
+			this.btnSaveToVenture.TabIndex = 4;
+			this.btnSaveToVenture.Text = "Save data to Venture";
+			this.btnSaveToVenture.Visible = false;
+			this.btnSaveToVenture.Click += new System.EventHandler(this.btnSaveToVenture_Click);
+			// 
+			// lblSendToVentureMsg
+			// 
+			this.lblSendToVentureMsg.BackColor = System.Drawing.Color.DarkCyan;
+			this.lblSendToVentureMsg.Location = new System.Drawing.Point(8, 140);
+			this.lblSendToVentureMsg.Name = "lblSendToVentureMsg";
+			this.lblSendToVentureMsg.Size = new System.Drawing.Size(224, 72);
+			this.lblSendToVentureMsg.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			// 
+			// lblStartOver
+			// 
+			this.lblStartOver.Location = new System.Drawing.Point(8, 220);
+			this.lblStartOver.Name = "lblStartOver";
+			this.lblStartOver.Size = new System.Drawing.Size(90, 20);
+			this.lblStartOver.TabIndex = 8;
+			this.lblStartOver.Text = "Start Again";
+			this.lblStartOver.Click += new System.EventHandler(this.lblStartOver_Click);
+			// 
+			// btnExit
+			// 
+			this.btnExit.Location = new System.Drawing.Point(140, 220);
+			this.btnExit.Name = "btnExit";
+			this.btnExit.Size = new System.Drawing.Size(90, 20);
+			this.btnExit.TabIndex = 12;
+			this.btnExit.Text = "Exit Program";
+			this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
+			// 
 			// scanPanel
 			// 
 			this.scanPanel.BackColor = System.Drawing.Color.DarkCyan;
@@ -168,7 +200,7 @@
 			this.scanPanel.Controls.Add(this.lblScanSum);
 			this.scanPanel.Controls.Add(this.lblValid);
 			this.scanPanel.Controls.Add(this.lblScanFail);
-			this.scanPanel.Location = new System.Drawing.Point(0, 24);
+			this.scanPanel.Location = new System.Drawing.Point(0, 28);
 			this.scanPanel.Name = "scanPanel";
 			this.scanPanel.Size = new System.Drawing.Size(238, 246);
 			this.scanPanel.Visible = false;
@@ -220,40 +252,13 @@
 			this.resultPanel.Controls.Add(this.iconBoxNo);
 			this.resultPanel.Controls.Add(this.lblScanResult);
 			this.resultPanel.Controls.Add(this.lblOverride);
-			this.resultPanel.Controls.Add(this.btnNoOverride);
 			this.resultPanel.Controls.Add(this.btnOverride);
+			this.resultPanel.Controls.Add(this.btnNoOverride);
 			this.resultPanel.Location = new System.Drawing.Point(30, 64);
 			this.resultPanel.Name = "resultPanel";
 			this.resultPanel.Size = new System.Drawing.Size(180, 150);
 			this.resultPanel.Visible = false;
 			this.resultPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.DrawBorder);
-			// 
-			// btnNoOverride
-			// 
-			this.btnNoOverride.BackColor = System.Drawing.Color.CornflowerBlue;
-			this.btnNoOverride.Location = new System.Drawing.Point(136, 116);
-			this.btnNoOverride.Name = "btnNoOverride";
-			this.btnNoOverride.Size = new System.Drawing.Size(40, 30);
-			this.btnNoOverride.TabIndex = 6;
-			this.btnNoOverride.Text = "No";
-			this.btnNoOverride.Click += new System.EventHandler(this.btnNoOverride_Click);
-			// 
-			// lblOverride
-			// 
-			this.lblOverride.Location = new System.Drawing.Point(4, 122);
-			this.lblOverride.Name = "lblOverride";
-			this.lblOverride.Size = new System.Drawing.Size(64, 20);
-			this.lblOverride.Text = "Allow In?";
-			// 
-			// lblScanResult
-			// 
-			this.lblScanResult.BackColor = System.Drawing.Color.Lavender;
-			this.lblScanResult.Font = new System.Drawing.Font("Tahoma", 11F, System.Drawing.FontStyle.Regular);
-			this.lblScanResult.ForeColor = System.Drawing.Color.Black;
-			this.lblScanResult.Location = new System.Drawing.Point(4, 56);
-			this.lblScanResult.Name = "lblScanResult";
-			this.lblScanResult.Size = new System.Drawing.Size(172, 56);
-			this.lblScanResult.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
 			// iconBoxOK
 			// 
@@ -279,9 +284,26 @@
 			this.iconBoxNo.Size = new System.Drawing.Size(48, 48);
 			this.iconBoxNo.Visible = false;
 			// 
+			// lblScanResult
+			// 
+			this.lblScanResult.BackColor = System.Drawing.Color.Lavender;
+			this.lblScanResult.Font = new System.Drawing.Font("Tahoma", 11F, System.Drawing.FontStyle.Regular);
+			this.lblScanResult.ForeColor = System.Drawing.Color.Black;
+			this.lblScanResult.Location = new System.Drawing.Point(4, 56);
+			this.lblScanResult.Name = "lblScanResult";
+			this.lblScanResult.Size = new System.Drawing.Size(172, 56);
+			this.lblScanResult.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			// 
+			// lblOverride
+			// 
+			this.lblOverride.Location = new System.Drawing.Point(4, 122);
+			this.lblOverride.Name = "lblOverride";
+			this.lblOverride.Size = new System.Drawing.Size(64, 20);
+			this.lblOverride.Text = "Allow In?";
+			// 
 			// btnOverride
 			// 
-			this.btnOverride.BackColor = System.Drawing.Color.LightCoral;
+			this.btnOverride.BackColor = System.Drawing.Color.LightSalmon;
 			this.btnOverride.Location = new System.Drawing.Point(72, 116);
 			this.btnOverride.Name = "btnOverride";
 			this.btnOverride.Size = new System.Drawing.Size(40, 30);
@@ -289,6 +311,16 @@
 			this.btnOverride.Text = "Yes";
 			this.btnOverride.Visible = false;
 			this.btnOverride.Click += new System.EventHandler(this.btnOverride_Click);
+			// 
+			// btnNoOverride
+			// 
+			this.btnNoOverride.BackColor = System.Drawing.Color.LightSkyBlue;
+			this.btnNoOverride.Location = new System.Drawing.Point(136, 116);
+			this.btnNoOverride.Name = "btnNoOverride";
+			this.btnNoOverride.Size = new System.Drawing.Size(40, 30);
+			this.btnNoOverride.TabIndex = 6;
+			this.btnNoOverride.Text = "No";
+			this.btnNoOverride.Click += new System.EventHandler(this.btnNoOverride_Click);
 			// 
 			// lblScanReady
 			// 
@@ -338,6 +370,74 @@
 			this.lblScanFail.Size = new System.Drawing.Size(72, 20);
 			this.lblScanFail.Text = "Failed:";
 			// 
+			// optionsPanel
+			// 
+			this.optionsPanel.BackColor = System.Drawing.Color.DarkCyan;
+			this.optionsPanel.Controls.Add(this.lblOptions);
+			this.optionsPanel.Controls.Add(this.lblScanRegOnlyInfo);
+			this.optionsPanel.Controls.Add(this.btnScanRegOnly);
+			this.optionsPanel.Controls.Add(this.lblScanSocEventInfo);
+			this.optionsPanel.Controls.Add(this.menuSocialEvents);
+			this.optionsPanel.Controls.Add(this.btnScanSocialEvents);
+			this.optionsPanel.Location = new System.Drawing.Point(0, 28);
+			this.optionsPanel.Name = "optionsPanel";
+			this.optionsPanel.Size = new System.Drawing.Size(238, 246);
+			this.optionsPanel.Visible = false;
+			// 
+			// lblOptions
+			// 
+			this.lblOptions.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular);
+			this.lblOptions.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+			this.lblOptions.Location = new System.Drawing.Point(0, 4);
+			this.lblOptions.Name = "lblOptions";
+			this.lblOptions.Size = new System.Drawing.Size(238, 32);
+			this.lblOptions.Text = "Choose the Scanner Mode:";
+			this.lblOptions.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			// 
+			// lblScanRegOnlyInfo
+			// 
+			this.lblScanRegOnlyInfo.ForeColor = System.Drawing.Color.Black;
+			this.lblScanRegOnlyInfo.Location = new System.Drawing.Point(0, 44);
+			this.lblScanRegOnlyInfo.Name = "lblScanRegOnlyInfo";
+			this.lblScanRegOnlyInfo.Size = new System.Drawing.Size(238, 24);
+			this.lblScanRegOnlyInfo.Text = "Recording Event Registration access";
+			this.lblScanRegOnlyInfo.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			// 
+			// btnScanRegOnly
+			// 
+			this.btnScanRegOnly.Location = new System.Drawing.Point(56, 68);
+			this.btnScanRegOnly.Name = "btnScanRegOnly";
+			this.btnScanRegOnly.Size = new System.Drawing.Size(124, 20);
+			this.btnScanRegOnly.TabIndex = 2;
+			this.btnScanRegOnly.Text = "Start Scanning";
+			this.btnScanRegOnly.Click += new System.EventHandler(this.btnScanRegOnly_Click);
+			// 
+			// lblScanSocEventInfo
+			// 
+			this.lblScanSocEventInfo.ForeColor = System.Drawing.Color.Black;
+			this.lblScanSocEventInfo.Location = new System.Drawing.Point(0, 128);
+			this.lblScanSocEventInfo.Name = "lblScanSocEventInfo";
+			this.lblScanSocEventInfo.Size = new System.Drawing.Size(238, 20);
+			this.lblScanSocEventInfo.Text = "Recording Social Event access";
+			this.lblScanSocEventInfo.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			// 
+			// menuSocialEvents
+			// 
+			this.menuSocialEvents.Font = new System.Drawing.Font("Tahoma", 8F, System.Drawing.FontStyle.Regular);
+			this.menuSocialEvents.Location = new System.Drawing.Point(4, 152);
+			this.menuSocialEvents.Name = "menuSocialEvents";
+			this.menuSocialEvents.Size = new System.Drawing.Size(228, 19);
+			this.menuSocialEvents.TabIndex = 5;
+			// 
+			// btnScanSocialEvents
+			// 
+			this.btnScanSocialEvents.Location = new System.Drawing.Point(52, 184);
+			this.btnScanSocialEvents.Name = "btnScanSocialEvents";
+			this.btnScanSocialEvents.Size = new System.Drawing.Size(124, 20);
+			this.btnScanSocialEvents.TabIndex = 9;
+			this.btnScanSocialEvents.Text = "Start Scanning";
+			this.btnScanSocialEvents.Click += new System.EventHandler(this.btnScanSocialEvents_Click);
+			// 
 			// loadPanel
 			// 
 			this.loadPanel.BackColor = System.Drawing.Color.DarkCyan;
@@ -348,7 +448,7 @@
 			this.loadPanel.Controls.Add(this.btnLoadFromVenture);
 			this.loadPanel.Location = new System.Drawing.Point(0, 28);
 			this.loadPanel.Name = "loadPanel";
-			this.loadPanel.Size = new System.Drawing.Size(238, 242);
+			this.loadPanel.Size = new System.Drawing.Size(238, 246);
 			// 
 			// lblLoadFile
 			// 
@@ -398,82 +498,6 @@
 			this.btnLoadFromVenture.Visible = false;
 			this.btnLoadFromVenture.Click += new System.EventHandler(this.btnLoadFromWeb_Click);
 			// 
-			// optionsPanel
-			// 
-			this.optionsPanel.BackColor = System.Drawing.Color.CadetBlue;
-			this.optionsPanel.Controls.Add(this.scanPanel);
-			this.optionsPanel.Controls.Add(this.lblOptions);
-			this.optionsPanel.Controls.Add(this.lblScanRegOnlyInfo);
-			this.optionsPanel.Controls.Add(this.btnScanRegOnly);
-			this.optionsPanel.Controls.Add(this.lblScanSocEventInfo);
-			this.optionsPanel.Controls.Add(this.menuSocialEvents);
-			this.optionsPanel.Controls.Add(this.btnScanSocialEvents);
-			this.optionsPanel.Location = new System.Drawing.Point(0, 24);
-			this.optionsPanel.Name = "optionsPanel";
-			this.optionsPanel.Size = new System.Drawing.Size(238, 246);
-			this.optionsPanel.Visible = false;
-			// 
-			// lblScanRegOnlyInfo
-			// 
-			this.lblScanRegOnlyInfo.ForeColor = System.Drawing.Color.Black;
-			this.lblScanRegOnlyInfo.Location = new System.Drawing.Point(0, 44);
-			this.lblScanRegOnlyInfo.Name = "lblScanRegOnlyInfo";
-			this.lblScanRegOnlyInfo.Size = new System.Drawing.Size(238, 24);
-			this.lblScanRegOnlyInfo.Text = "Recording Event Registration access";
-			this.lblScanRegOnlyInfo.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			// 
-			// btnScanRegOnly
-			// 
-			this.btnScanRegOnly.Location = new System.Drawing.Point(56, 68);
-			this.btnScanRegOnly.Name = "btnScanRegOnly";
-			this.btnScanRegOnly.Size = new System.Drawing.Size(124, 20);
-			this.btnScanRegOnly.TabIndex = 2;
-			this.btnScanRegOnly.Text = "Start Scanning";
-			this.btnScanRegOnly.Click += new System.EventHandler(this.btnScanRegOnly_Click);
-			// 
-			// lblScanSocEventInfo
-			// 
-			this.lblScanSocEventInfo.ForeColor = System.Drawing.Color.Black;
-			this.lblScanSocEventInfo.Location = new System.Drawing.Point(0, 128);
-			this.lblScanSocEventInfo.Name = "lblScanSocEventInfo";
-			this.lblScanSocEventInfo.Size = new System.Drawing.Size(238, 20);
-			this.lblScanSocEventInfo.Text = "Recording Social Event access";
-			this.lblScanSocEventInfo.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			// 
-			// menuSocialEvents
-			// 
-			this.menuSocialEvents.Font = new System.Drawing.Font("Tahoma", 8F, System.Drawing.FontStyle.Regular);
-			this.menuSocialEvents.Location = new System.Drawing.Point(4, 152);
-			this.menuSocialEvents.Name = "menuSocialEvents";
-			this.menuSocialEvents.Size = new System.Drawing.Size(228, 19);
-			this.menuSocialEvents.TabIndex = 5;
-			// 
-			// btnScanSocialEvents
-			// 
-			this.btnScanSocialEvents.Location = new System.Drawing.Point(52, 184);
-			this.btnScanSocialEvents.Name = "btnScanSocialEvents";
-			this.btnScanSocialEvents.Size = new System.Drawing.Size(124, 20);
-			this.btnScanSocialEvents.TabIndex = 9;
-			this.btnScanSocialEvents.Text = "Start Scanning";
-			this.btnScanSocialEvents.Click += new System.EventHandler(this.btnScanSocialEvents_Click);
-			// 
-			// lblOptions
-			// 
-			this.lblOptions.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular);
-			this.lblOptions.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-			this.lblOptions.Location = new System.Drawing.Point(0, 4);
-			this.lblOptions.Name = "lblOptions";
-			this.lblOptions.Size = new System.Drawing.Size(238, 32);
-			this.lblOptions.Text = "Choose the Scanner Mode:";
-			this.lblOptions.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			// 
-			// uploadProgress
-			// 
-			this.uploadProgress.Location = new System.Drawing.Point(44, 156);
-			this.uploadProgress.Name = "uploadProgress";
-			this.uploadProgress.Size = new System.Drawing.Size(144, 20);
-			this.uploadProgress.Visible = false;
-			// 
 			// UI
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -495,8 +519,8 @@
 			this.savePanel.ResumeLayout(false);
 			this.scanPanel.ResumeLayout(false);
 			this.resultPanel.ResumeLayout(false);
-			this.loadPanel.ResumeLayout(false);
 			this.optionsPanel.ResumeLayout(false);
+			this.loadPanel.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -542,6 +566,8 @@
 		private System.Windows.Forms.Label lblScannedInfo;
 		private System.Windows.Forms.Button btnSaveToFile;
 		private System.Windows.Forms.Button btnSaveToVenture;
-		private System.Windows.Forms.ProgressBar uploadProgress;
+		private System.Windows.Forms.Label lblSendToVentureMsg;
+		private System.Windows.Forms.Button lblStartOver;
+		private System.Windows.Forms.Button btnExit;
 	}
 }
