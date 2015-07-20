@@ -206,7 +206,9 @@ namespace REMedia {
 		/// <summary>
 		/// C2000 ESC
 		/// </summary>
-		ESC = 27
+		ESC = 27,
+		RED = 30,
+		BLUE = 31
 		#endregion
 	}
 }

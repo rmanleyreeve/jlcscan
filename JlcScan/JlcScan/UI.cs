@@ -61,7 +61,7 @@ namespace REMedia.JlcScan {
 					if (numEvents > 0) {
 						PopulateEventsDropdown();
 						menuEvents.Show();
-						btnLoadFromWeb.Show();
+						btnLoadFromVenture.Show();
 					} else {
 						DisplayOfflineText();
 					}
@@ -89,13 +89,20 @@ namespace REMedia.JlcScan {
 			GC.Collect();
 		}
 		private void Ui_KeyDown(object sender, KeyEventArgs e) {
-			//Log("KEY DOWN");
+			//Log("KEY DOWN: " + e.KeyValue);
 			if (IsScannerActive() && e.KeyValue == (int)ConstantKeyValue.Scan) {
 				this.btnScan_Click(null, null);
 			}
 			if (e.KeyValue == (int)ConstantKeyValue.ESC) {
-				this.Close();
+				//this.Close();
 			}
+			if (this.lblOverride.Visible && e.KeyValue == (int)ConstantKeyValue.RED) {
+				btnOverride_Click(null,null);
+			}
+			if (this.lblOverride.Visible && e.KeyValue == (int)ConstantKeyValue.BLUE) {
+				btnNoOverride_Click(null, null);
+			}
+
 		}
 		private void Ui_KeyUp(object sender, KeyEventArgs e) {
 			//Log("KEY UP");
@@ -190,7 +197,7 @@ namespace REMedia.JlcScan {
 			menuSocialEvents.DisplayMember = "display_name";
 		}
 		private void DisplayOfflineText() {
-			lblLoadWeb.Text = "No Internet Connection";
+			lblLoadFromVenture.Text = "No Internet Connection";
 		}
 		private void DrawBorder(object sender, PaintEventArgs e) {
 			e.Graphics.DrawRectangle(
@@ -451,6 +458,7 @@ namespace REMedia.JlcScan {
 			ClearData();
 			this.loadPanel.Hide();
 			this.scanPanel.Hide();
+			this.savePanel.Hide();
 			menuSocialEvents.SelectedIndex = 0;
 			this.optionsPanel.Show();
 		}
@@ -458,6 +466,7 @@ namespace REMedia.JlcScan {
 			ScannerActive = true;
 			this.loadPanel.Hide();
 			this.optionsPanel.Hide();
+			this.savePanel.Hide();
 			this.resultPanel.Hide();
 			if (GetSelectedSocialEventId() == 0) {
 				lblScanInfo.Text = "Scan Mode: Registration";
@@ -467,13 +476,19 @@ namespace REMedia.JlcScan {
 			this.scanPanel.Show();
 		}
 		private void GotoSaveScreen() {
-			// TODO show data file export options here
 			ScannerActive = false;
 			this.loadPanel.Hide();
 			this.optionsPanel.Hide();
 			this.scanPanel.Hide();
-			MessageBox.Show(String.Format(C.REG_SAVED_MSG, regScanned_OnList.Count));
-			SaveCsvFile();
+			this.resultPanel.Hide();
+			this.btnSaveToVenture.Hide();
+			this.uploadProgress.Hide();
+
+			this.lblScannedInfo.Text = String.Format(C.REG_SAVED_MSG, regScanned_OnList.Count);
+			this.savePanel.Show();
+			if (IsServerAvailable()) {
+				this.btnSaveToVenture.Show();
+			}
 		}
 
 		// BUTTON CLICK HANDLERS ====================================================================
@@ -568,7 +583,6 @@ namespace REMedia.JlcScan {
 			} else {
 				MessageBox.Show(C.NO_REG_SAVED_MSG);
 			}
-			this.Close();
 		}
 		private void btnSelect_Click(object sender, EventArgs e) {
 			GotoOptionsScreen();
@@ -594,10 +608,13 @@ namespace REMedia.JlcScan {
 			this.resultPanel.Hide();
 			ScannerActive = true;
 		}
-
 		private void btnNoOverride_Click(object sender, EventArgs e) {
 			this.resultPanel.Hide();
 			ScannerActive = true;
+		}
+		private void btnSaveToFile_Click(object sender, EventArgs e) {
+			SaveCsvFile();
+
 		}
 
 

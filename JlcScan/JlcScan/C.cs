@@ -33,8 +33,8 @@ namespace REMedia.JlcScan {
 		public const string CHECK_URL = "http://jlcventure.com/websvc/check.html";
 		public const string SELECT_FILE_MSG = "Please select an Event Data file";
 		public const string DATA_LOADED_MSG = "Event Data Loaded for {0} ({1} registrations)";
-		public const string NO_REG_SAVED_MSG = "No valid registrations to save";
-		public const string REG_SAVED_MSG = "{0} valid registrations saved";
+		public const string NO_REG_SAVED_MSG = "No Valid Registrations to save";
+		public const string REG_SAVED_MSG = "{0} Valid Registrations Scanned";
 
 		// constant vars
 		public const string INITIAL_DIR = "\\My Documents";
