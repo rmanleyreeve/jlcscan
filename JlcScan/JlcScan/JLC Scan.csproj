@@ -23,6 +23,7 @@
     <SccLocalPath>Svn</SccLocalPath>
     <SccAuxPath>Svn</SccAuxPath>
     <SccProvider>SubversionScc</SccProvider>
+    <ApplicationIcon>app.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -92,6 +93,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app.ico" />
     <Content Include="DLLs\CeReader.dll" />
     <Content Include="DLLs\CeReader.XML" />
     <Content Include="DLLs\DeviceAPI.dll" />

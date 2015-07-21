@@ -92,10 +92,10 @@
 			this.containerPanel.BackColor = System.Drawing.Color.Lavender;
 			this.containerPanel.Controls.Add(this.imgLogo);
 			this.containerPanel.Controls.Add(this.lblLogo);
-			this.containerPanel.Controls.Add(this.savePanel);
-			this.containerPanel.Controls.Add(this.scanPanel);
-			this.containerPanel.Controls.Add(this.optionsPanel);
 			this.containerPanel.Controls.Add(this.loadPanel);
+			this.containerPanel.Controls.Add(this.optionsPanel);
+			this.containerPanel.Controls.Add(this.scanPanel);
+			this.containerPanel.Controls.Add(this.savePanel);
 			this.containerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.containerPanel.Location = new System.Drawing.Point(0, 0);
 			this.containerPanel.Name = "containerPanel";
@@ -139,7 +139,7 @@
 			this.lblScannedInfo.Location = new System.Drawing.Point(0, 32);
 			this.lblScannedInfo.Name = "lblScannedInfo";
 			this.lblScannedInfo.Size = new System.Drawing.Size(236, 20);
-			this.lblScannedInfo.Text = "Valid RegistrationsList Scanned";
+			this.lblScannedInfo.Text = "0 valid Registrations scanned";
 			this.lblScannedInfo.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
 			// btnSaveToFile
@@ -506,6 +506,7 @@
 			this.ClientSize = new System.Drawing.Size(238, 295);
 			this.Controls.Add(this.containerPanel);
 			this.ForeColor = System.Drawing.Color.White;
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.KeyPreview = true;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
