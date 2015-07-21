@@ -139,7 +139,7 @@
 			this.lblScannedInfo.Location = new System.Drawing.Point(0, 32);
 			this.lblScannedInfo.Name = "lblScannedInfo";
 			this.lblScannedInfo.Size = new System.Drawing.Size(236, 20);
-			this.lblScannedInfo.Text = "Valid Registrations Scanned";
+			this.lblScannedInfo.Text = "Valid RegistrationsList Scanned";
 			this.lblScannedInfo.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
 			// btnSaveToFile

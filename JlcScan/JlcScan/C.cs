@@ -32,10 +32,10 @@ namespace REMedia.JlcScan {
 		public const string WEBSVC_FAIL_MSG = "Cannot get data from Venture server.\nPlease load data file from PDA.";
 		public const string CHECK_URL = "http://jlcventure.com/websvc/check.html";
 		public const string SELECT_FILE_MSG = "Please select an Event Data file";
-		public const string DATA_LOADED_MSG = "Event Data Loaded for {0} ({1} registrations)";
-		public const string NO_REG_SAVED_MSG = "No Valid Registrations to save!";
-		public const string REG_SCANNED_MSG = "{0} Valid Registrations Scanned.";
-		public const string REG_SAVED_MSG = "{0} Valid Registrations Saved.";
+		public const string DATA_LOADED_MSG = "Event Data Loaded for {0} ({1} RegistrationsList)";
+		public const string NO_REG_SAVED_MSG = "No Valid RegistrationsList to save!";
+		public const string REG_SCANNED_MSG = "{0} Valid RegistrationsList Scanned.";
+		public const string REG_SAVED_MSG = "{0} Valid RegistrationsList Saved.";
 		public const string VENTURE_UPLOAD_OK_MSG = "The data has been uploaded to Venture.";
 		public const string VENTURE_UPLOAD_FAIL_MSG = "The data could not be uploaded to Venture.\nPlease try again or save the data file to the PDA.";
 		public const string EXIT_DATA_NOT_SAVED_MSG = "DATA NOT SAVED!\nAre you sure you want to exit?";

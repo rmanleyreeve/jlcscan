@@ -11,45 +11,47 @@ using System.Xml.Linq;
 
 namespace REMedia.JlcScan {
 
-	// main interface form
+	// main UI form class =======================================================================
 	public partial class UI : Form {
 
+		// import barcode functionality from device library
 		[DllImport("DeviceAPI.dll", EntryPoint = "Barcode1D_init")]
 		private static extern void Barcode1D_init();
-
 		[DllImport("DeviceAPI.dll", EntryPoint = "Barcode1D_scan")]
 		private static extern int Barcode1D_scan(byte[] pszData);
-
 		[DllImport("DeviceAPI.dll", EntryPoint = "Barcode1D_free")]
 		private static extern void Barcode1D_free();
 
-		private List<Registration> registrations = new List<Registration>();
-		private List<Event> events = new List<Event>();
-		private List<SocialEventOption> se_options = new List<SocialEventOption>();
-		private string eventID;
-		private string eventTitle;
-		private int numTotalScans;
-		private int numValidScans;
-		private int numFailedScans;
-		private int numEvents = 0;
-		private static List<string> regScanned_OnList = new List<string>();
-		private static List<string> regScanned_NotOnList = new List<string>();
-		private static List<string> regScannedOverrides = new List<string>();
+		// properties
+		private List<Registration> RegistrationsList = new List<Registration>();
+		private List<Event> EventsList = new List<Event>();
+		private List<SocialEventOption> SocialEventOptionsList = new List<SocialEventOption>();
+		private string EventID;
+		private string EventTitle;
+		private int NumTotalScans;
+		private int NumValidScans;
+		private int NumFailedScans;
+		private int NumEvents = 0;
+		private static List<string> RegScanned_OnList = new List<string>();
+		private static List<string> RegScanned_NotOnList = new List<string>();
+		private static List<string> RegScannedOverrides = new List<string>();
 		public bool Online = false;
 		public bool ScannerActive;
 		private int SelectedSocialEventId;
 		public string LastScannedId;
 		public bool DataSaved = false;
+		private int ResultsScreenDuration = 3;
 
 		public UI() {
-			InitializeComponent();
+			InitializeComponent(); // set up ui layout from UI.Designer.cs
 		}
 
-		// UTILITY METHODS =====================================================================
+
+		// UTILITY METHODS =======================================================================
 		private void Ui_Load(object sender, EventArgs e) {
-			//Log("PROGRAM LOADED");
+			Log("PROGRAM LOADED");
 			if (SystemInfo.alreadyRun(this.Text, this.Handle.ToInt32())) {
-				MessageBox.Show("repeated start","",MessageBoxButtons.OK,MessageBoxIcon.Hand,MessageBoxDefaultButton.Button1);
+				MessageBox.Show("FATAL ERROR\nProgram already running","ERROR",MessageBoxButtons.OK,MessageBoxIcon.Hand,MessageBoxDefaultButton.Button1);
 				this.Close();
 			} else {
 				// set up UI
@@ -59,7 +61,7 @@ namespace REMedia.JlcScan {
 				Online = this.IsServerAvailable();
 				if (Online) {
 					this.GetEventListFromServer();
-					if (numEvents > 0) {
+					if (NumEvents > 0) {
 						this.PopulateEventsDropdown();
 						this.menuEvents.Show();
 						this.btnLoadFromVenture.Show();
@@ -73,16 +75,16 @@ namespace REMedia.JlcScan {
 			}
 		}
 		private void ClearData() {
-			this.UpdateScanResult(String.Empty);
-			this.numTotalScans = 0;
-			this.numValidScans = 0;
-			this.numFailedScans = 0;
+			this.UpdateScanResultMsg(String.Empty);
+			this.NumTotalScans = 0;
+			this.NumValidScans = 0;
+			this.NumFailedScans = 0;
 			this.UpdateScanCounts();
 			this.SelectedSocialEventId = 0;
 			this.LastScannedId = String.Empty;
-			regScanned_OnList.Clear();
-			regScanned_NotOnList.Clear();
-			regScannedOverrides.Clear();
+			RegScanned_OnList.Clear();
+			RegScanned_NotOnList.Clear();
+			RegScannedOverrides.Clear();
 			this.DataSaved = false;
 			this.lblSendToVentureMsg.Text = "";
 		}
@@ -93,11 +95,8 @@ namespace REMedia.JlcScan {
 		}
 		private void Ui_KeyDown(object sender, KeyEventArgs e) {
 			//Log("KEY DOWN: " + e.KeyValue);
-			if (IsScannerActive() && e.KeyValue == (int)ConstantKeyValue.Scan) {
+			if (GetScannerActive() && e.KeyValue == (int)ConstantKeyValue.Scan) {
 				this.btnScan_Click(null, null);
-			}
-			if (e.KeyValue == (int)ConstantKeyValue.ESC) {
-				//this.Close();
 			}
 			if (this.lblOverride.Visible && e.KeyValue == (int)ConstantKeyValue.RED) {
 				this.btnOverride_Click(null, null);
@@ -105,7 +104,9 @@ namespace REMedia.JlcScan {
 			if (this.lblOverride.Visible && e.KeyValue == (int)ConstantKeyValue.BLUE) {
 				this.btnNoOverride_Click(null, null);
 			}
-
+			if (e.KeyValue == (int)ConstantKeyValue.ESC) {
+				//this.Close();
+			}
 		}
 		private void Ui_KeyUp(object sender, KeyEventArgs e) {
 			//Log("KEY UP");
@@ -116,10 +117,11 @@ namespace REMedia.JlcScan {
 		public static void Log(String msg) {
 			System.Diagnostics.Debug.WriteLine(msg);
 		}
-		public string FixNull(string s) {
+		public string FixNullString(string s) {
 			return (s != null) ? s : String.Empty;
 		}
-		public bool IsScannerActive() {
+		// getters
+		public bool GetScannerActive() {
 			return this.ScannerActive;
 		}
 		public int GetSelectedSocialEventId() {
@@ -132,40 +134,41 @@ namespace REMedia.JlcScan {
 			return this.DataSaved;
 		}
 
+
 		// UI METHODS ============================================================================
-		private void UpdateScanResult(string txt) {
+		private void UpdateScanResultMsg(string txt) {
 			this.lblScanResult.Text = txt;
 		}
 		private void UpdateScanCounts() {
-			this.lblScanSum.Text = "Scanned: " + Convert.ToString(numTotalScans);
-			this.lblValid.Text = "Valid: " + Convert.ToString(numValidScans);
-			this.lblScanFail.Text = "Failed: " + Convert.ToString(numFailedScans);
+			this.lblScanSum.Text = "Scanned: " + Convert.ToString(NumTotalScans);
+			this.lblValid.Text = "Valid: " + Convert.ToString(NumValidScans);
+			this.lblScanFail.Text = "Failed: " + Convert.ToString(NumFailedScans);
 		}
-		private void ScanIncrementValid() {
-			this.numTotalScans++;
-			this.numValidScans++;
+		private void IncrementScanValid() {
+			this.NumTotalScans++;
+			this.NumValidScans++;
 			this.UpdateScanCounts();
 		}
-		private void ScanIncrementFail() {
-			this.numTotalScans++;
-			this.numFailedScans++;
+		private void IncrementScanFail() {
+			this.NumTotalScans++;
+			this.NumFailedScans++;
 			this.UpdateScanCounts();
 		}
-		private void ShowResult(string str) {
+		private void ShowScanResult(string str) {
 			this.iconBoxFail.Hide();
 			this.iconBoxNo.Hide();
 			this.iconBoxOK.Hide();
 			this.lblOverride.Hide();
 			this.btnOverride.Hide();
 			this.btnNoOverride.Hide();
-			bool ovr = false;
+			bool IsOverride = false;
 			switch (str) {
 				case "ok":
 					this.iconBoxOK.Show();
 					break;
 				case "no":
 					this.iconBoxNo.Show();
-					ovr = true;
+					IsOverride = true;
 					this.lblOverride.Show();
 					this.btnOverride.Show();
 					this.btnNoOverride.Show();
@@ -174,15 +177,15 @@ namespace REMedia.JlcScan {
 					this.iconBoxFail.Show();
 					break;
 			}
-			// show panel for 3 seconds
+			// show result panel for 3 seconds
 			this.ScannerActive = false;
 			this.resultPanel.Show();
-			if (!ovr) {
+			if (!IsOverride) {
 				int secs = 0;
 				Timer timer = new Timer { Interval = 1000, Enabled = true };
 				timer.Tick += delegate {
 					secs++;
-					if (secs < 3) { return; }
+					if (secs < this.ResultsScreenDuration) { return; }
 					timer.Enabled = false;
 					this.resultPanel.Hide();
 					this.ScannerActive = true;
@@ -190,15 +193,15 @@ namespace REMedia.JlcScan {
 			}
 		}
 		private void PopulateEventsDropdown() {
-			this.events.Insert(0, new Event() { id = 139, display_name = "RE MEDIA TEST EVENT" }); // HACK
-			this.events.Insert(0, new Event() { id = 0, display_name = "Choose Event..." });
-			this.menuEvents.DataSource = events;
+			this.EventsList.Insert(0, new Event() { id = 139, display_name = "RE MEDIA TEST EVENT" }); // HACK
+			this.EventsList.Insert(0, new Event() { id = 0, display_name = "Choose Event..." });
+			this.menuEvents.DataSource = EventsList;
 			this.menuEvents.ValueMember = "id";
 			this.menuEvents.DisplayMember = "display_name";
 		}
 		private void PopulateSocialEventsOptionsDropdown() {
-			this.se_options.Insert(0, new SocialEventOption() { id = 0, display_name = "Choose Social Event..." });
-			this.menuSocialEvents.DataSource = se_options;
+			this.SocialEventOptionsList.Insert(0, new SocialEventOption() { id = 0, display_name = "Choose Social Event..." });
+			this.menuSocialEvents.DataSource = SocialEventOptionsList;
 			menuSocialEvents.ValueMember = "id";
 			this.menuSocialEvents.DisplayMember = "display_name";
 		}
@@ -215,7 +218,9 @@ namespace REMedia.JlcScan {
 		private void UpdateSaveToVentureMsg(string msg) {
 			this.lblSendToVentureMsg.Text = msg;
 		}
-		// SCANNING RELATED METHODS ================================================================
+
+	
+		// SCANNING RELATED METHODS ===============================================================
 		public static string Scan() {
 			int barLen = 0;
 			byte[] bcData = new byte[2048];
@@ -241,100 +246,101 @@ namespace REMedia.JlcScan {
 			}
 		}
 		public void SE_RegOk(Registration reg) {
-			regScanned_OnList.Add(reg.id);
+			RegScanned_OnList.Add(reg.id);
 			C.PlaySound(@"\windows\beep.wav");
-			this.ShowResult("ok");
-			this.UpdateScanResult(reg.first_name + " " + reg.last_name + "\n" + C.VALID_SE_REG_MSG);
-			this.ScanIncrementValid();
+			this.ShowScanResult("ok");
+			this.UpdateScanResultMsg(reg.first_name + " " + reg.last_name + "\n" + C.VALID_SE_REG_MSG);
+			this.IncrementScanValid();
 		}
 		public void RegOk(Registration reg) {
-			regScanned_OnList.Add(reg.id);
+			RegScanned_OnList.Add(reg.id);
 			C.PlaySound(@"\windows\beep.wav");
-			this.ShowResult("ok");
-			this.UpdateScanResult(reg.first_name + " " + reg.last_name + "\n" + C.VALID_REG_MSG);
-			this.ScanIncrementValid();
+			this.ShowScanResult("ok");
+			this.UpdateScanResultMsg(reg.first_name + " " + reg.last_name + "\n" + C.VALID_REG_MSG);
+			this.IncrementScanValid();
 		}
 		public void RegNotOk(string r) {
-			regScanned_NotOnList.Add(r);
+			RegScanned_NotOnList.Add(r);
 			C.PlaySound(@"\windows\exclam.wav");
-			this.ShowResult("no");
-			this.UpdateScanResult(C.INVALID_REG_MSG);
-			this.ScanIncrementFail();
+			this.ShowScanResult("no");
+			this.UpdateScanResultMsg(C.INVALID_REG_MSG);
+			this.IncrementScanFail();
 		}
 		public void SE_RegNotOk(string rid) {
-			regScanned_NotOnList.Add(rid);
+			RegScanned_NotOnList.Add(rid);
 			C.PlaySound(@"\windows\exclam.wav");
-			this.ShowResult("no");
-			this.UpdateScanResult(C.INVALID_SE_REG_MSG);
-			this.ScanIncrementFail();
+			this.ShowScanResult("no");
+			this.UpdateScanResultMsg(C.INVALID_SE_REG_MSG);
+			this.IncrementScanFail();
 		}
 		public void RegAlreadyScanned() {
 			C.PlaySound(@"\windows\critical.wav");
-			this.ShowResult("fail");
-			this.UpdateScanResult(C.DUPLICATE_SCAN_MSG);
-			this.ScanIncrementFail();
+			this.ShowScanResult("fail");
+			this.UpdateScanResultMsg(C.DUPLICATE_SCAN_MSG);
+			this.IncrementScanFail();
 		}
 		public void BadEventCode() {
 			C.PlaySound(@"\windows\critical.wav");
-			this.ShowResult("fail");
-			this.UpdateScanResult(C.BAD_EVENT_MSG);
-			this.ScanIncrementFail();
+			this.ShowScanResult("fail");
+			this.UpdateScanResultMsg(C.BAD_EVENT_MSG);
+			this.IncrementScanFail();
 		}
 		public void BadFormat() {
 			C.PlaySound(@"\windows\critical.wav");
-			this.ShowResult("fail");
-			this.UpdateScanResult(C.BAD_FORMAT_MSG);
-			this.ScanIncrementFail();
+			this.ShowScanResult("fail");
+			this.UpdateScanResultMsg(C.BAD_FORMAT_MSG);
+			this.IncrementScanFail();
 		}
 		public void ScanFail() {
 			C.PlaySound(@"\windows\critical.wav");
-			ShowResult("fail");
-			UpdateScanResult(C.SCAN_FAIL_MSG);
-			ScanIncrementFail();
+			ShowScanResult("fail");
+			UpdateScanResultMsg(C.SCAN_FAIL_MSG);
+			IncrementScanFail();
 		}
 
-		// DATA FILE METHODS ============================================================================
+
+		// DATA FILE METHODS ======================================================================
 		private int ReadXMLRegistrations(XDocument xdoc) {
 			int count = (int)xdoc.Element("event").Element("registrations").Attribute("count");
-			this.eventID = (String)xdoc.Element("event").Attribute("id");
-			this.eventTitle = (String)xdoc.Element("event").Element("title");
+			this.EventID = (String)xdoc.Element("event").Attribute("id");
+			this.EventTitle = (String)xdoc.Element("event").Element("title");
 			foreach (XElement el in xdoc.Descendants("registration")) {
 				try {
-					Log(String.Format("Added Registration #{0}->{1}", el.Attribute("num").Value, el.Attribute("id").Value)); // DEBUG
+					Log(String.Format("Added registration #{0}->{1}", el.Attribute("num").Value, el.Attribute("id").Value)); // DEBUG
 					Registration r = new Registration() {
-						id = FixNull(el.Attribute("id").Value),
-						first_name = FixNull(el.Element("first_name").Value),
-						last_name = FixNull(el.Element("last_name").Value),
+						id = FixNullString(el.Attribute("id").Value),
+						first_name = FixNullString(el.Element("first_name").Value),
+						last_name = FixNullString(el.Element("last_name").Value),
 						social_events_booked = new List<int>()
 					};
-					this.registrations.Add(r);
+					this.RegistrationsList.Add(r);
 				} catch (Exception ex) {
 					Log(ex.StackTrace);
 					Log(el.ToString());
 				}
 			}
-			Log("XML count=" + count + ", read=" + registrations.Count()); // DEBUG
+			Log("XML count=" + count + ", read=" + RegistrationsList.Count()); // DEBUG
 
-			// read in social events
+			// read in social EventsList
 			foreach (XElement el_se in xdoc.Descendants("socialevent")) {
 				try {
-					Log("SE: " + el_se.Attribute("id").Value + el_se.Attribute("name").Value); // DEBUG
+					Log("SE: #" + el_se.Attribute("id").Value + " " + el_se.Attribute("name").Value); // DEBUG
 					foreach (XElement el_seo in el_se.Descendants("option")) {
 						try {
-							Log("SEO: " + el_seo.Attribute("id").Value + el_seo.Attribute("name").Value); // DEBUG
+							Log("SEO: #" + el_seo.Attribute("id").Value + " " + el_seo.Attribute("name").Value); // DEBUG
 							SocialEventOption seo = new SocialEventOption() {
 								id = Convert.ToInt32(el_seo.Attribute("id").Value),
-								name = FixNull(el_seo.Attribute("name").Value),
+								name = FixNullString(el_seo.Attribute("name").Value),
 								social_event_id = Convert.ToInt32(el_se.Attribute("id").Value),
-								social_event_name = FixNull(el_se.Attribute("name").Value),
-								display_name = FixNull(el_se.Attribute("name").Value) + ": " + FixNull(el_seo.Attribute("name").Value)
+								social_event_name = FixNullString(el_se.Attribute("name").Value),
+								display_name = FixNullString(el_se.Attribute("name").Value) + ": " + FixNullString(el_seo.Attribute("name").Value)
 							};
-							this.se_options.Add(seo);
+							this.SocialEventOptionsList.Add(seo);
 							foreach (XElement el_seb in el_seo.Descendants("booking")) {
 								try {
 									string booked_reg = el_seb.Value;
 									Log("Booked: " + booked_reg); // DEBUG
-									Registration regBooked = registrations.FirstOrDefault(r => r.id == booked_reg);
+									Registration regBooked = RegistrationsList.FirstOrDefault(r => r.id == booked_reg);
 									if (regBooked != null) {
 										regBooked.social_events_booked.Add(Convert.ToInt32(el_seo.Attribute("id").Value));
 									}
@@ -353,43 +359,43 @@ namespace REMedia.JlcScan {
 					Log(el_se.ToString());
 				}
 			}
-			return this.registrations.Count();
+			return this.RegistrationsList.Count();
 		}
 		private int ReadXMLEvents(XDocument xdoc) {
 			foreach (XElement el in xdoc.Descendants("event")) {
 				try {
 					Event ev = new Event() {
 						id = Convert.ToInt32(el.Attribute("id").Value),
-						name = FixNull(el.Attribute("name").Value),
-						city = FixNull(el.Attribute("city").Value),
-						event_code = FixNull(el.Attribute("event_code").Value),
-						display_name = FixNull(el.Attribute("name").Value) + " " + FixNull(el.Attribute("city").Value)
+						name = FixNullString(el.Attribute("name").Value),
+						city = FixNullString(el.Attribute("city").Value),
+						event_code = FixNullString(el.Attribute("event_code").Value),
+						display_name = FixNullString(el.Attribute("name").Value) + " " + FixNullString(el.Attribute("city").Value)
 					};
-					this.events.Add(ev);
+					this.EventsList.Add(ev);
 				} catch (Exception ex) {
 					Log(ex.StackTrace);
 					Log(el.ToString());
 				}
 			}
-			return this.events.Count();
+			return this.EventsList.Count();
 		}
 		private void SaveCsvFile() {
 			Log("On List:"); // DEBUG
-			regScanned_OnList.ForEach(x => Log(Convert.ToString(x))); // DEBUG
+			RegScanned_OnList.ForEach(x => Log(Convert.ToString(x))); // DEBUG
 			Log("Overrides:"); // DEBUG
-			regScannedOverrides.ForEach(x => Log(Convert.ToString(x))); // DEBUG
+			RegScannedOverrides.ForEach(x => Log(Convert.ToString(x))); // DEBUG
 			string filePath = "";
 			if (this.GetSelectedSocialEventId() > 0) {
-				filePath = String.Format("{0}\\Event_{1}.csv", C.INITIAL_DIR, eventID);
+				filePath = String.Format("{0}\\Event_{1}.csv", C.INITIAL_DIR, EventID);
 			} else {
 				filePath = String.Format("{0}\\SocialEvent_{1}.csv", C.INITIAL_DIR, this.GetSelectedSocialEventId());
 			}
 			File.Create(filePath).Close();
 			using (TextWriter writer = File.CreateText(filePath)) {
 				writer.WriteLine("File Saved At: " + DateTime.Now.ToString());
-				regScanned_OnList.ForEach(x => writer.WriteLine('"' + Convert.ToString(x) + '"'));
+				RegScanned_OnList.ForEach(x => writer.WriteLine('"' + Convert.ToString(x) + '"'));
 				this.DataSaved = true;
-				MessageBox.Show(String.Format(C.REG_SAVED_MSG, numValidScans));
+				MessageBox.Show(String.Format(C.REG_SAVED_MSG, NumValidScans));
 				this.btnSaveToFile.Enabled = false;
 			}
 		}
@@ -397,10 +403,10 @@ namespace REMedia.JlcScan {
 			XDocument xdoc = new XDocument();
 			try {
 				xdoc = new XDocument(
-					new XElement("event", new XAttribute("id", eventID), new XAttribute("type", "registration"), new XAttribute("created", DateTime.Now),
-						new XElement("valid", new XAttribute("count",numValidScans),regScanned_OnList.Select(x => new XElement("registration", new XAttribute("id", x)))
+					new XElement("event", new XAttribute("id", EventID), new XAttribute("type", "registration"), new XAttribute("created", DateTime.Now),
+						new XElement("valid", new XAttribute("count",NumValidScans),RegScanned_OnList.Select(x => new XElement("registration", new XAttribute("id", x)))
 						),
-						new XElement("overrides", new XAttribute("count",regScannedOverrides.Count),regScannedOverrides.Select(x => new XElement("registration", new XAttribute("id", x)))
+						new XElement("overrides", new XAttribute("count",RegScannedOverrides.Count),RegScannedOverrides.Select(x => new XElement("registration", new XAttribute("id", x)))
 						)
 					)
 				);
@@ -414,10 +420,10 @@ namespace REMedia.JlcScan {
 			XDocument xdoc = new XDocument();
 			try {
 				xdoc = new XDocument(
-					new XElement("socialevent", new XAttribute("id", this.eventID), new XAttribute("type", "socialevent"), new XAttribute("social_event_option_id", this.GetSelectedSocialEventId()), new XAttribute("created", DateTime.Now),
-						new XElement("valid", new XAttribute("count", numValidScans), regScanned_OnList.Select(x => new XElement("registration", new XAttribute("id", x)))
+					new XElement("socialevent", new XAttribute("id", this.EventID), new XAttribute("type", "socialevent"), new XAttribute("social_event_option_id", this.GetSelectedSocialEventId()), new XAttribute("created", DateTime.Now),
+						new XElement("valid", new XAttribute("count", NumValidScans), RegScanned_OnList.Select(x => new XElement("registration", new XAttribute("id", x)))
 						),
-						new XElement("overrides", new XAttribute("count", regScannedOverrides.Count), regScannedOverrides.Select(x => new XElement("registration", new XAttribute("id", x)))
+						new XElement("overrides", new XAttribute("count", RegScannedOverrides.Count), RegScannedOverrides.Select(x => new XElement("registration", new XAttribute("id", x)))
 						)
 					)
 				);
@@ -428,7 +434,8 @@ namespace REMedia.JlcScan {
 			return xdoc;
 		}
 
-		// NETWORK METHODS ===========================================================================
+
+		// NETWORK METHODS ========================================================================
 		private bool IsServerAvailable() {
 			bool ok = false;
 			try {
@@ -488,10 +495,10 @@ namespace REMedia.JlcScan {
 			try {
 				string data = GetDataFromServer(C.WEBSVC_EVENT_ENDPOINT);
 				XDocument xdoc = XDocument.Parse(data.ToString());
-				this.numEvents = ReadXMLEvents(xdoc);
+				this.NumEvents = ReadXMLEvents(xdoc);
 			} catch (Exception ex) {
 				Log(ex.StackTrace);
-				this.numEvents = 0;
+				this.NumEvents = 0;
 			}
 		}
 		private string SendDataToServer(string data, string url) {
@@ -526,9 +533,10 @@ namespace REMedia.JlcScan {
 
 		}
 
-		// NAVIGATION ==================================================================================
+
+		// NAVIGATION =============================================================================
 		private void LoadComplete() {
-			if (this.se_options.Count > 0) {
+			if (this.SocialEventOptionsList.Count > 0) {
 				this.PopulateSocialEventsOptionsDropdown();
 				this.GotoOptionsScreen();
 			} else {
@@ -567,14 +575,15 @@ namespace REMedia.JlcScan {
 			this.resultPanel.Hide();
 			this.btnSaveToVenture.Enabled = true;
 			this.btnSaveToFile.Enabled = true;
-			this.lblScannedInfo.Text = String.Format(C.REG_SCANNED_MSG, regScanned_OnList.Count);
+			this.lblScannedInfo.Text = String.Format(C.REG_SCANNED_MSG, RegScanned_OnList.Count);
 			this.savePanel.Show();
 			if (IsServerAvailable()) {
 				this.btnSaveToVenture.Show();
 			}
 		}
 
-		// BUTTON CLICK HANDLERS ====================================================================
+
+		// BUTTON CLICK HANDLERS ==================================================================
 		private void btnLoadFile_Click(object sender, EventArgs e) {
 			OpenFileDialog ofd = new OpenFileDialog();
 			ofd.Filter = "XML File|*.xml";
@@ -583,23 +592,24 @@ namespace REMedia.JlcScan {
 				// load xml file
 				XDocument xdoc = XDocument.Load(ofd.FileName);
 				int numReg = ReadXMLRegistrations(xdoc);
-				MessageBox.Show(String.Format(C.DATA_LOADED_MSG, eventTitle.ToUpper(), numReg), "INFO", MessageBoxButtons.OK, MessageBoxIcon.Asterisk, MessageBoxDefaultButton.Button1);
+				MessageBox.Show(String.Format(C.DATA_LOADED_MSG, EventTitle.ToUpper(), numReg), "INFO", MessageBoxButtons.OK, MessageBoxIcon.Asterisk, MessageBoxDefaultButton.Button1);
 				this.LoadComplete();
 			} else {
 				MessageBox.Show(C.SELECT_FILE_MSG,"ALERT");
 			}
 		}
 		private void btnLoadFromWeb_Click(object sender, EventArgs e) {
-			this.registrations.Clear();
-			if (Online) {
+			this.RegistrationsList.Clear();
+			if (this.Online) {
 				try {
 					int id = (int)menuEvents.SelectedValue;
 					if (id > 0) {
 						string url = C.WEBSVC_EVENTS_ENDPOINT + "?id=" + id;
 						string data = GetDataFromServer(url);
+						//Log(data); // DEBUG
 						XDocument xdoc = XDocument.Parse(data.ToString());
 						int numReg = ReadXMLRegistrations(xdoc);
-						MessageBox.Show(String.Format(C.DATA_LOADED_MSG, eventTitle.ToUpper(), numReg), "INFO", MessageBoxButtons.OK, MessageBoxIcon.Asterisk, MessageBoxDefaultButton.Button1);
+						MessageBox.Show(String.Format(C.DATA_LOADED_MSG, EventTitle.ToUpper(), numReg), "INFO", MessageBoxButtons.OK, MessageBoxIcon.Asterisk, MessageBoxDefaultButton.Button1);
 						this.LoadComplete();
 					} else {
 						MessageBox.Show(C.NO_EVENT_SELECTED, "ALERT", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
@@ -625,15 +635,15 @@ namespace REMedia.JlcScan {
 					evID = parts[0];
 					regID = parts[1];
 					// check event code matches
-					if (evID != eventID) {
+					if (evID != EventID) {
 						BadEventCode();
 					} else {
 						// event ok, check reg id against list
 						this.LastScannedId = regID;
-						Registration reg = this.registrations.FirstOrDefault(r => r.id == regID);
+						Registration reg = this.RegistrationsList.FirstOrDefault(r => r.id == regID);
 						if (reg != null) {
 							// on the list
-							if (regScanned_OnList.Contains(regID)) {
+							if (RegScanned_OnList.Contains(regID)) {
 								this.RegAlreadyScanned();
 							} else {
 								if (GetSelectedSocialEventId() != 0) {
@@ -643,7 +653,7 @@ namespace REMedia.JlcScan {
 								}
 							}
 						} else {
-							if (regScannedOverrides.Contains(regID)) {
+							if (RegScannedOverrides.Contains(regID)) {
 								// was overridden and allowed in
 								this.RegAlreadyScanned();
 							} else {
@@ -661,7 +671,7 @@ namespace REMedia.JlcScan {
 			}
 		}
 		private void btnScanDone_Click(object sender, EventArgs e) {
-			if (regScanned_OnList.Count > 0) {
+			if (RegScanned_OnList.Count > 0) {
 				this.GotoSaveScreen();
 			} else {
 				MessageBox.Show(C.NO_REG_SAVED_MSG, "ALERT", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
@@ -683,11 +693,11 @@ namespace REMedia.JlcScan {
 			}
 		}
 		private void btnOverride_Click(object sender, EventArgs e) {
-			if (MessageBox.Show(C.OVERRIDE_CONFIRM, "ATTENTION", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1) == DialogResult.Yes) {
+			if (MessageBox.Show(C.OVERRIDE_CONFIRM, "ATTENTION", MessageBoxButtons.YesNo, MessageBoxIcon.None, MessageBoxDefaultButton.Button1) == DialogResult.Yes) {
 			C.PlaySound(@"\windows\beep.wav");
-			regScannedOverrides.Add(GetLastScannedId());
-			regScanned_OnList.Add(GetLastScannedId());
-			this.ScanIncrementValid();
+			RegScannedOverrides.Add(GetLastScannedId());
+			RegScanned_OnList.Add(GetLastScannedId());
+			this.IncrementScanValid();
 			this.resultPanel.Hide();
 			this.ScannerActive = true;
 			} else {
@@ -732,7 +742,7 @@ namespace REMedia.JlcScan {
 		}
 		private void btnExit_Click(object sender, EventArgs e) {
 			if (!this.GetDataSaved()) {
-				if (MessageBox.Show(C.EXIT_DATA_NOT_SAVED_MSG, "ATTENTION", MessageBoxButtons.YesNo,MessageBoxIcon.Exclamation,MessageBoxDefaultButton.Button1) == DialogResult.Yes) {
+				if (MessageBox.Show(C.EXIT_DATA_NOT_SAVED_MSG, "ATTENTION", MessageBoxButtons.YesNo,MessageBoxIcon.Question,MessageBoxDefaultButton.Button1) == DialogResult.Yes) {
 					this.Close();
 				}
 			} else {
@@ -744,7 +754,12 @@ namespace REMedia.JlcScan {
 
 
 
-	}
+
+
+
+
+	} 
+	// end main UI class ========================================================================
 
 	// registration class for each registered delegate
 	public class Registration {
@@ -756,7 +771,7 @@ namespace REMedia.JlcScan {
 		public List<int> social_events_booked { get; set; }
 	}
 
-	// events class populated from Venture
+	// EventsList class populated from Venture
 	public class Event {
 		public int id { get; set; }
 		public string name { get; set; }
@@ -765,7 +780,7 @@ namespace REMedia.JlcScan {
 		public string display_name { get; set; }
 	}
 
-	// social events class populated from Venture
+	// social EventsList class populated from Venture
 	public class SocialEventOption {
 		public int id { get; set; }
 		public string name { get; set; }
