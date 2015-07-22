@@ -199,7 +199,6 @@ namespace REMedia.JlcScan {
 			}
 		}
 		private void PopulateEventsDropdown() {
-			this.EventsList.Insert(0, new Event() { id = 139, display_name = "RE MEDIA TEST EVENT" }); // HACK
 			this.EventsList.Insert(0, new Event() { id = 0, display_name = "Choose Event..." });
 			this.menuEvents.DataSource = EventsList;
 			this.menuEvents.ValueMember = "id";
