@@ -140,9 +140,9 @@ namespace REMedia.JlcScan {
 			this.lblScanResult.Text = txt;
 		}
 		private void UpdateScanCounts() {
-			this.lblScanSum.Text = "Scanned: " + Convert.ToString(NumTotalScans);
-			this.lblValid.Text = "Valid: " + Convert.ToString(NumValidScans);
-			this.lblScanFail.Text = "Failed: " + Convert.ToString(NumFailedScans);
+			this.lblTotalCount.Text = "Scanned: " + Convert.ToString(NumTotalScans);
+			this.lblValidCount.Text = "Valid: " + Convert.ToString(NumValidScans);
+			this.lblFailCount.Text = "Failed: " + Convert.ToString(NumFailedScans);
 		}
 		private void IncrementScanValid() {
 			this.NumTotalScans++;
@@ -561,9 +561,9 @@ namespace REMedia.JlcScan {
 			this.savePanel.Hide();
 			this.resultPanel.Hide();
 			if (GetSelectedSocialEventId() == 0) {
-				this.lblScanInfo.Text = "Scan Mode: Registration";
+				this.lblScanMode.Text = "Scan Mode: Registration";
 			} else {
-				this.lblScanInfo.Text = "Scan Mode: Social Event";
+				this.lblScanMode.Text = "Scan Mode: Social Event";
 			}
 			this.scanPanel.Show();
 		}
@@ -575,7 +575,7 @@ namespace REMedia.JlcScan {
 			this.resultPanel.Hide();
 			this.btnSaveToVenture.Enabled = true;
 			this.btnSaveToFile.Enabled = true;
-			this.lblScannedInfo.Text = String.Format(C.REG_SCANNED_MSG, RegScanned_OnList.Count);
+			this.lblNumScannedInfo.Text = String.Format(C.REG_SCANNED_MSG, RegScanned_OnList.Count);
 			this.savePanel.Show();
 			if (IsServerAvailable()) {
 				this.btnSaveToVenture.Show();
