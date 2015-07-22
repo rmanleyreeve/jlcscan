@@ -55,6 +55,12 @@ namespace REMedia.JlcScan {
 				this.Close();
 			} else {
 				// set up UI
+				this.Menu = null;
+				this.ControlBox = false;
+				this.FormBorderStyle = FormBorderStyle.None;
+				this.WindowState = FormWindowState.Maximized;
+				this.Text = string.Empty;
+				// initialise
 				this.ClearData();
 				this.ScannerActive = false;
 				// check if web services available
@@ -95,16 +101,16 @@ namespace REMedia.JlcScan {
 		}
 		private void Ui_KeyDown(object sender, KeyEventArgs e) {
 			//Log("KEY DOWN: " + e.KeyValue);
-			if (GetScannerActive() && e.KeyValue == (int)ConstantKeyValue.Scan) {
+			if (GetScannerActive() && e.KeyValue == (int)SystemHelper.ConstantKeyValue.Scan) {
 				this.btnScan_Click(null, null);
 			}
-			if (this.lblOverride.Visible && e.KeyValue == (int)ConstantKeyValue.RED) {
+			if (this.lblOverride.Visible && e.KeyValue == (int)SystemHelper.ConstantKeyValue.RED) {
 				this.btnOverride_Click(null, null);
 			}
-			if (this.lblOverride.Visible && e.KeyValue == (int)ConstantKeyValue.BLUE) {
+			if (this.lblOverride.Visible && e.KeyValue == (int)SystemHelper.ConstantKeyValue.BLUE) {
 				this.btnNoOverride_Click(null, null);
 			}
-			if (e.KeyValue == (int)ConstantKeyValue.ESC) {
+			if (e.KeyValue == (int)SystemHelper.ConstantKeyValue.ESC) {
 				//this.Close();
 			}
 		}
@@ -674,7 +680,9 @@ namespace REMedia.JlcScan {
 			if (RegScanned_OnList.Count > 0) {
 				this.GotoSaveScreen();
 			} else {
-				MessageBox.Show(C.NO_REG_SAVED_MSG, "ALERT", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
+				if (MessageBox.Show(C.NO_REG_SAVED_MSG, "ALERT", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1) == DialogResult.Yes) {
+					this.Close();
+				}
 			}
 		}
 		private void btnSelect_Click(object sender, EventArgs e) {

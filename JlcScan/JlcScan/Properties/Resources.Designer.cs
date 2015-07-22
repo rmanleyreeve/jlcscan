@@ -64,6 +64,13 @@ namespace SDK.REMedia.JlcScan.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap JLC_logo {
+            get {
+                object obj = ResourceManager.GetObject("JLC_logo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap no {
             get {
                 object obj = ResourceManager.GetObject("no", resourceCulture);
