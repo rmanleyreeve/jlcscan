@@ -602,6 +602,11 @@ namespace REMedia.JlcScan {
 			this.btnSaveToVenture.Enabled = true;
 			this.btnSaveToFile.Enabled = true;
 			this.lblNumScannedInfo.Text = String.Format(C.REG_SCANNED_MSG, RegScanned_OnList.Count);
+			if (this.SocialEventOptionsList.Count == 0) {
+				this.btnStartOver.Hide();
+			} else {
+				this.btnStartOver.Show();
+			}
 			this.savePanel.Show();
 			if (IsServerAvailable()) {
 				this.btnSaveToVenture.Show();
