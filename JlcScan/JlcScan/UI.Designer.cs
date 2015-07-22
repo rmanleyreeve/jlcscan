@@ -64,7 +64,7 @@
 			this.btnSaveToFile = new System.Windows.Forms.Button();
 			this.btnSaveToVenture = new System.Windows.Forms.Button();
 			this.lblSendToVentureMsg = new System.Windows.Forms.Label();
-			this.lblStartOver = new System.Windows.Forms.Button();
+			this.btnStartOver = new System.Windows.Forms.Button();
 			this.btnExit = new System.Windows.Forms.Button();
 			this.loadPanel.SuspendLayout();
 			this.optionsPanel.SuspendLayout();
@@ -412,7 +412,7 @@
 			this.savePanel.Controls.Add(this.btnSaveToFile);
 			this.savePanel.Controls.Add(this.btnSaveToVenture);
 			this.savePanel.Controls.Add(this.lblSendToVentureMsg);
-			this.savePanel.Controls.Add(this.lblStartOver);
+			this.savePanel.Controls.Add(this.btnStartOver);
 			this.savePanel.Controls.Add(this.btnExit);
 			this.savePanel.Location = new System.Drawing.Point(0, 50);
 			this.savePanel.Name = "savePanel";
@@ -465,14 +465,14 @@
 			this.lblSendToVentureMsg.Size = new System.Drawing.Size(240, 72);
 			this.lblSendToVentureMsg.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
-			// lblStartOver
+			// btnStartOver
 			// 
-			this.lblStartOver.Location = new System.Drawing.Point(8, 220);
-			this.lblStartOver.Name = "lblStartOver";
-			this.lblStartOver.Size = new System.Drawing.Size(90, 20);
-			this.lblStartOver.TabIndex = 8;
-			this.lblStartOver.Text = "Start Again";
-			this.lblStartOver.Click += new System.EventHandler(this.lblStartOver_Click);
+			this.btnStartOver.Location = new System.Drawing.Point(8, 220);
+			this.btnStartOver.Name = "btnStartOver";
+			this.btnStartOver.Size = new System.Drawing.Size(90, 20);
+			this.btnStartOver.TabIndex = 8;
+			this.btnStartOver.Text = "Start Again";
+			this.btnStartOver.Click += new System.EventHandler(this.lblStartOver_Click);
 			// 
 			// btnExit
 			// 
@@ -558,7 +558,7 @@
 		private System.Windows.Forms.Button btnSaveToFile;
 		private System.Windows.Forms.Button btnSaveToVenture;
 		private System.Windows.Forms.Label lblSendToVentureMsg;
-		private System.Windows.Forms.Button lblStartOver;
+		private System.Windows.Forms.Button btnStartOver;
 		private System.Windows.Forms.Button btnExit;
 	}
 }
