@@ -32,9 +32,9 @@ namespace REMedia.JlcScan {
 		private int NumValidScans;
 		private int NumFailedScans;
 		private int NumEvents = 0;
-		private static List<string> RegScanned_OnList = new List<string>();
+		private static List<Registration> RegScanned_OnList = new List<Registration>();
+		private static List<Registration> RegScannedOverrides = new List<Registration>();
 		private static List<string> RegScanned_NotOnList = new List<string>();
-		private static List<string> RegScannedOverrides = new List<string>();
 		public bool Online = false;
 		public bool ScannerActive;
 		private int SelectedSocialEventId;
@@ -252,14 +252,16 @@ namespace REMedia.JlcScan {
 			}
 		}
 		public void SE_RegOk(Registration reg) {
-			RegScanned_OnList.Add(reg.id);
+			reg.timestamp = "" + DateTime.Now.ToString("u");
+			RegScanned_OnList.Add(reg);
 			C.PlaySound(@"\windows\beep.wav");
 			this.ShowScanResult("ok");
 			this.UpdateScanResultMsg(reg.first_name + " " + reg.last_name + "\n" + C.VALID_SE_REG_MSG);
 			this.IncrementScanValid();
 		}
 		public void RegOk(Registration reg) {
-			RegScanned_OnList.Add(reg.id);
+			reg.timestamp = DateTime.Now.ToString("u");
+			RegScanned_OnList.Add(reg);
 			C.PlaySound(@"\windows\beep.wav");
 			this.ShowScanResult("ok");
 			this.UpdateScanResultMsg(reg.first_name + " " + reg.last_name + "\n" + C.VALID_REG_MSG);
@@ -387,19 +389,19 @@ namespace REMedia.JlcScan {
 		}
 		private void SaveCsvFile() {
 			Log("On List:"); // DEBUG
-			RegScanned_OnList.ForEach(x => Log(Convert.ToString(x))); // DEBUG
+			RegScanned_OnList.ForEach(x => Log(Convert.ToString(x.id) + "," + x.timestamp)); // DEBUG
 			Log("Overrides:"); // DEBUG
-			RegScannedOverrides.ForEach(x => Log(Convert.ToString(x))); // DEBUG
+			RegScannedOverrides.ForEach(x => Log(Convert.ToString(x.id) + "," + x.timestamp)); // DEBUG
 			string filePath = "";
 			if (this.GetSelectedSocialEventId() > 0) {
-				filePath = String.Format("{0}\\Event_{1}.csv", C.INITIAL_DIR, EventID);
-			} else {
 				filePath = String.Format("{0}\\SocialEvent_{1}.csv", C.INITIAL_DIR, this.GetSelectedSocialEventId());
+			} else {
+				filePath = String.Format("{0}\\Event_{1}.csv", C.INITIAL_DIR, EventID);
 			}
 			File.Create(filePath).Close();
 			using (TextWriter writer = File.CreateText(filePath)) {
 				writer.WriteLine("File Saved At: " + DateTime.Now.ToString());
-				RegScanned_OnList.ForEach(x => writer.WriteLine('"' + Convert.ToString(x) + '"'));
+				RegScanned_OnList.ForEach(x => writer.WriteLine('"' + Convert.ToString(x.id) + "\",\"" + x.timestamp + '"'));
 				this.DataSaved = true;
 				MessageBox.Show(String.Format(C.REG_SAVED_MSG, NumValidScans));
 				this.btnSaveToFile.Enabled = false;
@@ -409,10 +411,10 @@ namespace REMedia.JlcScan {
 			XDocument xdoc = new XDocument();
 			try {
 				xdoc = new XDocument(
-					new XElement("event", new XAttribute("id", EventID), new XAttribute("type", "registration"), new XAttribute("created", DateTime.Now),
-						new XElement("valid", new XAttribute("count",NumValidScans),RegScanned_OnList.Select(x => new XElement("registration", new XAttribute("id", x)))
+					new XElement("event", new XAttribute("id", EventID), new XAttribute("type", "registration"), new XAttribute("created", DateTime.Now.ToString("u")),
+						new XElement("valid", new XAttribute("count",NumValidScans),RegScanned_OnList.Select(x => new XElement("registration", new XAttribute("id", x.id),new XAttribute("timestamp",x.timestamp)))
 						),
-						new XElement("overrides", new XAttribute("count",RegScannedOverrides.Count),RegScannedOverrides.Select(x => new XElement("registration", new XAttribute("id", x)))
+						new XElement("overrides", new XAttribute("count",RegScannedOverrides.Count),RegScannedOverrides.Select(x => new XElement("registration", new XAttribute("id", x.id),new XAttribute("timestamp",x.timestamp)))
 						)
 					)
 				);
@@ -426,10 +428,10 @@ namespace REMedia.JlcScan {
 			XDocument xdoc = new XDocument();
 			try {
 				xdoc = new XDocument(
-					new XElement("socialevent", new XAttribute("id", this.EventID), new XAttribute("type", "socialevent"), new XAttribute("social_event_option_id", this.GetSelectedSocialEventId()), new XAttribute("created", DateTime.Now),
-						new XElement("valid", new XAttribute("count", NumValidScans), RegScanned_OnList.Select(x => new XElement("registration", new XAttribute("id", x)))
+					new XElement("socialevent", new XAttribute("id", this.EventID), new XAttribute("type", "socialevent"), new XAttribute("social_event_option_id", this.GetSelectedSocialEventId()), new XAttribute("created", DateTime.Now.ToString("u")),
+						new XElement("valid", new XAttribute("count", NumValidScans), RegScanned_OnList.Select(x => new XElement("registration", new XAttribute("id", x.id), new XAttribute("timestamp", x.timestamp)))
 						),
-						new XElement("overrides", new XAttribute("count", RegScannedOverrides.Count), RegScannedOverrides.Select(x => new XElement("registration", new XAttribute("id", x)))
+						new XElement("overrides", new XAttribute("count", RegScannedOverrides.Count), RegScannedOverrides.Select(x => new XElement("registration", new XAttribute("id", x.id), new XAttribute("timestamp", x.timestamp)))
 						)
 					)
 				);
@@ -649,7 +651,7 @@ namespace REMedia.JlcScan {
 						Registration reg = this.RegistrationsList.FirstOrDefault(r => r.id == regID);
 						if (reg != null) {
 							// on the list
-							if (RegScanned_OnList.Contains(regID)) {
+							if (RegScanned_OnList.Contains(reg)) {
 								this.RegAlreadyScanned();
 							} else {
 								if (GetSelectedSocialEventId() != 0) {
@@ -659,7 +661,7 @@ namespace REMedia.JlcScan {
 								}
 							}
 						} else {
-							if (RegScannedOverrides.Contains(regID)) {
+							if (RegScannedOverrides.Contains(reg)) {
 								// was overridden and allowed in
 								this.RegAlreadyScanned();
 							} else {
@@ -703,8 +705,8 @@ namespace REMedia.JlcScan {
 		private void btnOverride_Click(object sender, EventArgs e) {
 			if (MessageBox.Show(C.OVERRIDE_CONFIRM, "ATTENTION", MessageBoxButtons.YesNo, MessageBoxIcon.None, MessageBoxDefaultButton.Button1) == DialogResult.Yes) {
 			C.PlaySound(@"\windows\beep.wav");
-			RegScannedOverrides.Add(GetLastScannedId());
-			RegScanned_OnList.Add(GetLastScannedId());
+			RegScannedOverrides.Add(new Registration() { id = GetLastScannedId(), timestamp = DateTime.Now.ToString("u") });
+			RegScanned_OnList.Add(new Registration() { id = GetLastScannedId(), timestamp = DateTime.Now.ToString("u") });
 			this.IncrementScanValid();
 			this.resultPanel.Hide();
 			this.ScannerActive = true;
@@ -777,6 +779,7 @@ namespace REMedia.JlcScan {
 		public string last_name { get; set; }
 		public string suffix { get; set; }
 		public List<int> social_events_booked { get; set; }
+		public string timestamp { get; set; }
 	}
 
 	// EventsList class populated from Venture

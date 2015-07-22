@@ -449,7 +449,7 @@
 			// 
 			// btnSaveToVenture
 			// 
-			this.btnSaveToVenture.Location = new System.Drawing.Point(44, 100);
+			this.btnSaveToVenture.Location = new System.Drawing.Point(44, 116);
 			this.btnSaveToVenture.Name = "btnSaveToVenture";
 			this.btnSaveToVenture.Size = new System.Drawing.Size(144, 20);
 			this.btnSaveToVenture.TabIndex = 4;
@@ -460,9 +460,9 @@
 			// lblSendToVentureMsg
 			// 
 			this.lblSendToVentureMsg.BackColor = System.Drawing.Color.DarkCyan;
-			this.lblSendToVentureMsg.Location = new System.Drawing.Point(0, 124);
+			this.lblSendToVentureMsg.Location = new System.Drawing.Point(0, 140);
 			this.lblSendToVentureMsg.Name = "lblSendToVentureMsg";
-			this.lblSendToVentureMsg.Size = new System.Drawing.Size(240, 96);
+			this.lblSendToVentureMsg.Size = new System.Drawing.Size(240, 72);
 			this.lblSendToVentureMsg.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
 			// lblStartOver
