@@ -557,6 +557,19 @@ namespace REMedia.JlcScan {
 			this.loadPanel.Hide();
 			this.scanPanel.Hide();
 			this.savePanel.Hide();
+			if (this.SocialEventOptionsList.Count > 0) {
+				try {
+					this.menuSocialEvents.Hide();
+					this.lblScanSocEvent.Hide();
+					this.btnScanSocialEvents.Hide();
+				} catch(Exception ex){}
+			} else {
+				try {
+					this.menuSocialEvents.Show();
+					this.lblScanSocEvent.Show();
+					this.btnScanSocialEvents.Show();
+				} catch (Exception ex) { }
+			}
 			try {
 				this.menuSocialEvents.SelectedIndex = 0;
 			} catch (Exception ex) { }
@@ -572,6 +585,11 @@ namespace REMedia.JlcScan {
 				this.lblScanMode.Text = "Scan Mode: Registration";
 			} else {
 				this.lblScanMode.Text = "Scan Mode: Social Event";
+			}
+			if (this.SocialEventOptionsList.Count == 0) {
+				this.btnOptions.Hide();
+			} else {
+				this.btnOptions.Show();
 			}
 			this.scanPanel.Show();
 		}
