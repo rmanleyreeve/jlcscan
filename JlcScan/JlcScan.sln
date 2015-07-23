@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JLC Scan", "JlcScan\JLC Sca
 EndProject
 Project("{B900F1C2-3D47-4FEC-85B3-04AAF18C3634}") = "JlcScanSetup", "JlcScanSetup\JlcScanSetup.vddproj", "{CF935B91-2211-4779-A7A4-4198586FD8E7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JLC Badge Maker", "JLC Badge Maker\JLC Badge Maker.csproj", "{6F35C625-DF66-40EE-B8CF-68B9CD7B9B1E}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -23,6 +25,11 @@ Global
 		{F3364CF6-2DC6-41F3-9B33-60E714E81898}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{CF935B91-2211-4779-A7A4-4198586FD8E7}.Debug|Any CPU.ActiveCfg = Debug
 		{CF935B91-2211-4779-A7A4-4198586FD8E7}.Release|Any CPU.ActiveCfg = Release
+		{6F35C625-DF66-40EE-B8CF-68B9CD7B9B1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F35C625-DF66-40EE-B8CF-68B9CD7B9B1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F35C625-DF66-40EE-B8CF-68B9CD7B9B1E}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{6F35C625-DF66-40EE-B8CF-68B9CD7B9B1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F35C625-DF66-40EE-B8CF-68B9CD7B9B1E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
