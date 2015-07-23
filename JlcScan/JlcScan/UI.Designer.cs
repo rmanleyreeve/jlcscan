@@ -454,7 +454,6 @@
 			this.btnSaveToVenture.Size = new System.Drawing.Size(144, 20);
 			this.btnSaveToVenture.TabIndex = 4;
 			this.btnSaveToVenture.Text = "Save data to Venture";
-			this.btnSaveToVenture.Visible = false;
 			this.btnSaveToVenture.Click += new System.EventHandler(this.btnSaveToVenture_Click);
 			// 
 			// lblSendToVentureMsg

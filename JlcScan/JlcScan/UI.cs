@@ -185,6 +185,7 @@ namespace REMedia.JlcScan {
 			}
 			// show result panel for 3 seconds
 			this.ScannerActive = false;
+			this.btnScan.Enabled = false;
 			this.resultPanel.Show();
 			if (!IsOverride) {
 				int secs = 0;
@@ -194,6 +195,7 @@ namespace REMedia.JlcScan {
 					if (secs < this.ResultsScreenDuration) { return; }
 					timer.Enabled = false;
 					this.resultPanel.Hide();
+					this.btnScan.Enabled = true;
 					this.ScannerActive = true;
 				};
 			}
@@ -551,6 +553,14 @@ namespace REMedia.JlcScan {
 				this.GotoScanScreen();
 			}
 		}
+		private void GotoLoadScreen() {
+			this.ScannerActive = false;
+			this.ClearData();
+			this.optionsPanel.Hide();
+			this.scanPanel.Hide();
+			this.savePanel.Hide();
+			this.loadPanel.Show();
+		}
 		private void GotoOptionsScreen() {
 			this.ScannerActive = false;
 			this.ClearData();
@@ -559,16 +569,16 @@ namespace REMedia.JlcScan {
 			this.savePanel.Hide();
 			if (this.SocialEventOptionsList.Count > 0) {
 				try {
-					this.menuSocialEvents.Hide();
-					this.lblScanSocEvent.Hide();
-					this.btnScanSocialEvents.Hide();
-				} catch(Exception ex){}
-			} else {
-				try {
 					this.menuSocialEvents.Show();
 					this.lblScanSocEvent.Show();
 					this.btnScanSocialEvents.Show();
 				} catch (Exception ex) { }
+			} else {
+				try {
+					this.menuSocialEvents.Hide();
+					this.lblScanSocEvent.Hide();
+					this.btnScanSocialEvents.Hide();
+				} catch(Exception ex){}
 			}
 			try {
 				this.menuSocialEvents.SelectedIndex = 0;
@@ -586,11 +596,7 @@ namespace REMedia.JlcScan {
 			} else {
 				this.lblScanMode.Text = "Scan Mode: Social Event";
 			}
-			if (this.SocialEventOptionsList.Count == 0) {
-				this.btnOptions.Hide();
-			} else {
-				this.btnOptions.Show();
-			}
+			this.btnOptions.Enabled = (this.SocialEventOptionsList.Count > 0);
 			this.scanPanel.Show();
 		}
 		private void GotoSaveScreen() {
@@ -599,18 +605,11 @@ namespace REMedia.JlcScan {
 			this.optionsPanel.Hide();
 			this.scanPanel.Hide();
 			this.resultPanel.Hide();
-			this.btnSaveToVenture.Enabled = true;
 			this.btnSaveToFile.Enabled = true;
+			this.btnSaveToVenture.Enabled = (IsServerAvailable());
 			this.lblNumScannedInfo.Text = String.Format(C.REG_SCANNED_MSG, RegScanned_OnList.Count);
-			if (this.SocialEventOptionsList.Count == 0) {
-				this.btnStartOver.Hide();
-			} else {
-				this.btnStartOver.Show();
-			}
+			this.btnStartOver.Enabled = (this.SocialEventOptionsList.Count > 0);
 			this.savePanel.Show();
-			if (IsServerAvailable()) {
-				this.btnSaveToVenture.Show();
-			}
 		}
 
 
@@ -727,19 +726,18 @@ namespace REMedia.JlcScan {
 		}
 		private void btnOverride_Click(object sender, EventArgs e) {
 			if (MessageBox.Show(C.OVERRIDE_CONFIRM, "ATTENTION", MessageBoxButtons.YesNo, MessageBoxIcon.None, MessageBoxDefaultButton.Button1) == DialogResult.Yes) {
-			C.PlaySound(@"\windows\beep.wav");
-			RegScanned_Overrides.Add(new Registration() { id = GetLastScannedId(), timestamp = DateTime.Now.ToString("u") });
-			RegScanned_OnList.Add(new Registration() { id = GetLastScannedId(), timestamp = DateTime.Now.ToString("u") });
-			this.IncrementScanValid();
-			this.resultPanel.Hide();
-			this.ScannerActive = true;
-			} else {
-			this.resultPanel.Hide();
-			this.ScannerActive = true;
+				C.PlaySound(@"\windows\beep.wav");
+				RegScanned_Overrides.Add(new Registration() { id = GetLastScannedId(), timestamp = DateTime.Now.ToString("u") });
+				RegScanned_OnList.Add(new Registration() { id = GetLastScannedId(), timestamp = DateTime.Now.ToString("u") });
+				this.IncrementScanValid();
 			}
+			this.resultPanel.Hide();
+			this.btnScan.Enabled = true;
+			this.ScannerActive = true;
 		}
 		private void btnNoOverride_Click(object sender, EventArgs e) {
 			this.resultPanel.Hide();
+			this.btnScan.Enabled = true;
 			this.ScannerActive = true;
 		}
 		private void btnSaveToFile_Click(object sender, EventArgs e) {
