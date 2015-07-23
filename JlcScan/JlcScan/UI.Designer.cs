@@ -37,9 +37,9 @@
 			this.lblOptions = new System.Windows.Forms.Label();
 			this.lblScanRegOnly = new System.Windows.Forms.Label();
 			this.btnScanRegOnly = new System.Windows.Forms.Button();
-			this.lblScanSocEvent = new System.Windows.Forms.Label();
+			this.lblScanSocialEvent = new System.Windows.Forms.Label();
 			this.menuSocialEvents = new System.Windows.Forms.ComboBox();
-			this.btnScanSocialEvents = new System.Windows.Forms.Button();
+			this.btnScanSocialEvent = new System.Windows.Forms.Button();
 			this.scanPanel = new System.Windows.Forms.Panel();
 			this.lblScanMode = new System.Windows.Forms.Label();
 			this.btnScan = new System.Windows.Forms.Button();
@@ -51,8 +51,8 @@
 			this.iconBoxNo = new System.Windows.Forms.PictureBox();
 			this.lblScanResult = new System.Windows.Forms.Label();
 			this.lblOverride = new System.Windows.Forms.Label();
-			this.btnOverride = new System.Windows.Forms.Button();
-			this.btnNoOverride = new System.Windows.Forms.Button();
+			this.btnOverrideYes = new System.Windows.Forms.Button();
+			this.btnOverrideNo = new System.Windows.Forms.Button();
 			this.lblScanReady = new System.Windows.Forms.Label();
 			this.imgScanReady = new System.Windows.Forms.PictureBox();
 			this.lblTotalCount = new System.Windows.Forms.Label();
@@ -63,7 +63,7 @@
 			this.lblNumScannedInfo = new System.Windows.Forms.Label();
 			this.btnSaveToFile = new System.Windows.Forms.Button();
 			this.btnSaveToVenture = new System.Windows.Forms.Button();
-			this.lblSendToVentureMsg = new System.Windows.Forms.Label();
+			this.lblSaveToVenture = new System.Windows.Forms.Label();
 			this.btnStartOver = new System.Windows.Forms.Button();
 			this.btnExit = new System.Windows.Forms.Button();
 			this.loadPanel.SuspendLayout();
@@ -151,7 +151,7 @@
 			this.btnLoadFromVenture.TabIndex = 3;
 			this.btnLoadFromVenture.Text = "Load from Venture";
 			this.btnLoadFromVenture.Visible = false;
-			this.btnLoadFromVenture.Click += new System.EventHandler(this.btnLoadFromWeb_Click);
+			this.btnLoadFromVenture.Click += new System.EventHandler(this.btnLoadFromVenture_Click);
 			// 
 			// optionsPanel
 			// 
@@ -159,9 +159,9 @@
 			this.optionsPanel.Controls.Add(this.lblOptions);
 			this.optionsPanel.Controls.Add(this.lblScanRegOnly);
 			this.optionsPanel.Controls.Add(this.btnScanRegOnly);
-			this.optionsPanel.Controls.Add(this.lblScanSocEvent);
+			this.optionsPanel.Controls.Add(this.lblScanSocialEvent);
 			this.optionsPanel.Controls.Add(this.menuSocialEvents);
-			this.optionsPanel.Controls.Add(this.btnScanSocialEvents);
+			this.optionsPanel.Controls.Add(this.btnScanSocialEvent);
 			this.optionsPanel.Location = new System.Drawing.Point(0, 50);
 			this.optionsPanel.Name = "optionsPanel";
 			this.optionsPanel.Size = new System.Drawing.Size(240, 244);
@@ -195,14 +195,14 @@
 			this.btnScanRegOnly.Text = "Start Scanning";
 			this.btnScanRegOnly.Click += new System.EventHandler(this.btnScanRegOnly_Click);
 			// 
-			// lblScanSocEvent
+			// lblScanSocialEvent
 			// 
-			this.lblScanSocEvent.ForeColor = System.Drawing.Color.Black;
-			this.lblScanSocEvent.Location = new System.Drawing.Point(0, 128);
-			this.lblScanSocEvent.Name = "lblScanSocEvent";
-			this.lblScanSocEvent.Size = new System.Drawing.Size(240, 20);
-			this.lblScanSocEvent.Text = "Recording Social Event access";
-			this.lblScanSocEvent.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			this.lblScanSocialEvent.ForeColor = System.Drawing.Color.Black;
+			this.lblScanSocialEvent.Location = new System.Drawing.Point(0, 128);
+			this.lblScanSocialEvent.Name = "lblScanSocialEvent";
+			this.lblScanSocialEvent.Size = new System.Drawing.Size(240, 20);
+			this.lblScanSocialEvent.Text = "Recording Social Event access";
+			this.lblScanSocialEvent.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
 			// menuSocialEvents
 			// 
@@ -212,14 +212,14 @@
 			this.menuSocialEvents.Size = new System.Drawing.Size(228, 19);
 			this.menuSocialEvents.TabIndex = 5;
 			// 
-			// btnScanSocialEvents
+			// btnScanSocialEvent
 			// 
-			this.btnScanSocialEvents.Location = new System.Drawing.Point(52, 184);
-			this.btnScanSocialEvents.Name = "btnScanSocialEvents";
-			this.btnScanSocialEvents.Size = new System.Drawing.Size(124, 20);
-			this.btnScanSocialEvents.TabIndex = 9;
-			this.btnScanSocialEvents.Text = "Start Scanning";
-			this.btnScanSocialEvents.Click += new System.EventHandler(this.btnScanSocialEvents_Click);
+			this.btnScanSocialEvent.Location = new System.Drawing.Point(52, 184);
+			this.btnScanSocialEvent.Name = "btnScanSocialEvent";
+			this.btnScanSocialEvent.Size = new System.Drawing.Size(124, 20);
+			this.btnScanSocialEvent.TabIndex = 9;
+			this.btnScanSocialEvent.Text = "Start Scanning";
+			this.btnScanSocialEvent.Click += new System.EventHandler(this.btnScanSocialEvents_Click);
 			// 
 			// scanPanel
 			// 
@@ -286,8 +286,8 @@
 			this.resultPanel.Controls.Add(this.iconBoxNo);
 			this.resultPanel.Controls.Add(this.lblScanResult);
 			this.resultPanel.Controls.Add(this.lblOverride);
-			this.resultPanel.Controls.Add(this.btnOverride);
-			this.resultPanel.Controls.Add(this.btnNoOverride);
+			this.resultPanel.Controls.Add(this.btnOverrideYes);
+			this.resultPanel.Controls.Add(this.btnOverrideNo);
 			this.resultPanel.Location = new System.Drawing.Point(30, 60);
 			this.resultPanel.Name = "resultPanel";
 			this.resultPanel.Size = new System.Drawing.Size(180, 150);
@@ -335,26 +335,26 @@
 			this.lblOverride.Size = new System.Drawing.Size(64, 20);
 			this.lblOverride.Text = "Allow In?";
 			// 
-			// btnOverride
+			// btnOverrideYes
 			// 
-			this.btnOverride.BackColor = System.Drawing.Color.LightSalmon;
-			this.btnOverride.Location = new System.Drawing.Point(72, 116);
-			this.btnOverride.Name = "btnOverride";
-			this.btnOverride.Size = new System.Drawing.Size(40, 30);
-			this.btnOverride.TabIndex = 4;
-			this.btnOverride.Text = "Yes";
-			this.btnOverride.Visible = false;
-			this.btnOverride.Click += new System.EventHandler(this.btnOverride_Click);
+			this.btnOverrideYes.BackColor = System.Drawing.Color.LightSalmon;
+			this.btnOverrideYes.Location = new System.Drawing.Point(72, 116);
+			this.btnOverrideYes.Name = "btnOverrideYes";
+			this.btnOverrideYes.Size = new System.Drawing.Size(40, 30);
+			this.btnOverrideYes.TabIndex = 4;
+			this.btnOverrideYes.Text = "Yes";
+			this.btnOverrideYes.Visible = false;
+			this.btnOverrideYes.Click += new System.EventHandler(this.btnOverride_Click);
 			// 
-			// btnNoOverride
+			// btnOverrideNo
 			// 
-			this.btnNoOverride.BackColor = System.Drawing.Color.LightSkyBlue;
-			this.btnNoOverride.Location = new System.Drawing.Point(136, 116);
-			this.btnNoOverride.Name = "btnNoOverride";
-			this.btnNoOverride.Size = new System.Drawing.Size(40, 30);
-			this.btnNoOverride.TabIndex = 6;
-			this.btnNoOverride.Text = "No";
-			this.btnNoOverride.Click += new System.EventHandler(this.btnNoOverride_Click);
+			this.btnOverrideNo.BackColor = System.Drawing.Color.LightSkyBlue;
+			this.btnOverrideNo.Location = new System.Drawing.Point(136, 116);
+			this.btnOverrideNo.Name = "btnOverrideNo";
+			this.btnOverrideNo.Size = new System.Drawing.Size(40, 30);
+			this.btnOverrideNo.TabIndex = 6;
+			this.btnOverrideNo.Text = "No";
+			this.btnOverrideNo.Click += new System.EventHandler(this.btnNoOverride_Click);
 			// 
 			// lblScanReady
 			// 
@@ -411,7 +411,7 @@
 			this.savePanel.Controls.Add(this.lblNumScannedInfo);
 			this.savePanel.Controls.Add(this.btnSaveToFile);
 			this.savePanel.Controls.Add(this.btnSaveToVenture);
-			this.savePanel.Controls.Add(this.lblSendToVentureMsg);
+			this.savePanel.Controls.Add(this.lblSaveToVenture);
 			this.savePanel.Controls.Add(this.btnStartOver);
 			this.savePanel.Controls.Add(this.btnExit);
 			this.savePanel.Location = new System.Drawing.Point(0, 50);
@@ -456,13 +456,13 @@
 			this.btnSaveToVenture.Text = "Save data to Venture";
 			this.btnSaveToVenture.Click += new System.EventHandler(this.btnSaveToVenture_Click);
 			// 
-			// lblSendToVentureMsg
+			// lblSaveToVenture
 			// 
-			this.lblSendToVentureMsg.BackColor = System.Drawing.Color.DarkCyan;
-			this.lblSendToVentureMsg.Location = new System.Drawing.Point(0, 140);
-			this.lblSendToVentureMsg.Name = "lblSendToVentureMsg";
-			this.lblSendToVentureMsg.Size = new System.Drawing.Size(240, 72);
-			this.lblSendToVentureMsg.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			this.lblSaveToVenture.BackColor = System.Drawing.Color.DarkCyan;
+			this.lblSaveToVenture.Location = new System.Drawing.Point(0, 140);
+			this.lblSaveToVenture.Name = "lblSaveToVenture";
+			this.lblSaveToVenture.Size = new System.Drawing.Size(240, 72);
+			this.lblSaveToVenture.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
 			// btnStartOver
 			// 
@@ -537,26 +537,26 @@
 		private System.Windows.Forms.Label lblOptions;
 		private System.Windows.Forms.Button btnScanRegOnly;
 		private System.Windows.Forms.Label lblScanRegOnly;
-		private System.Windows.Forms.Label lblScanSocEvent;
+		private System.Windows.Forms.Label lblScanSocialEvent;
 		private System.Windows.Forms.ComboBox menuSocialEvents;
-		private System.Windows.Forms.Button btnScanSocialEvents;
+		private System.Windows.Forms.Button btnScanSocialEvent;
 		private System.Windows.Forms.PictureBox imgLogo;
 		private System.Windows.Forms.Panel resultPanel;
 		private System.Windows.Forms.PictureBox iconBoxOK;
 		private System.Windows.Forms.Label lblScanResult;
 		private System.Windows.Forms.PictureBox iconBoxNo;
 		private System.Windows.Forms.PictureBox iconBoxFail;
-		private System.Windows.Forms.Button btnOverride;
 		private System.Windows.Forms.Label lblScanReady;
 		private System.Windows.Forms.PictureBox imgScanReady;
 		private System.Windows.Forms.Label lblOverride;
-		private System.Windows.Forms.Button btnNoOverride;
+		private System.Windows.Forms.Button btnOverrideYes;
+		private System.Windows.Forms.Button btnOverrideNo;
 		private System.Windows.Forms.Panel savePanel;
 		private System.Windows.Forms.Label lblScanComplete;
 		private System.Windows.Forms.Label lblNumScannedInfo;
 		private System.Windows.Forms.Button btnSaveToFile;
 		private System.Windows.Forms.Button btnSaveToVenture;
-		private System.Windows.Forms.Label lblSendToVentureMsg;
+		private System.Windows.Forms.Label lblSaveToVenture;
 		private System.Windows.Forms.Button btnStartOver;
 		private System.Windows.Forms.Button btnExit;
 	}

@@ -41,6 +41,7 @@ namespace REMedia.JlcScan {
 		public string LastScannedId;
 		public bool DataSaved = false;
 		private int ResultsScreenDuration = 3;
+		private int SocketTimeout = 15000;
 
 		public UI() {
 			InitializeComponent(); // set up ui layout from UI.Designer.cs
@@ -51,7 +52,7 @@ namespace REMedia.JlcScan {
 		private void Ui_Load(object sender, EventArgs e) {
 			Log("PROGRAM LOADED");
 			if (SystemInfo.alreadyRun(this.Text, this.Handle.ToInt32())) {
-				MessageBox.Show("FATAL ERROR\nProgram already running","ERROR",MessageBoxButtons.OK,MessageBoxIcon.Hand,MessageBoxDefaultButton.Button1);
+				MessageBox.Show("FATAL ERROR\nProgram already running", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Hand, MessageBoxDefaultButton.Button1);
 				this.Close();
 			} else {
 				// set up UI
@@ -92,7 +93,7 @@ namespace REMedia.JlcScan {
 			RegScanned_NotOnList.Clear();
 			RegScanned_Overrides.Clear();
 			this.DataSaved = false;
-			this.lblSendToVentureMsg.Text = "";
+			this.lblSaveToVenture.Text = "";
 		}
 		private void Ui_Closed(object sender, EventArgs e) {
 			Log("PROGRAM CLOSED");
@@ -165,8 +166,8 @@ namespace REMedia.JlcScan {
 			this.iconBoxNo.Hide();
 			this.iconBoxOK.Hide();
 			this.lblOverride.Hide();
-			this.btnOverride.Hide();
-			this.btnNoOverride.Hide();
+			this.btnOverrideYes.Hide();
+			this.btnOverrideNo.Hide();
 			bool IsOverride = false;
 			switch (str) {
 				case "ok":
@@ -176,8 +177,8 @@ namespace REMedia.JlcScan {
 					this.iconBoxNo.Show();
 					IsOverride = true;
 					this.lblOverride.Show();
-					this.btnOverride.Show();
-					this.btnNoOverride.Show();
+					this.btnOverrideYes.Show();
+					this.btnOverrideNo.Show();
 					break;
 				case "fail":
 					this.iconBoxFail.Show();
@@ -218,15 +219,15 @@ namespace REMedia.JlcScan {
 		private void DrawBorder(object sender, PaintEventArgs e) {
 			e.Graphics.DrawRectangle(
 				new Pen(Color.Black), 0, 0,
-				e.ClipRectangle.Width - 2,
-				e.ClipRectangle.Height - 2
+				e.ClipRectangle.Width - 1,
+				e.ClipRectangle.Height - 1
 			);
 		}
 		private void UpdateSaveToVentureMsg(string msg) {
-			this.lblSendToVentureMsg.Text = msg;
+			this.lblSaveToVenture.Text = msg;
 		}
 
-	
+
 		// SCANNING RELATED METHODS ===============================================================
 		public static string Scan() {
 			int barLen = 0;
@@ -389,10 +390,7 @@ namespace REMedia.JlcScan {
 			return this.EventsList.Count();
 		}
 		private void SaveCsvFile() {
-			Log("On List:"); // DEBUG
-			RegScanned_OnList.ForEach(x => Log(Convert.ToString(x.id) + "," + x.timestamp)); // DEBUG
-			Log("Overrides:"); // DEBUG
-			RegScanned_Overrides.ForEach(x => Log(Convert.ToString(x.id) + "," + x.timestamp)); // DEBUG
+			this.LogResults();
 			string filePath = "";
 			if (this.GetSelectedSocialEventId() > 0) {
 				filePath = String.Format("{0}\\SocialEvent_{1}.csv", C.INITIAL_DIR, this.GetSelectedSocialEventId());
@@ -405,8 +403,35 @@ namespace REMedia.JlcScan {
 				RegScanned_OnList.ForEach(x => writer.WriteLine("\"" + Convert.ToString(x.id) + "\",\"" + x.timestamp + "\",0"));
 				RegScanned_Overrides.ForEach(x => writer.WriteLine("\"" + Convert.ToString(x.id) + "\",\"" + x.timestamp + "\",1"));
 				this.DataSaved = true;
+				C.PlaySound(@"\windows\beep.wav"); 
 				MessageBox.Show(String.Format(C.REG_SAVED_MSG, NumValidScans));
 				this.btnSaveToFile.Enabled = false;
+			}
+		}
+		private void SaveToVenture() {
+			this.LogResults();
+			XDocument xdoc;
+			if (this.GetSelectedSocialEventId() > 0) {
+				xdoc = BuildXmlDataFile_SocialEvents();
+			} else {
+				xdoc = BuildXmlDataFile_Registrations();
+			}
+			string response = "";
+			try {
+				response = SendDataToServer(xdoc.ToString(), C.WEBSVC_SAVE_ENDPOINT);
+				Log("Server Response:\n" + response);
+				if (response == "OK") {
+					C.PlaySound(@"\windows\beep.wav");
+					this.UpdateSaveToVentureMsg(C.VENTURE_UPLOAD_OK_MSG);
+					this.DataSaved = true;
+					this.btnSaveToVenture.Enabled = false;
+				} else {
+					C.PlaySound(@"\windows\critical.wav");
+					this.UpdateSaveToVentureMsg(C.VENTURE_UPLOAD_FAIL_MSG);
+				}
+
+			} catch (Exception ex) {
+				Log(ex.Message);
 			}
 		}
 		private XDocument BuildXmlDataFile_Registrations() {
@@ -414,16 +439,16 @@ namespace REMedia.JlcScan {
 			try {
 				xdoc = new XDocument(
 					new XElement("event", new XAttribute("id", EventID), new XAttribute("type", "registration"), new XAttribute("created", DateTime.Now.ToString("u")),
-						new XElement("valid", new XAttribute("count",NumValidScans),RegScanned_OnList.Select(x => new XElement("registration", new XAttribute("id", x.id),new XAttribute("timestamp",x.timestamp)))
+						new XElement("valid", new XAttribute("count", NumValidScans), RegScanned_OnList.Select(x => new XElement("registration", new XAttribute("id", x.id), new XAttribute("timestamp", x.timestamp)))
 						),
-						new XElement("overrides", new XAttribute("count",RegScanned_Overrides.Count),RegScanned_Overrides.Select(x => new XElement("registration", new XAttribute("id", x.id),new XAttribute("timestamp",x.timestamp)))
+						new XElement("overrides", new XAttribute("count", RegScanned_Overrides.Count), RegScanned_Overrides.Select(x => new XElement("registration", new XAttribute("id", x.id), new XAttribute("timestamp", x.timestamp)))
 						)
 					)
 				);
 			} catch (Exception ex) {
 				Log(ex.Message);
 			}
-			Log("Built Saved Registration XML:\n"+xdoc.ToString()); // DEBUG
+			Log("Built Saved Registration XML:\n" + xdoc.ToString()); // DEBUG
 			return xdoc;
 		}
 		private XDocument BuildXmlDataFile_SocialEvents() {
@@ -443,6 +468,12 @@ namespace REMedia.JlcScan {
 			Log("Built Saved Registration XML:\n" + xdoc.ToString()); // DEBUG
 			return xdoc;
 		}
+		private void LogResults() { // DEBUG
+			Log("On List:");
+			RegScanned_OnList.ForEach(x => Log(Convert.ToString(x.id) + "," + x.timestamp));
+			Log("Overrides:");
+			RegScanned_Overrides.ForEach(x => Log(Convert.ToString(x.id) + "," + x.timestamp));
+		}
 
 
 		// NETWORK METHODS ========================================================================
@@ -450,15 +481,13 @@ namespace REMedia.JlcScan {
 			bool ok = false;
 			try {
 				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(C.CHECK_URL);
-				request.Timeout = 10000;
+				request.Timeout = this.SocketTimeout;
 				HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 				if (response.StatusCode == HttpStatusCode.OK) {
 					ok = true;
 					Log("IsServerAvailable: " + response.StatusCode);
-					response.Close();
-				} else {
-					response.Close();
 				}
+				response.Close();
 			} catch (Exception ex) {
 				Log("Network error: " + ex.Message);
 			}
@@ -474,7 +503,7 @@ namespace REMedia.JlcScan {
 			try {
 				byte[] buf = new byte[8192];
 				request = (HttpWebRequest)WebRequest.Create(url);
-				request.Timeout = 30000;
+				request.Timeout = this.SocketTimeout;
 				request.UserAgent = "Mozilla/4.0 (compatible; MSIE 6.01; Windows NT 5.0)";
 				response = (HttpWebResponse)request.GetResponse();
 				Log("Got " + response.ContentLength.ToString() + " bytes"); // DEBUG
@@ -520,8 +549,8 @@ namespace REMedia.JlcScan {
 			req.ProtocolVersion = HttpVersion.Version10;
 			req.ContentType = "text/xml;charset=utf-8";
 			req.Method = "POST";
-			req.ReadWriteTimeout = 30000;
-			req.Timeout = 30000;
+			req.ReadWriteTimeout = this.SocketTimeout;
+			req.Timeout = this.SocketTimeout;
 			byte[] postBytes = Encoding.UTF8.GetBytes(data);
 			req.ContentLength = postBytes.Length;
 			try {
@@ -570,15 +599,15 @@ namespace REMedia.JlcScan {
 			if (this.SocialEventOptionsList.Count > 0) {
 				try {
 					this.menuSocialEvents.Show();
-					this.lblScanSocEvent.Show();
-					this.btnScanSocialEvents.Show();
+					this.lblScanSocialEvent.Show();
+					this.btnScanSocialEvent.Show();
 				} catch (Exception ex) { }
 			} else {
 				try {
 					this.menuSocialEvents.Hide();
-					this.lblScanSocEvent.Hide();
-					this.btnScanSocialEvents.Hide();
-				} catch(Exception ex){}
+					this.lblScanSocialEvent.Hide();
+					this.btnScanSocialEvent.Hide();
+				} catch (Exception ex) { }
 			}
 			try {
 				this.menuSocialEvents.SelectedIndex = 0;
@@ -625,10 +654,10 @@ namespace REMedia.JlcScan {
 				MessageBox.Show(String.Format(C.DATA_LOADED_MSG, EventTitle.ToUpper(), numReg), "INFO", MessageBoxButtons.OK, MessageBoxIcon.Asterisk, MessageBoxDefaultButton.Button1);
 				this.LoadComplete();
 			} else {
-				MessageBox.Show(C.SELECT_FILE_MSG,"ALERT");
+				MessageBox.Show(C.SELECT_FILE_MSG, "ALERT");
 			}
 		}
-		private void btnLoadFromWeb_Click(object sender, EventArgs e) {
+		private void btnLoadFromVenture_Click(object sender, EventArgs e) {
 			this.RegistrationsList.Clear();
 			if (this.Online) {
 				try {
@@ -744,36 +773,14 @@ namespace REMedia.JlcScan {
 			this.SaveCsvFile();
 		}
 		private void btnSaveToVenture_Click(object sender, EventArgs e) {
-			XDocument xdoc;
-			if (this.GetSelectedSocialEventId() > 0) {
-				xdoc = BuildXmlDataFile_SocialEvents();
-			} else {
-				xdoc = BuildXmlDataFile_Registrations();
-			}
-			string response = "";
-			try {
-				response = SendDataToServer(xdoc.ToString(), C.WEBSVC_SAVE_ENDPOINT);
-				Log("Server Response:\n" + response);
-				if(response == "OK") {
-					C.PlaySound(@"\windows\beep.wav");
-					this.UpdateSaveToVentureMsg(C.VENTURE_UPLOAD_OK_MSG);
-					this.DataSaved = true;
-					this.btnSaveToVenture.Enabled = false;
-				} else {
-					C.PlaySound(@"\windows\critical.wav");
-					this.UpdateSaveToVentureMsg(C.VENTURE_UPLOAD_FAIL_MSG);
-				}
-
-			} catch (Exception ex) {
-				Log(ex.Message);
-			}
+			this.SaveToVenture();
 		}
 		private void lblStartOver_Click(object sender, EventArgs e) {
 			this.GotoOptionsScreen();
 		}
 		private void btnExit_Click(object sender, EventArgs e) {
 			if (!this.GetDataSaved()) {
-				if (MessageBox.Show(C.EXIT_DATA_NOT_SAVED_MSG, "ATTENTION", MessageBoxButtons.YesNo,MessageBoxIcon.Question,MessageBoxDefaultButton.Button1) == DialogResult.Yes) {
+				if (MessageBox.Show(C.EXIT_DATA_NOT_SAVED_MSG, "ATTENTION", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.Yes) {
 					this.Close();
 				}
 			} else {
@@ -789,7 +796,7 @@ namespace REMedia.JlcScan {
 
 
 
-	} 
+	}
 	// end main UI class ========================================================================
 
 	// registration class for each registered delegate
