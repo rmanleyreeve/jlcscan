@@ -12,6 +12,7 @@ namespace REMedia.JlcScan {
 
 		//UI messages
 		public const string VALID_REG_MSG = "VALID REGISTRATION";
+		public const string VALID_TEMP_REG_MSG = "VALID TEMP REGISTRATION";
 		public const string INVALID_REG_MSG = "ERROR\nNOT REGISTERED FOR THIS EVENT";
 		public const string VALID_SE_REG_MSG = "VALID SOCIAL EVENT BOOKING";
 		public const string INVALID_SE_REG_MSG = "ERROR\nNOT BOOKED FOR THIS SOCIAL EVENT";
