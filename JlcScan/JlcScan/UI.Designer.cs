@@ -344,7 +344,7 @@
 			this.btnOverrideYes.TabIndex = 4;
 			this.btnOverrideYes.Text = "Yes";
 			this.btnOverrideYes.Visible = false;
-			this.btnOverrideYes.Click += new System.EventHandler(this.btnOverride_Click);
+			this.btnOverrideYes.Click += new System.EventHandler(this.btnOverrideYes_Click);
 			// 
 			// btnOverrideNo
 			// 
@@ -354,7 +354,7 @@
 			this.btnOverrideNo.Size = new System.Drawing.Size(40, 30);
 			this.btnOverrideNo.TabIndex = 6;
 			this.btnOverrideNo.Text = "No";
-			this.btnOverrideNo.Click += new System.EventHandler(this.btnNoOverride_Click);
+			this.btnOverrideNo.Click += new System.EventHandler(this.btnOverrideNo_Click);
 			// 
 			// lblScanReady
 			// 
