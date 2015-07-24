@@ -31,7 +31,8 @@
 			this.menuBadgeStyle = new System.Windows.Forms.ComboBox();
 			this.button1 = new System.Windows.Forms.Button();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.foo = new System.Windows.Forms.PictureBox();
+			this.country = new System.Windows.Forms.TextBox();
+			this.label8 = new System.Windows.Forms.Label();
 			this.organisation = new System.Windows.Forms.TextBox();
 			this.label5 = new System.Windows.Forms.Label();
 			this.last_name = new System.Windows.Forms.TextBox();
@@ -46,7 +47,6 @@
 			this.imgLogo = new System.Windows.Forms.PictureBox();
 			this.mainPanel.SuspendLayout();
 			this.groupBox1.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.foo)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.imgLogo)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -60,9 +60,9 @@
 			this.mainPanel.Controls.Add(this.menuBadgeStyle);
 			this.mainPanel.Controls.Add(this.button1);
 			this.mainPanel.Controls.Add(this.groupBox1);
-			this.mainPanel.Location = new System.Drawing.Point(12, 88);
+			this.mainPanel.Location = new System.Drawing.Point(12, 80);
 			this.mainPanel.Name = "mainPanel";
-			this.mainPanel.Size = new System.Drawing.Size(600, 338);
+			this.mainPanel.Size = new System.Drawing.Size(600, 345);
 			this.mainPanel.TabIndex = 2;
 			// 
 			// label7
@@ -75,7 +75,6 @@
 			this.label7.Size = new System.Drawing.Size(58, 16);
 			this.label7.TabIndex = 14;
 			this.label7.Text = "Position:";
-			this.label7.Click += new System.EventHandler(this.label7_Click);
 			// 
 			// label6
 			// 
@@ -87,7 +86,6 @@
 			this.label6.Size = new System.Drawing.Size(40, 16);
 			this.label6.TabIndex = 13;
 			this.label6.Text = "Style:";
-			this.label6.Click += new System.EventHandler(this.label6_Click);
 			// 
 			// menuPrintPosition
 			// 
@@ -102,7 +100,7 @@
 			this.menuPrintPosition.Location = new System.Drawing.Point(306, 282);
 			this.menuPrintPosition.Name = "menuPrintPosition";
 			this.menuPrintPosition.Size = new System.Drawing.Size(57, 21);
-			this.menuPrintPosition.TabIndex = 12;
+			this.menuPrintPosition.TabIndex = 11;
 			this.menuPrintPosition.SelectedIndexChanged += new System.EventHandler(this.menuPrintPosition_SelectedIndexChanged);
 			// 
 			// menuBadgeStyle
@@ -110,13 +108,12 @@
 			this.menuBadgeStyle.FormattingEnabled = true;
 			this.menuBadgeStyle.Items.AddRange(new object[] {
             "Select Badge Style...",
-            "6 per page",
-            "GLS",
-            "ACC"});
+            "6 per page, logo top",
+            "6 per page, logo bottom"});
 			this.menuBadgeStyle.Location = new System.Drawing.Point(75, 282);
 			this.menuBadgeStyle.Name = "menuBadgeStyle";
 			this.menuBadgeStyle.Size = new System.Drawing.Size(148, 21);
-			this.menuBadgeStyle.TabIndex = 11;
+			this.menuBadgeStyle.TabIndex = 10;
 			this.menuBadgeStyle.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
 			// 
 			// button1
@@ -125,14 +122,15 @@
 			this.button1.Location = new System.Drawing.Point(412, 279);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(152, 27);
-			this.button1.TabIndex = 10;
+			this.button1.TabIndex = 99;
 			this.button1.Text = "Create Badge";
 			this.button1.UseVisualStyleBackColor = true;
 			this.button1.Click += new System.EventHandler(this.button1_Click);
 			// 
 			// groupBox1
 			// 
-			this.groupBox1.Controls.Add(this.foo);
+			this.groupBox1.Controls.Add(this.country);
+			this.groupBox1.Controls.Add(this.label8);
 			this.groupBox1.Controls.Add(this.organisation);
 			this.groupBox1.Controls.Add(this.label5);
 			this.groupBox1.Controls.Add(this.last_name);
@@ -143,61 +141,69 @@
 			this.groupBox1.Controls.Add(this.label2);
 			this.groupBox1.Controls.Add(this.eventID);
 			this.groupBox1.Controls.Add(this.label1);
-			this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.groupBox1.Location = new System.Drawing.Point(28, 16);
+			this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.groupBox1.Location = new System.Drawing.Point(28, 4);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(544, 232);
+			this.groupBox1.Size = new System.Drawing.Size(544, 260);
 			this.groupBox1.TabIndex = 1;
 			this.groupBox1.TabStop = false;
 			// 
-			// foo
+			// country
 			// 
-			this.foo.BackColor = System.Drawing.Color.Transparent;
-			this.foo.Location = new System.Drawing.Point(332, 32);
-			this.foo.Name = "foo";
-			this.foo.Size = new System.Drawing.Size(200, 60);
-			this.foo.TabIndex = 5;
-			this.foo.TabStop = false;
+			this.country.Location = new System.Drawing.Point(128, 217);
+			this.country.Name = "country";
+			this.country.Size = new System.Drawing.Size(392, 24);
+			this.country.TabIndex = 6;
+			// 
+			// label8
+			// 
+			this.label8.AutoSize = true;
+			this.label8.ForeColor = System.Drawing.Color.White;
+			this.label8.Location = new System.Drawing.Point(16, 220);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(64, 18);
+			this.label8.TabIndex = 9;
+			this.label8.Text = "Country:";
 			// 
 			// organisation
 			// 
-			this.organisation.Location = new System.Drawing.Point(128, 188);
+			this.organisation.Location = new System.Drawing.Point(128, 181);
 			this.organisation.Name = "organisation";
-			this.organisation.Size = new System.Drawing.Size(388, 26);
+			this.organisation.Size = new System.Drawing.Size(388, 24);
 			this.organisation.TabIndex = 5;
 			// 
 			// label5
 			// 
 			this.label5.AutoSize = true;
 			this.label5.ForeColor = System.Drawing.Color.White;
-			this.label5.Location = new System.Drawing.Point(16, 192);
+			this.label5.Location = new System.Drawing.Point(16, 184);
 			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(103, 20);
+			this.label5.Size = new System.Drawing.Size(96, 18);
 			this.label5.TabIndex = 8;
 			this.label5.Text = "Organisation:";
 			// 
 			// last_name
 			// 
-			this.last_name.Location = new System.Drawing.Point(128, 148);
+			this.last_name.Location = new System.Drawing.Point(128, 145);
 			this.last_name.Name = "last_name";
-			this.last_name.Size = new System.Drawing.Size(388, 26);
+			this.last_name.Size = new System.Drawing.Size(388, 24);
 			this.last_name.TabIndex = 4;
 			// 
 			// label4
 			// 
 			this.label4.AutoSize = true;
 			this.label4.ForeColor = System.Drawing.Color.White;
-			this.label4.Location = new System.Drawing.Point(16, 152);
+			this.label4.Location = new System.Drawing.Point(16, 148);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(90, 20);
+			this.label4.Size = new System.Drawing.Size(84, 18);
 			this.label4.TabIndex = 6;
 			this.label4.Text = "Last Name:";
 			// 
 			// first_name
 			// 
-			this.first_name.Location = new System.Drawing.Point(128, 108);
+			this.first_name.Location = new System.Drawing.Point(128, 109);
 			this.first_name.Name = "first_name";
-			this.first_name.Size = new System.Drawing.Size(388, 26);
+			this.first_name.Size = new System.Drawing.Size(388, 24);
 			this.first_name.TabIndex = 3;
 			// 
 			// label3
@@ -206,15 +212,15 @@
 			this.label3.ForeColor = System.Drawing.Color.White;
 			this.label3.Location = new System.Drawing.Point(16, 112);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(108, 20);
+			this.label3.Size = new System.Drawing.Size(103, 18);
 			this.label3.TabIndex = 4;
 			this.label3.Text = "First Name(s):";
 			// 
 			// title
 			// 
-			this.title.Location = new System.Drawing.Point(128, 72);
+			this.title.Location = new System.Drawing.Point(128, 73);
 			this.title.Name = "title";
-			this.title.Size = new System.Drawing.Size(156, 26);
+			this.title.Size = new System.Drawing.Size(156, 24);
 			this.title.TabIndex = 2;
 			// 
 			// label2
@@ -223,7 +229,7 @@
 			this.label2.ForeColor = System.Drawing.Color.White;
 			this.label2.Location = new System.Drawing.Point(16, 76);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(42, 20);
+			this.label2.Size = new System.Drawing.Size(39, 18);
 			this.label2.TabIndex = 2;
 			this.label2.Text = "Title:";
 			// 
@@ -231,7 +237,7 @@
 			// 
 			this.eventID.Location = new System.Drawing.Point(128, 24);
 			this.eventID.Name = "eventID";
-			this.eventID.Size = new System.Drawing.Size(64, 26);
+			this.eventID.Size = new System.Drawing.Size(64, 24);
 			this.eventID.TabIndex = 1;
 			// 
 			// label1
@@ -240,7 +246,7 @@
 			this.label1.ForeColor = System.Drawing.Color.White;
 			this.label1.Location = new System.Drawing.Point(16, 28);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(75, 20);
+			this.label1.Size = new System.Drawing.Size(67, 18);
 			this.label1.TabIndex = 0;
 			this.label1.Text = "Event ID:";
 			// 
@@ -248,7 +254,7 @@
 			// 
 			this.lblLogo.AutoSize = true;
 			this.lblLogo.Font = new System.Drawing.Font("Arial", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.lblLogo.Location = new System.Drawing.Point(217, 60);
+			this.lblLogo.Location = new System.Drawing.Point(217, 56);
 			this.lblLogo.Name = "lblLogo";
 			this.lblLogo.Size = new System.Drawing.Size(191, 24);
 			this.lblLogo.TabIndex = 3;
@@ -283,7 +289,6 @@
 			this.mainPanel.PerformLayout();
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.foo)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.imgLogo)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
@@ -311,7 +316,8 @@
 		private System.Windows.Forms.ComboBox menuBadgeStyle;
 		private System.Windows.Forms.Label label7;
 		private System.Windows.Forms.Label label6;
-		private System.Windows.Forms.PictureBox foo;
+		private System.Windows.Forms.TextBox country;
+		private System.Windows.Forms.Label label8;
 	}
 }
 
