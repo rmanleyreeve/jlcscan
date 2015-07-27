@@ -25,7 +25,7 @@ namespace JLC_Badge_Maker {
 			InitializeComponent();
 			this.menuBadgeStyle.SelectedIndex = 0;
 			this.menuPrintPosition.SelectedIndex = 0;
-			test();
+			//test();
 		}
 
 		private void IncrementCounter() {
@@ -52,6 +52,10 @@ namespace JLC_Badge_Maker {
 			return ok;
 		}
 
+		private string sp(string s) {
+			return (s == String.Empty) ? s : s + " ";
+		}
+
 		private void button1_Click(object sender, EventArgs e) {
 			if (!validate()) {
 				MessageBox.Show("Badge Details missing", "ATTENTION", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -64,7 +68,7 @@ namespace JLC_Badge_Maker {
 			_organisation = organisation.Text;
 			_country = country.Text;
 			style = menuBadgeStyle.SelectedIndex;
-			position = Convert.ToInt32(menuPrintPosition.SelectedItem.ToString());
+			position = menuPrintPosition.SelectedIndex;
 
 			IncrementCounter();
 
@@ -129,22 +133,22 @@ namespace JLC_Badge_Maker {
 			cb.Stroke();
 
 			switch (position) {
-				case 1:
+				case 0:
 					badgeX = 0; badgeY = (docH - badgeH);
 					break;
-				case 2:
+				case 1:
 					badgeX = badgeW; badgeY = (docH - badgeH);
 					break;
-				case 3:
+				case 2:
 					badgeX = 0; badgeY = badgeH;
 					break;
-				case 4:
+				case 3:
 					badgeX = badgeW; badgeY = badgeH;
 					break;
-				case 5:
+				case 4:
 					badgeX = 0; badgeY = 0;
 					break;
-				case 6:
+				case 5:
 					badgeX = badgeW; badgeY = 0;
 					break;
 			}
@@ -187,9 +191,6 @@ namespace JLC_Badge_Maker {
 			MessageBox.Show("Badge PDF Created", "INFO", MessageBoxButtons.OK, MessageBoxIcon.Information);
 		}
 
-		private string sp(string s) {
-			return (s == String.Empty) ? s : s + " ";
-		}
 
 		private void comboBox1_SelectedIndexChanged(object sender, EventArgs e) {
 
