@@ -3,7 +3,7 @@
 "VSVersion" = "3:800"
 "ProjectType" = "8:{978C614F-708E-4E1A-B201-565925725DBA}"
 "IsWebType" = "8:FALSE"
-"ProjectName" = "8:JlcBadgeMakerSetup"
+"ProjectName" = "8:JLC Badge Maker Setup"
 "LanguageId" = "3:1033"
 "CodePage" = "3:1252"
 "UILanguageId" = "3:1033"
@@ -117,6 +117,19 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Net.Framework.3.5"
+                    {
+                    "Name" = "8:.NET Framework 3.5"
+                    "ProductCode" = "8:Microsoft.Net.Framework.3.5"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                }
             }
         }
     }
@@ -286,7 +299,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:JLC Badge Maker"
         "ProductCode" = "8:{DBF775BA-2C77-4404-BA6B-3C2B1A67F60C}"
-        "PackageCode" = "8:{5E28919D-88D4-4B79-9045-115B9BEA0F84}"
+        "PackageCode" = "8:{B61D93E2-BC98-4857-8C45-37659580AA44}"
         "UpgradeCode" = "8:{93CBCCCA-A970-4144-97C7-E9BB178C223B}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
@@ -301,8 +314,8 @@
         "ARPCONTACT" = "8:rmrdigitalmedia"
         "Keywords" = "8:"
         "ARPCOMMENTS" = "8:"
-        "ARPURLINFOABOUT" = "8:"
-        "ARPPRODUCTICON" = "8:"
+        "ARPURLINFOABOUT" = "8:http://www.re-media.biz"
+        "ARPPRODUCTICON" = "8:_C27635EDE5CF49949274A254A8CF01A5"
         "ARPIconIndex" = "3:0"
         "SearchPath" = "8:"
         "UseSystemSearchPath" = "11:TRUE"
