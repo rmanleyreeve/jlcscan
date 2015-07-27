@@ -133,9 +133,9 @@
 			this.labelSurname.ForeColor = System.Drawing.Color.White;
 			this.labelSurname.Location = new System.Drawing.Point(16, 148);
 			this.labelSurname.Name = "labelSurname";
-			this.labelSurname.Size = new System.Drawing.Size(84, 18);
+			this.labelSurname.Size = new System.Drawing.Size(90, 18);
 			this.labelSurname.TabIndex = 6;
-			this.labelSurname.Text = "Last Name:";
+			this.labelSurname.Text = "*Last Name:";
 			// 
 			// first_name
 			// 
@@ -150,9 +150,9 @@
 			this.labelFirstname.ForeColor = System.Drawing.Color.White;
 			this.labelFirstname.Location = new System.Drawing.Point(16, 112);
 			this.labelFirstname.Name = "labelFirstname";
-			this.labelFirstname.Size = new System.Drawing.Size(103, 18);
+			this.labelFirstname.Size = new System.Drawing.Size(109, 18);
 			this.labelFirstname.TabIndex = 4;
-			this.labelFirstname.Text = "First Name(s):";
+			this.labelFirstname.Text = "*First Name(s):";
 			// 
 			// title
 			// 
@@ -184,9 +184,9 @@
 			this.labelID.ForeColor = System.Drawing.Color.White;
 			this.labelID.Location = new System.Drawing.Point(16, 28);
 			this.labelID.Name = "labelID";
-			this.labelID.Size = new System.Drawing.Size(67, 18);
+			this.labelID.Size = new System.Drawing.Size(73, 18);
 			this.labelID.TabIndex = 0;
-			this.labelID.Text = "Event ID:";
+			this.labelID.Text = "*Event ID:";
 			// 
 			// labelPos
 			// 
@@ -195,7 +195,7 @@
 			this.labelPos.ForeColor = System.Drawing.Color.White;
 			this.labelPos.Location = new System.Drawing.Point(236, 320);
 			this.labelPos.Name = "labelPos";
-			this.labelPos.Size = new System.Drawing.Size(59, 16);
+			this.labelPos.Size = new System.Drawing.Size(58, 16);
 			this.labelPos.TabIndex = 14;
 			this.labelPos.Text = "Position:";
 			// 
@@ -206,9 +206,9 @@
 			this.labelStyle.ForeColor = System.Drawing.Color.White;
 			this.labelStyle.Location = new System.Drawing.Point(34, 320);
 			this.labelStyle.Name = "labelStyle";
-			this.labelStyle.Size = new System.Drawing.Size(41, 16);
+			this.labelStyle.Size = new System.Drawing.Size(45, 16);
 			this.labelStyle.TabIndex = 13;
-			this.labelStyle.Text = "Style:";
+			this.labelStyle.Text = "*Style:";
 			// 
 			// menuPrintPosition
 			// 
@@ -233,11 +233,11 @@
             "Select Badge Style...",
             "6 per page, logo top",
             "6 per page, logo bottom"});
-			this.menuBadgeStyle.Location = new System.Drawing.Point(75, 318);
+			this.menuBadgeStyle.Location = new System.Drawing.Point(80, 318);
 			this.menuBadgeStyle.Name = "menuBadgeStyle";
-			this.menuBadgeStyle.Size = new System.Drawing.Size(148, 21);
+			this.menuBadgeStyle.Size = new System.Drawing.Size(137, 21);
 			this.menuBadgeStyle.TabIndex = 10;
-			this.menuBadgeStyle.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+			this.menuBadgeStyle.SelectedIndexChanged += new System.EventHandler(this.menuBadgeStyle_SelectedIndexChanged);
 			// 
 			// buttonGo
 			// 
@@ -255,9 +255,9 @@
 			this.lblLogo.AutoSize = true;
 			this.lblLogo.BackColor = System.Drawing.Color.DarkCyan;
 			this.lblLogo.Font = new System.Drawing.Font("Arial Rounded MT Bold", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.lblLogo.Location = new System.Drawing.Point(190, 56);
+			this.lblLogo.Location = new System.Drawing.Point(190, 60);
 			this.lblLogo.Name = "lblLogo";
-			this.lblLogo.Size = new System.Drawing.Size(246, 32);
+			this.lblLogo.Size = new System.Drawing.Size(245, 32);
 			this.lblLogo.TabIndex = 3;
 			this.lblLogo.Text = "JLC Badge Maker";
 			// 

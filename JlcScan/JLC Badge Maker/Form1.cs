@@ -21,6 +21,9 @@ namespace JLC_Badge_Maker {
 		public int count = 0;
 		public List<Badge> BadgeList = new List<Badge>();
 
+		string PDF_OK = "Temporary Badge PDF Created";
+		string VALIDATION_FAIL_MSG = "You must complete the required fields.";
+
 		public UI() {
 			InitializeComponent();
 			this.menuBadgeStyle.SelectedIndex = 0;
@@ -41,14 +44,25 @@ namespace JLC_Badge_Maker {
 
 		private bool validate() {
 			bool ok = true;
-			if (
-				eventID.Text == String.Empty ||
-				first_name.Text == String.Empty ||
-				last_name.Text == String.Empty ||
-				menuBadgeStyle.SelectedIndex == 0
-			) {
-				ok = false;
+			List<TextBox> fields = new List<TextBox>() { 
+				this.eventID, 
+				this.first_name, 
+				this.last_name 
+			};
+			foreach (TextBox f in fields) {
+				f.BackColor = Color.White;
+				if (f.Text == String.Empty) {
+					f.BackColor = Color.Pink;
+					ok = false;
+				}
 			}
+			if (menuBadgeStyle.SelectedIndex == 0) {
+				menuBadgeStyle.BackColor = Color.Pink;
+				ok = false;
+			} else {
+				menuBadgeStyle.BackColor = Color.White;
+			}
+
 			return ok;
 		}
 
@@ -58,7 +72,7 @@ namespace JLC_Badge_Maker {
 
 		private void button1_Click(object sender, EventArgs e) {
 			if (!validate()) {
-				MessageBox.Show("Badge Details missing", "ATTENTION", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+				MessageBox.Show(VALIDATION_FAIL_MSG, "ATTENTION", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 				return;
 			}
 			_eventID = eventID.Text;
@@ -89,8 +103,7 @@ namespace JLC_Badge_Maker {
 			Log("style: " + style);
 			Log("pos: " + position);
 			CreatePDF(b, style, position);
-
-			MessageBox.Show("Badge PDF Created", "INFO", MessageBoxButtons.OK, MessageBoxIcon.Information);
+			MessageBox.Show(PDF_OK, "INFO", MessageBoxButtons.OK, MessageBoxIcon.Information);
 			this.eventID.Text = _eventID;
 			this.title.Text = String.Empty;
 			this.first_name.Text = String.Empty;
@@ -176,6 +189,7 @@ namespace JLC_Badge_Maker {
 			doc.Close();
 		}
 
+		// DEBUG ==================================================================
 		private void test() {
 			Badge b = new Badge() {
 				id = "X111",
@@ -188,11 +202,11 @@ namespace JLC_Badge_Maker {
 				timestamp = DateTime.Now.ToString("u")
 			};
 			CreatePDF(b, 1, 1);
-			MessageBox.Show("Badge PDF Created", "INFO", MessageBoxButtons.OK, MessageBoxIcon.Information);
+			MessageBox.Show(PDF_OK, "INFO", MessageBoxButtons.OK, MessageBoxIcon.Information);
 		}
 
 
-		private void comboBox1_SelectedIndexChanged(object sender, EventArgs e) {
+		private void menuBadgeStyle_SelectedIndexChanged(object sender, EventArgs e) {
 
 		}
 
