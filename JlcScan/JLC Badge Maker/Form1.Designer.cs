@@ -25,24 +25,24 @@
 		private void InitializeComponent() {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UI));
 			this.mainPanel = new System.Windows.Forms.Panel();
-			this.label7 = new System.Windows.Forms.Label();
-			this.label6 = new System.Windows.Forms.Label();
-			this.menuPrintPosition = new System.Windows.Forms.ComboBox();
-			this.menuBadgeStyle = new System.Windows.Forms.ComboBox();
-			this.button1 = new System.Windows.Forms.Button();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.country = new System.Windows.Forms.TextBox();
-			this.label8 = new System.Windows.Forms.Label();
+			this.labelCountry = new System.Windows.Forms.Label();
 			this.organisation = new System.Windows.Forms.TextBox();
-			this.label5 = new System.Windows.Forms.Label();
+			this.labelOrg = new System.Windows.Forms.Label();
 			this.last_name = new System.Windows.Forms.TextBox();
-			this.label4 = new System.Windows.Forms.Label();
+			this.labelSurname = new System.Windows.Forms.Label();
 			this.first_name = new System.Windows.Forms.TextBox();
-			this.label3 = new System.Windows.Forms.Label();
+			this.labelFirstname = new System.Windows.Forms.Label();
 			this.title = new System.Windows.Forms.TextBox();
-			this.label2 = new System.Windows.Forms.Label();
+			this.labelTitle = new System.Windows.Forms.Label();
 			this.eventID = new System.Windows.Forms.TextBox();
-			this.label1 = new System.Windows.Forms.Label();
+			this.labelID = new System.Windows.Forms.Label();
+			this.labelPos = new System.Windows.Forms.Label();
+			this.labelStyle = new System.Windows.Forms.Label();
+			this.menuPrintPosition = new System.Windows.Forms.ComboBox();
+			this.menuBadgeStyle = new System.Windows.Forms.ComboBox();
+			this.buttonGo = new System.Windows.Forms.Button();
 			this.lblLogo = new System.Windows.Forms.Label();
 			this.imgLogo = new System.Windows.Forms.PictureBox();
 			this.mainPanel.SuspendLayout();
@@ -54,95 +54,33 @@
 			// 
 			this.mainPanel.BackColor = System.Drawing.Color.DarkCyan;
 			this.mainPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.mainPanel.Controls.Add(this.label7);
-			this.mainPanel.Controls.Add(this.label6);
+			this.mainPanel.Controls.Add(this.groupBox1);
+			this.mainPanel.Controls.Add(this.labelPos);
+			this.mainPanel.Controls.Add(this.labelStyle);
 			this.mainPanel.Controls.Add(this.menuPrintPosition);
 			this.mainPanel.Controls.Add(this.menuBadgeStyle);
-			this.mainPanel.Controls.Add(this.button1);
-			this.mainPanel.Controls.Add(this.groupBox1);
-			this.mainPanel.Location = new System.Drawing.Point(12, 80);
+			this.mainPanel.Controls.Add(this.buttonGo);
+			this.mainPanel.Location = new System.Drawing.Point(12, 54);
 			this.mainPanel.Name = "mainPanel";
-			this.mainPanel.Size = new System.Drawing.Size(600, 345);
+			this.mainPanel.Size = new System.Drawing.Size(600, 375);
 			this.mainPanel.TabIndex = 2;
-			// 
-			// label7
-			// 
-			this.label7.AutoSize = true;
-			this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label7.ForeColor = System.Drawing.Color.White;
-			this.label7.Location = new System.Drawing.Point(246, 284);
-			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(58, 16);
-			this.label7.TabIndex = 14;
-			this.label7.Text = "Position:";
-			// 
-			// label6
-			// 
-			this.label6.AutoSize = true;
-			this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label6.ForeColor = System.Drawing.Color.White;
-			this.label6.Location = new System.Drawing.Point(34, 284);
-			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(40, 16);
-			this.label6.TabIndex = 13;
-			this.label6.Text = "Style:";
-			// 
-			// menuPrintPosition
-			// 
-			this.menuPrintPosition.FormattingEnabled = true;
-			this.menuPrintPosition.Items.AddRange(new object[] {
-            "1",
-            "2",
-            "3",
-            "4",
-            "5",
-            "6"});
-			this.menuPrintPosition.Location = new System.Drawing.Point(306, 282);
-			this.menuPrintPosition.Name = "menuPrintPosition";
-			this.menuPrintPosition.Size = new System.Drawing.Size(57, 21);
-			this.menuPrintPosition.TabIndex = 11;
-			this.menuPrintPosition.SelectedIndexChanged += new System.EventHandler(this.menuPrintPosition_SelectedIndexChanged);
-			// 
-			// menuBadgeStyle
-			// 
-			this.menuBadgeStyle.FormattingEnabled = true;
-			this.menuBadgeStyle.Items.AddRange(new object[] {
-            "Select Badge Style...",
-            "6 per page, logo top",
-            "6 per page, logo bottom"});
-			this.menuBadgeStyle.Location = new System.Drawing.Point(75, 282);
-			this.menuBadgeStyle.Name = "menuBadgeStyle";
-			this.menuBadgeStyle.Size = new System.Drawing.Size(148, 21);
-			this.menuBadgeStyle.TabIndex = 10;
-			this.menuBadgeStyle.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
-			// 
-			// button1
-			// 
-			this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.button1.Location = new System.Drawing.Point(412, 279);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(152, 27);
-			this.button1.TabIndex = 99;
-			this.button1.Text = "Create Badge";
-			this.button1.UseVisualStyleBackColor = true;
-			this.button1.Click += new System.EventHandler(this.button1_Click);
 			// 
 			// groupBox1
 			// 
 			this.groupBox1.Controls.Add(this.country);
-			this.groupBox1.Controls.Add(this.label8);
+			this.groupBox1.Controls.Add(this.labelCountry);
 			this.groupBox1.Controls.Add(this.organisation);
-			this.groupBox1.Controls.Add(this.label5);
+			this.groupBox1.Controls.Add(this.labelOrg);
 			this.groupBox1.Controls.Add(this.last_name);
-			this.groupBox1.Controls.Add(this.label4);
+			this.groupBox1.Controls.Add(this.labelSurname);
 			this.groupBox1.Controls.Add(this.first_name);
-			this.groupBox1.Controls.Add(this.label3);
+			this.groupBox1.Controls.Add(this.labelFirstname);
 			this.groupBox1.Controls.Add(this.title);
-			this.groupBox1.Controls.Add(this.label2);
+			this.groupBox1.Controls.Add(this.labelTitle);
 			this.groupBox1.Controls.Add(this.eventID);
-			this.groupBox1.Controls.Add(this.label1);
+			this.groupBox1.Controls.Add(this.labelID);
 			this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.groupBox1.Location = new System.Drawing.Point(28, 4);
+			this.groupBox1.Location = new System.Drawing.Point(27, 36);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(544, 260);
 			this.groupBox1.TabIndex = 1;
@@ -155,15 +93,15 @@
 			this.country.Size = new System.Drawing.Size(392, 24);
 			this.country.TabIndex = 6;
 			// 
-			// label8
+			// labelCountry
 			// 
-			this.label8.AutoSize = true;
-			this.label8.ForeColor = System.Drawing.Color.White;
-			this.label8.Location = new System.Drawing.Point(16, 220);
-			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(64, 18);
-			this.label8.TabIndex = 9;
-			this.label8.Text = "Country:";
+			this.labelCountry.AutoSize = true;
+			this.labelCountry.ForeColor = System.Drawing.Color.White;
+			this.labelCountry.Location = new System.Drawing.Point(16, 220);
+			this.labelCountry.Name = "labelCountry";
+			this.labelCountry.Size = new System.Drawing.Size(64, 18);
+			this.labelCountry.TabIndex = 9;
+			this.labelCountry.Text = "Country:";
 			// 
 			// organisation
 			// 
@@ -172,15 +110,15 @@
 			this.organisation.Size = new System.Drawing.Size(388, 24);
 			this.organisation.TabIndex = 5;
 			// 
-			// label5
+			// labelOrg
 			// 
-			this.label5.AutoSize = true;
-			this.label5.ForeColor = System.Drawing.Color.White;
-			this.label5.Location = new System.Drawing.Point(16, 184);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(96, 18);
-			this.label5.TabIndex = 8;
-			this.label5.Text = "Organisation:";
+			this.labelOrg.AutoSize = true;
+			this.labelOrg.ForeColor = System.Drawing.Color.White;
+			this.labelOrg.Location = new System.Drawing.Point(16, 184);
+			this.labelOrg.Name = "labelOrg";
+			this.labelOrg.Size = new System.Drawing.Size(96, 18);
+			this.labelOrg.TabIndex = 8;
+			this.labelOrg.Text = "Organisation:";
 			// 
 			// last_name
 			// 
@@ -189,15 +127,15 @@
 			this.last_name.Size = new System.Drawing.Size(388, 24);
 			this.last_name.TabIndex = 4;
 			// 
-			// label4
+			// labelSurname
 			// 
-			this.label4.AutoSize = true;
-			this.label4.ForeColor = System.Drawing.Color.White;
-			this.label4.Location = new System.Drawing.Point(16, 148);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(84, 18);
-			this.label4.TabIndex = 6;
-			this.label4.Text = "Last Name:";
+			this.labelSurname.AutoSize = true;
+			this.labelSurname.ForeColor = System.Drawing.Color.White;
+			this.labelSurname.Location = new System.Drawing.Point(16, 148);
+			this.labelSurname.Name = "labelSurname";
+			this.labelSurname.Size = new System.Drawing.Size(84, 18);
+			this.labelSurname.TabIndex = 6;
+			this.labelSurname.Text = "Last Name:";
 			// 
 			// first_name
 			// 
@@ -206,15 +144,15 @@
 			this.first_name.Size = new System.Drawing.Size(388, 24);
 			this.first_name.TabIndex = 3;
 			// 
-			// label3
+			// labelFirstname
 			// 
-			this.label3.AutoSize = true;
-			this.label3.ForeColor = System.Drawing.Color.White;
-			this.label3.Location = new System.Drawing.Point(16, 112);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(103, 18);
-			this.label3.TabIndex = 4;
-			this.label3.Text = "First Name(s):";
+			this.labelFirstname.AutoSize = true;
+			this.labelFirstname.ForeColor = System.Drawing.Color.White;
+			this.labelFirstname.Location = new System.Drawing.Point(16, 112);
+			this.labelFirstname.Name = "labelFirstname";
+			this.labelFirstname.Size = new System.Drawing.Size(103, 18);
+			this.labelFirstname.TabIndex = 4;
+			this.labelFirstname.Text = "First Name(s):";
 			// 
 			// title
 			// 
@@ -223,15 +161,15 @@
 			this.title.Size = new System.Drawing.Size(156, 24);
 			this.title.TabIndex = 2;
 			// 
-			// label2
+			// labelTitle
 			// 
-			this.label2.AutoSize = true;
-			this.label2.ForeColor = System.Drawing.Color.White;
-			this.label2.Location = new System.Drawing.Point(16, 76);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(39, 18);
-			this.label2.TabIndex = 2;
-			this.label2.Text = "Title:";
+			this.labelTitle.AutoSize = true;
+			this.labelTitle.ForeColor = System.Drawing.Color.White;
+			this.labelTitle.Location = new System.Drawing.Point(16, 76);
+			this.labelTitle.Name = "labelTitle";
+			this.labelTitle.Size = new System.Drawing.Size(39, 18);
+			this.labelTitle.TabIndex = 2;
+			this.labelTitle.Text = "Title:";
 			// 
 			// eventID
 			// 
@@ -240,25 +178,88 @@
 			this.eventID.Size = new System.Drawing.Size(64, 24);
 			this.eventID.TabIndex = 1;
 			// 
-			// label1
+			// labelID
 			// 
-			this.label1.AutoSize = true;
-			this.label1.ForeColor = System.Drawing.Color.White;
-			this.label1.Location = new System.Drawing.Point(16, 28);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(67, 18);
-			this.label1.TabIndex = 0;
-			this.label1.Text = "Event ID:";
+			this.labelID.AutoSize = true;
+			this.labelID.ForeColor = System.Drawing.Color.White;
+			this.labelID.Location = new System.Drawing.Point(16, 28);
+			this.labelID.Name = "labelID";
+			this.labelID.Size = new System.Drawing.Size(67, 18);
+			this.labelID.TabIndex = 0;
+			this.labelID.Text = "Event ID:";
+			// 
+			// labelPos
+			// 
+			this.labelPos.AutoSize = true;
+			this.labelPos.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelPos.ForeColor = System.Drawing.Color.White;
+			this.labelPos.Location = new System.Drawing.Point(236, 320);
+			this.labelPos.Name = "labelPos";
+			this.labelPos.Size = new System.Drawing.Size(59, 16);
+			this.labelPos.TabIndex = 14;
+			this.labelPos.Text = "Position:";
+			// 
+			// labelStyle
+			// 
+			this.labelStyle.AutoSize = true;
+			this.labelStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelStyle.ForeColor = System.Drawing.Color.White;
+			this.labelStyle.Location = new System.Drawing.Point(34, 320);
+			this.labelStyle.Name = "labelStyle";
+			this.labelStyle.Size = new System.Drawing.Size(41, 16);
+			this.labelStyle.TabIndex = 13;
+			this.labelStyle.Text = "Style:";
+			// 
+			// menuPrintPosition
+			// 
+			this.menuPrintPosition.FormattingEnabled = true;
+			this.menuPrintPosition.Items.AddRange(new object[] {
+            "Top Left",
+            "Top Right",
+            "Middle Left",
+            "Middle Right",
+            "Bottom Left",
+            "Bottom Right"});
+			this.menuPrintPosition.Location = new System.Drawing.Point(296, 318);
+			this.menuPrintPosition.Name = "menuPrintPosition";
+			this.menuPrintPosition.Size = new System.Drawing.Size(100, 21);
+			this.menuPrintPosition.TabIndex = 11;
+			this.menuPrintPosition.SelectedIndexChanged += new System.EventHandler(this.menuPrintPosition_SelectedIndexChanged);
+			// 
+			// menuBadgeStyle
+			// 
+			this.menuBadgeStyle.FormattingEnabled = true;
+			this.menuBadgeStyle.Items.AddRange(new object[] {
+            "Select Badge Style...",
+            "6 per page, logo top",
+            "6 per page, logo bottom"});
+			this.menuBadgeStyle.Location = new System.Drawing.Point(75, 318);
+			this.menuBadgeStyle.Name = "menuBadgeStyle";
+			this.menuBadgeStyle.Size = new System.Drawing.Size(148, 21);
+			this.menuBadgeStyle.TabIndex = 10;
+			this.menuBadgeStyle.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+			// 
+			// buttonGo
+			// 
+			this.buttonGo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.buttonGo.Location = new System.Drawing.Point(412, 315);
+			this.buttonGo.Name = "buttonGo";
+			this.buttonGo.Size = new System.Drawing.Size(152, 27);
+			this.buttonGo.TabIndex = 99;
+			this.buttonGo.Text = "Create Badge";
+			this.buttonGo.UseVisualStyleBackColor = true;
+			this.buttonGo.Click += new System.EventHandler(this.button1_Click);
 			// 
 			// lblLogo
 			// 
 			this.lblLogo.AutoSize = true;
-			this.lblLogo.Font = new System.Drawing.Font("Arial", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.lblLogo.Location = new System.Drawing.Point(217, 56);
+			this.lblLogo.BackColor = System.Drawing.Color.DarkCyan;
+			this.lblLogo.Font = new System.Drawing.Font("Arial Rounded MT Bold", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lblLogo.Location = new System.Drawing.Point(190, 56);
 			this.lblLogo.Name = "lblLogo";
-			this.lblLogo.Size = new System.Drawing.Size(191, 24);
+			this.lblLogo.Size = new System.Drawing.Size(246, 32);
 			this.lblLogo.TabIndex = 3;
-			this.lblLogo.Text = "JLC Badge Creator";
+			this.lblLogo.Text = "JLC Badge Maker";
 			// 
 			// imgLogo
 			// 
@@ -301,23 +302,23 @@
 		private System.Windows.Forms.Label lblLogo;
 		private System.Windows.Forms.PictureBox imgLogo;
 		private System.Windows.Forms.GroupBox groupBox1;
-		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.Label label2;
+		private System.Windows.Forms.Label labelID;
+		private System.Windows.Forms.Label labelTitle;
 		private System.Windows.Forms.TextBox eventID;
 		private System.Windows.Forms.TextBox title;
-		private System.Windows.Forms.Label label3;
+		private System.Windows.Forms.Label labelFirstname;
 		private System.Windows.Forms.TextBox organisation;
-		private System.Windows.Forms.Label label5;
+		private System.Windows.Forms.Label labelOrg;
 		private System.Windows.Forms.TextBox last_name;
-		private System.Windows.Forms.Label label4;
+		private System.Windows.Forms.Label labelSurname;
 		private System.Windows.Forms.TextBox first_name;
-		private System.Windows.Forms.Button button1;
+		private System.Windows.Forms.Button buttonGo;
 		private System.Windows.Forms.ComboBox menuPrintPosition;
 		private System.Windows.Forms.ComboBox menuBadgeStyle;
-		private System.Windows.Forms.Label label7;
-		private System.Windows.Forms.Label label6;
+		private System.Windows.Forms.Label labelPos;
+		private System.Windows.Forms.Label labelStyle;
 		private System.Windows.Forms.TextBox country;
-		private System.Windows.Forms.Label label8;
+		private System.Windows.Forms.Label labelCountry;
 	}
 }
 
