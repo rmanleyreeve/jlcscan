@@ -210,6 +210,7 @@ namespace REMedia.JlcScan {
 			this.menuEvents.DataSource = EventsList;
 			this.menuEvents.ValueMember = "id";
 			this.menuEvents.DisplayMember = "display_name";
+			this.btnLoadFromVenture.Focus();
 		}
 		private void PopulateSocialEventsOptionsDropdown() {
 			this.SocialEventOptionsList.Insert(0, new SocialEventOption() { id = 0, display_name = "Choose Social Event..." });
@@ -392,7 +393,9 @@ namespace REMedia.JlcScan {
 						name = FixNullString(el.Attribute("name").Value),
 						city = FixNullString(el.Attribute("city").Value),
 						event_code = FixNullString(el.Attribute("event_code").Value),
-						display_name = FixNullString(el.Attribute("name").Value) + " " + FixNullString(el.Attribute("city").Value)
+						display_name = (FixNullString(el.Attribute("event_code").Value) + " " + 
+							FixNullString(el.Attribute("name").Value) + " " + 
+							FixNullString(el.Attribute("city").Value)).Trim()
 					};
 					this.EventsList.Add(ev);
 				} catch (Exception ex) {
