@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JLC Scan", "JlcScan\JLC Scan.csproj", "{F3364CF6-2DC6-41F3-9B33-60E714E81898}"
 EndProject
-Project("{B900F1C2-3D47-4FEC-85B3-04AAF18C3634}") = "JlcScanSetup", "JlcScanSetup\JlcScanSetup.vddproj", "{CF935B91-2211-4779-A7A4-4198586FD8E7}"
+Project("{B900F1C2-3D47-4FEC-85B3-04AAF18C3634}") = "JLC Scan Setup", "JlcScanSetup\JlcScanSetup.vddproj", "{CF935B91-2211-4779-A7A4-4198586FD8E7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JLC Badge Maker", "JLC Badge Maker\JLC Badge Maker.csproj", "{6F35C625-DF66-40EE-B8CF-68B9CD7B9B1E}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "JlcBadgeMakerSetup", "JlcBadgeMakerSetup\JlcBadgeMakerSetup.vdproj", "{5F9D5FC5-CA06-458F-A51B-9B1D38C36BAD}"
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "JLC Badge Maker Setup", "JlcBadgeMakerSetup\JlcBadgeMakerSetup.vdproj", "{5F9D5FC5-CA06-458F-A51B-9B1D38C36BAD}"
 EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution

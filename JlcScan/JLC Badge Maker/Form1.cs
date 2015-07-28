@@ -21,6 +21,7 @@ namespace JLC_Badge_Maker {
 		public List<Badge> BadgeList = new List<Badge>();
 		string PDF_OK = "Temporary Badge PDF Created";
 		string VALIDATION_FAIL_MSG = "You must complete the required fields.";
+		bool drawGuides = true;
 
 		public UI() {
 			InitializeComponent();
@@ -113,7 +114,7 @@ namespace JLC_Badge_Maker {
 		
 		private void CreatePDF(Badge b, int style, int position) {
 			string dir = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-			string path = dir + "/" + b.id + ".pdf";
+			string path = dir + "/" + b.event_id + "_" + b.id + ".pdf";
 			Document doc = new Document(PageSize.A4);
 			int docH = (int)doc.PageSize.Height; //842
 			int docW = (int)doc.PageSize.Width; //595
@@ -136,24 +137,24 @@ namespace JLC_Badge_Maker {
 			iTextSharp.text.Font font4 = new iTextSharp.text.Font(bf, 5, iTextSharp.text.Font.NORMAL);
 			cb.SetColorFill(BaseColor.BLACK);
 			cb.SetFontAndSize(bf, 30);
-
-			// GUIDES
-			cb.MoveTo(0, docH - marginT);
-			cb.LineTo(docW, docH - marginT);
-			cb.Stroke(); // top margin
-			cb.MoveTo(0, marginB);
-			cb.LineTo(docW, marginB);
-			cb.Stroke(); // bottom margin
-			cb.MoveTo(badgeW, marginB);
-			cb.LineTo(badgeW, docH - marginT);
-			cb.Stroke(); // center line
-			cb.MoveTo(0, (marginB + badgeH));
-			cb.LineTo(docW, (marginB + badgeH));
-			cb.Stroke(); // lower divider
-			cb.MoveTo(0, (marginB + (badgeH * 2)));
-			cb.LineTo(docW, (marginB + (badgeH * 2)));
-			cb.Stroke(); // upper divider
-
+			if (drawGuides) {
+				// GUIDES
+				cb.MoveTo(0, docH - marginT);
+				cb.LineTo(docW, docH - marginT);
+				cb.Stroke(); // top margin
+				cb.MoveTo(0, marginB);
+				cb.LineTo(docW, marginB);
+				cb.Stroke(); // bottom margin
+				cb.MoveTo(badgeW, marginB);
+				cb.LineTo(badgeW, docH - marginT);
+				cb.Stroke(); // center line
+				cb.MoveTo(0, (marginB + badgeH));
+				cb.LineTo(docW, (marginB + badgeH));
+				cb.Stroke(); // lower divider
+				cb.MoveTo(0, (marginB + (badgeH * 2)));
+				cb.LineTo(docW, (marginB + (badgeH * 2)));
+				cb.Stroke(); // upper divider
+			}
 			// set position of badge
 			switch (position) {
 				case 0:
@@ -302,7 +303,6 @@ namespace JLC_Badge_Maker {
 			doc.Close();
 			MessageBox.Show("TEST CREATED", "INFO", MessageBoxButtons.OK, MessageBoxIcon.Information);
 		}
-
 
 		private void menuBadgeStyle_SelectedIndexChanged(object sender, EventArgs e) {
 
