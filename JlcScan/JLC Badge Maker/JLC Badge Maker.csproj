@@ -34,11 +34,11 @@
   <ItemGroup>
     <Reference Include="BarcodeLib, Version=1.0.0.19, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\BarcodeLib.dll</HintPath>
+      <HintPath>DLLs\BarcodeLib.dll</HintPath>
     </Reference>
     <Reference Include="itextsharp, Version=5.5.6.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\itextsharp.dll</HintPath>
+      <HintPath>DLLs\itextsharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -91,6 +91,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\JLC_logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DLLs\BarcodeLib.dll" />
+    <Content Include="DLLs\itextsharp.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
