@@ -77,7 +77,7 @@
 			// 
 			this.lblLogo.BackColor = System.Drawing.Color.Lavender;
 			this.lblLogo.Dock = System.Windows.Forms.DockStyle.Top;
-			this.lblLogo.Font = new System.Drawing.Font("HelveticaNeueLT Com 33 ThEx", 14F, System.Drawing.FontStyle.Bold);
+			this.lblLogo.Font = new System.Drawing.Font("HelveticaNeueLT Com 33 ThEx", 14F, System.Drawing.FontStyle.Regular);
 			this.lblLogo.ForeColor = System.Drawing.Color.Black;
 			this.lblLogo.Location = new System.Drawing.Point(0, 0);
 			this.lblLogo.Name = "lblLogo";
