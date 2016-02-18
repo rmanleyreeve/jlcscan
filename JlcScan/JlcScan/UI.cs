@@ -416,10 +416,9 @@ namespace REMedia.JlcScan {
 			File.Create(filePath).Close();
 			using (TextWriter writer = File.CreateText(filePath)) {
 				writer.WriteLine("#File Saved At: " + DateTime.Now.ToString());
-				RegScanned_OnList.ForEach(x => writer.WriteLine("\"" + x.id + "\",\"" + x.timestamp + "\",\"OK\""));
+				RegScanned_OnList.ForEach(x => writer.WriteLine("\"" + x.id + "\",\"" + x.timestamp + "\",\"" + ((x.id.StartsWith("X"))?"TEMP":"OK") + "\""));
 				RegScanned_Overrides.ForEach(x => writer.WriteLine("\"" + x.id + "\",\"" + x.timestamp + "\",\"OVERRIDE\""));
 				RegScanned_Rejected.ForEach(x => writer.WriteLine("\"" + x.id + "\",\"" + x.timestamp + "\",\"REJECTED\""));
-				RegScanned_Temp.ForEach(x => writer.WriteLine("\"" + x.id + "\",\"" + x.timestamp + "\",\"TEMP\""));
 				this.DataSaved = true;
 				C.PlaySound(@"\windows\beep.wav");
 				MessageBox.Show(String.Format(C.REG_SAVED_MSG, NumValidScans));

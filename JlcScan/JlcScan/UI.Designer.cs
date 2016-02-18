@@ -77,12 +77,12 @@
 			// 
 			this.lblLogo.BackColor = System.Drawing.Color.Lavender;
 			this.lblLogo.Dock = System.Windows.Forms.DockStyle.Top;
-			this.lblLogo.Font = new System.Drawing.Font("HelveticaNeueLT Com 33 ThEx", 14F, System.Drawing.FontStyle.Bold);
+			this.lblLogo.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Bold);
 			this.lblLogo.ForeColor = System.Drawing.Color.Black;
 			this.lblLogo.Location = new System.Drawing.Point(0, 0);
 			this.lblLogo.Name = "lblLogo";
 			this.lblLogo.Size = new System.Drawing.Size(240, 22);
-			this.lblLogo.Text = "JLC VentureSCAN";
+			this.lblLogo.Text = "JLC VentureScan";
 			this.lblLogo.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
 			// imgLogo
@@ -502,7 +502,7 @@
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "UI";
-			this.Text = "JLC Scan";
+			this.Text = "JLC VentureScan";
 			this.Load += new System.EventHandler(this.Ui_Load);
 			this.Closed += new System.EventHandler(this.Ui_Closed);
 			this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Ui_KeyUp);
