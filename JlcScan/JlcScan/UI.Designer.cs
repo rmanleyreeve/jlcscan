@@ -105,6 +105,7 @@
 			this.loadPanel.Location = new System.Drawing.Point(0, 50);
 			this.loadPanel.Name = "loadPanel";
 			this.loadPanel.Size = new System.Drawing.Size(240, 244);
+			this.loadPanel.Focus();
 			// 
 			// lblLoadFile
 			// 
