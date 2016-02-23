@@ -66,6 +66,7 @@
 			this.lblSaveToVenture = new System.Windows.Forms.Label();
 			this.btnStartOver = new System.Windows.Forms.Button();
 			this.btnExit = new System.Windows.Forms.Button();
+			this.btnExitTop = new System.Windows.Forms.Button();
 			this.loadPanel.SuspendLayout();
 			this.optionsPanel.SuspendLayout();
 			this.scanPanel.SuspendLayout();
@@ -75,13 +76,13 @@
 			// 
 			// lblLogo
 			// 
-			this.lblLogo.BackColor = System.Drawing.Color.Lavender;
+			this.lblLogo.BackColor = System.Drawing.Color.MidnightBlue;
 			this.lblLogo.Dock = System.Windows.Forms.DockStyle.Top;
 			this.lblLogo.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Bold);
-			this.lblLogo.ForeColor = System.Drawing.Color.Black;
+			this.lblLogo.ForeColor = System.Drawing.Color.White;
 			this.lblLogo.Location = new System.Drawing.Point(0, 0);
 			this.lblLogo.Name = "lblLogo";
-			this.lblLogo.Size = new System.Drawing.Size(240, 22);
+			this.lblLogo.Size = new System.Drawing.Size(240, 20);
 			this.lblLogo.Text = "JLC VentureScan";
 			this.lblLogo.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
@@ -89,9 +90,9 @@
 			// 
 			this.imgLogo.BackColor = System.Drawing.Color.Lavender;
 			this.imgLogo.Image = ((System.Drawing.Image)(resources.GetObject("imgLogo.Image")));
-			this.imgLogo.Location = new System.Drawing.Point(0, 22);
+			this.imgLogo.Location = new System.Drawing.Point(0, 20);
 			this.imgLogo.Name = "imgLogo";
-			this.imgLogo.Size = new System.Drawing.Size(240, 28);
+			this.imgLogo.Size = new System.Drawing.Size(240, 30);
 			// 
 			// loadPanel
 			// 
@@ -482,6 +483,17 @@
 			this.btnExit.Text = "Exit Program";
 			this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
 			// 
+			// btnExitTop
+			// 
+			this.btnExitTop.BackColor = System.Drawing.SystemColors.ControlLight;
+			this.btnExitTop.Font = new System.Drawing.Font("Tahoma", 8F, System.Drawing.FontStyle.Regular);
+			this.btnExitTop.Location = new System.Drawing.Point(221, 1);
+			this.btnExitTop.Name = "btnExitTop";
+			this.btnExitTop.Size = new System.Drawing.Size(18, 18);
+			this.btnExitTop.TabIndex = 6;
+			this.btnExitTop.Text = "X";
+			this.btnExitTop.Click += new System.EventHandler(this.btnExit_Click);
+			// 
 			// UI
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -489,6 +501,7 @@
 			this.BackColor = System.Drawing.Color.Black;
 			this.ClientSize = new System.Drawing.Size(240, 320);
 			this.ControlBox = false;
+			this.Controls.Add(this.btnExitTop);
 			this.Controls.Add(this.lblLogo);
 			this.Controls.Add(this.imgLogo);
 			this.Controls.Add(this.loadPanel);
@@ -559,5 +572,6 @@
 		private System.Windows.Forms.Label lblSaveToVenture;
 		private System.Windows.Forms.Button btnStartOver;
 		private System.Windows.Forms.Button btnExit;
+		private System.Windows.Forms.Button btnExitTop;
 	}
 }
