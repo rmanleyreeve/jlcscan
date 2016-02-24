@@ -32,11 +32,11 @@ namespace REMedia.JlcScan {
 		private int NumValidScans;
 		private int NumFailedScans;
 		private int NumEvents = 0;
-		private static List<Registration> RegScanned_OnList = new List<Registration>();
-		private static List<Registration> RegScanned_Overrides = new List<Registration>();
-		private static List<Registration> RegScanned_Rejected = new List<Registration>();
-		private static List<Registration> RegScanned_Temp = new List<Registration>();
-		private static List<string> RegScanned_NotOnList = new List<string>();
+		private List<Registration> RegScanned_OnList = new List<Registration>();
+		private List<Registration> RegScanned_Overrides = new List<Registration>();
+		private List<Registration> RegScanned_Rejected = new List<Registration>();
+		private List<Registration> RegScanned_Temp = new List<Registration>();
+		private List<string> RegScanned_NotOnList = new List<string>();
 		public bool Online = false;
 		public bool ScannerActive;
 		private int SelectedSocialEventId;
@@ -289,13 +289,19 @@ namespace REMedia.JlcScan {
 			this.IncrementScanFail();
 		}
 		public void ProcessTempReg(string rid) {
-			Registration r = new Registration() { id = rid, timestamp = DateTime.Now.ToString("u") };
-			RegScanned_OnList.Add(r);
-			RegScanned_Temp.Add(r);
-			C.PlaySound(@"\windows\beep.wav");
-			this.ShowScanResult("ok");
-			this.UpdateScanResultMsg(C.VALID_TEMP_REG_MSG);
-			this.IncrementScanValid();
+			// check if already scanned
+			Registration tmp = this.RegScanned_OnList.FirstOrDefault(r => r.id == rid);
+			if (tmp != null) {
+				this.RegAlreadyScanned();
+			} else {
+				Registration r = new Registration() { id = rid, timestamp = DateTime.Now.ToString("u") };
+				RegScanned_OnList.Add(r);
+				RegScanned_Temp.Add(r);
+				C.PlaySound(@"\windows\beep.wav");
+				this.ShowScanResult("ok");
+				this.UpdateScanResultMsg(C.VALID_TEMP_REG_MSG);
+				this.IncrementScanValid();
+			}
 		}
 		public void RegAlreadyScanned() {
 			C.PlaySound(@"\windows\critical.wav");
