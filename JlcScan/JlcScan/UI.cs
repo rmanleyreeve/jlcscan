@@ -36,13 +36,14 @@ namespace REMedia.JlcScan {
 		private List<Registration> RegScanned_Overrides = new List<Registration>();
 		private List<Registration> RegScanned_Rejected = new List<Registration>();
 		private List<Registration> RegScanned_Temp = new List<Registration>();
+		private List<Registration> RegScanned_Quick = new List<Registration>();
 		private List<string> RegScanned_NotOnList = new List<string>();
 		public bool Online = false;
 		public bool ScannerActive;
 		private int SelectedSocialEventId;
 		public string LastScannedId;
 		public bool DataSaved = false;
-		private int ResultsScreenDuration = 3;
+		private int ResultsScreenDuration = 2;
 		private int SocketTimeout = 15000;
 
 		public UI() {
@@ -96,6 +97,7 @@ namespace REMedia.JlcScan {
 			RegScanned_Overrides.Clear();
 			RegScanned_Rejected.Clear();
 			RegScanned_Temp.Clear();
+			RegScanned_Quick.Clear();
 			this.DataSaved = false;
 			this.lblSaveToVenture.Text = "";
 		}
@@ -160,6 +162,11 @@ namespace REMedia.JlcScan {
 			this.NumValidScans++;
 			this.UpdateScanCounts();
 		}
+		private void IncrementScanOverride() {
+			this.NumValidScans++;
+			this.NumFailedScans--;
+			this.UpdateScanCounts();
+		}
 		private void IncrementScanFail() {
 			this.NumTotalScans++;
 			this.NumFailedScans++;
@@ -188,7 +195,7 @@ namespace REMedia.JlcScan {
 					this.iconBoxFail.Show();
 					break;
 			}
-			// show result panel for 3 seconds
+			// show result panel for specified time
 			this.ScannerActive = false;
 			this.btnScan.Enabled = false;
 			this.resultPanel.Show();
@@ -252,7 +259,7 @@ namespace REMedia.JlcScan {
 		public void CheckSEAccess(Registration reg) {
 			int seoId = GetSelectedSocialEventId();
 			Log("Selected SE: " + seoId); // DEBUG
-			if (reg.social_events_booked.Contains(seoId)) {
+			if (reg.social_events_booked!=null && reg.social_events_booked.Contains(seoId)) {
 				this.SE_RegOk(reg);
 			} else {
 				this.SE_RegNotOk(reg.id);
@@ -502,6 +509,10 @@ namespace REMedia.JlcScan {
 			RegScanned_Overrides.ForEach(x => Log(Convert.ToString(x.id) + "," + x.timestamp));
 			Log("Rejected:");
 			RegScanned_Rejected.ForEach(x => Log(Convert.ToString(x.id) + "," + x.timestamp));
+			Log("Temp:");
+			RegScanned_Temp.ForEach(x => Log(Convert.ToString(x.id) + "," + x.timestamp));
+			Log("Quick:");
+			RegScanned_Quick.ForEach(x => Log(Convert.ToString(x.id) + "," + x.timestamp));
 		}
 
 
@@ -718,8 +729,8 @@ namespace REMedia.JlcScan {
 				string regID = String.Empty;
 				try {
 					String[] parts = barCode.Split(' ');
-					Log("Event Code: " + parts[0]); // DEBUG
-					Log("Reg ID: " + parts[1]); // DEBUG
+					//Log("Event Code: " + parts[0]); // DEBUG
+					//Log("Reg ID: " + parts[1]); // DEBUG
 					evID = parts[0];
 					regID = parts[1];
 					// check event code matches
@@ -731,6 +742,16 @@ namespace REMedia.JlcScan {
 					if(regID.StartsWith("X")) {
 						ProcessTempReg(regID);
 						return;
+					}
+					// check for quick reg badges
+					if (regID.StartsWith("Q")) {
+						regID = regID.Remove(0, 1);
+						Registration qreg = this.RegistrationsList.FirstOrDefault(r => r.id == regID);
+						if (qreg == null) {
+							Registration qr = new Registration() { id = regID, timestamp = DateTime.Now.ToString("u") };
+							this.RegistrationsList.Add(qr); // the quick reg will be in venture so we add it to reg list
+							RegScanned_Quick.Add(qr);
+						}
 					}
 					// event ok, check reg id against list
 					this.LastScannedId = regID;
@@ -793,7 +814,7 @@ namespace REMedia.JlcScan {
 				C.PlaySound(@"\windows\beep.wav");
 				RegScanned_Overrides.Add(new Registration() { id = GetLastScannedId(), timestamp = DateTime.Now.ToString("u") });
 				RegScanned_OnList.Add(new Registration() { id = GetLastScannedId(), timestamp = DateTime.Now.ToString("u") });
-				this.IncrementScanValid();
+				this.IncrementScanOverride();
 			}
 			this.resultPanel.Hide();
 			this.btnScan.Enabled = true;
