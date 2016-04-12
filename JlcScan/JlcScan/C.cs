@@ -39,6 +39,7 @@ namespace REMedia.JlcScan {
 
 		// constants
 		public const string INITIAL_DIR = "\\My Documents";
+		public const string LOG_DIR = INITIAL_DIR + "\\VentureScan Logs";
 		public const string WEBSVC_EVENTS_ENDPOINT = "http://jlcventure.com/websvc/pda_event.php";
 		public const string WEBSVC_EVENT_ENDPOINT = "http://jlcventure.com/websvc/pda_events.php";
 		public const string WEBSVC_SAVE_ENDPOINT = "http://jlcventure.com/websvc/save.php";

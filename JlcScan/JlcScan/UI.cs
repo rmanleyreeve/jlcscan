@@ -50,9 +50,9 @@ namespace REMedia.JlcScan {
 		private int SocketTimeout = 15000;
 
 		public UI() {
+			System.IO.Directory.CreateDirectory(C.LOG_DIR);
 			InitializeComponent(); // set up ui layout from UI.Designer.cs
 		}
-
 
 		// UTILITY METHODS =======================================================================
 		private void Ui_Load(object sender, EventArgs e) {
@@ -507,16 +507,37 @@ namespace REMedia.JlcScan {
 		private void LogResults() { // DEBUG
 			Log("OK:");
 			this.RegScanned_OK.ForEach(x => Log(Convert.ToString(x.id) + "," + x.timestamp));
+			Log("Temp:");
+			this.RegScanned_Temp.ForEach(x => Log(Convert.ToString(x.id) + "," + x.timestamp));
 			Log("Overrides:");
 			this.RegScanned_Overrides.ForEach(x => Log(Convert.ToString(x.id) + "," + x.timestamp));
 			Log("Rejected:");
 			this.RegScanned_Rejected.ForEach(x => Log(Convert.ToString(x.id) + "," + x.timestamp));
-			Log("Temp:");
-			this.RegScanned_Temp.ForEach(x => Log(Convert.ToString(x.id) + "," + x.timestamp));
-			Log("Quick:");
-			this.idRegScanned_Quick.ForEach(x => Log(x));
+			Log("Quick Registrations:");
+			this.idRegScanned_Quick.Distinct().ToList().ForEach(x => Log(x));
+			Log("Not on list:");
+			this.idRegScanned_NotOnList.Distinct().ToList().ForEach(x => Log(x));
 		}
-
+		private void LogResultsToFile() {
+			long ts = (DateTime.UtcNow.Ticks/10000000);
+			string filePath = String.Format("{0}\\Event_{1}_{2}.log", C.LOG_DIR, EventID, ts);
+			File.Create(filePath).Close();
+			using (TextWriter writer = File.CreateText(filePath)) {
+				writer.WriteLine("#File Saved At: " + DateTime.Now.ToString());
+				writer.WriteLine("OK:");
+				this.RegScanned_OK.ForEach(x => writer.WriteLine(x.id + "," + x.timestamp));
+				writer.WriteLine("TEMP:");
+				this.RegScanned_Temp.ForEach(x => writer.WriteLine(x.id + "," + x.timestamp));
+				writer.WriteLine("OVERRIDE:");
+				this.RegScanned_Overrides.ForEach(x => writer.WriteLine(x.id + "," + x.timestamp));
+				writer.WriteLine("REJECTED:");
+				this.RegScanned_Rejected.ForEach(x => writer.WriteLine(x.id + "," + x.timestamp));
+				writer.WriteLine("QUICK REG:");
+				this.idRegScanned_Quick.Distinct().ToList().ForEach(x => writer.WriteLine(x));
+				writer.WriteLine("NOT ON LIST:");
+				this.idRegScanned_NotOnList.Distinct().ToList().ForEach(x => writer.WriteLine(x));
+			}
+		}
 
 		// NETWORK METHODS ========================================================================
 		private bool IsServerAvailable() {
@@ -749,6 +770,17 @@ namespace REMedia.JlcScan {
 					if (regID.StartsWith("Q")) {
 						regID = regID.Remove(0, 1);
 						this.idRegScanned_Quick.Add(regID);
+						// quick reg will be in venture, so add to list and proceed
+						Registration qreg = this.RegistrationsLoaded.FirstOrDefault(r => r.id == regID);
+						if (qreg == null) {
+							Registration r = new Registration() {
+								id = regID,
+								first_name = "Quick",
+								last_name = "Registration",
+								social_events_booked = new List<int>()
+							};
+							this.RegistrationsLoaded.Add(r);
+						}
 					}
 					// check already scanned
 					if(this.RegScannedTally.Contains(regID)){
@@ -832,9 +864,11 @@ namespace REMedia.JlcScan {
 		private void btnExit_Click(object sender, EventArgs e) {
 			if (!this.GetDataSaved()) {
 				if (MessageBox.Show(C.EXIT_DATA_NOT_SAVED_MSG, "ATTENTION", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.Yes) {
+					this.LogResultsToFile();
 					this.Close();
 				}
 			} else {
+				this.LogResultsToFile();
 				this.Close();
 			}
 		}
