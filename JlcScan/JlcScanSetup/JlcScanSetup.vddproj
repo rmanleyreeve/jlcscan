@@ -116,6 +116,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_58E085398B3F46ECA8E22B8A962203A7"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_5E7D4EF3B0F5F3C8DC320235BFA2F69A"
         "OwnerKey" = "8:_D5BBA353698C9B18FA4B6290C05CDC32"
         "MsmSig" = "8:_UNDEFINED"
@@ -200,7 +206,7 @@
         "DisplayName" = "8:Release"
         "IsDebugOnly" = "11:FALSE"
         "IsReleaseOnly" = "11:TRUE"
-        "OutputFilename" = "8:Release\\JlcScanSetup.cab"
+        "OutputFilename" = "8:Release\\JlcScan.cab"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
         "SignOutput" = "11:FALSE"
@@ -350,6 +356,24 @@
             "Register" = "3:0"
             "Exclude" = "11:TRUE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{BA458234-9B71-4F46-8107-E91156377184}:_58E085398B3F46ECA8E22B8A962203A7"
+            {
+            "SourcePath" = "8:bg.bmp"
+            "TargetName" = "8:bg.bmp"
+            "Tag" = "8:"
+            "Folder" = "8:_14115106BC8A426DA79AE76E09328FBB"
+            "Condition" = "8:"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "Register" = "3:0"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{E4F2F62A-3940-4BF5-A031-F7FA98CAAFFA}:_5E7D4EF3B0F5F3C8DC320235BFA2F69A"
@@ -504,11 +528,38 @@
                 {
                 }
             }
+            "{F6DFDB62-1DD1-498B-89B7-27BAC542EE5A}:_14115106BC8A426DA79AE76E09328FBB"
+            {
+            "Name" = "8:#1912"
+            "Condition" = "8:"
+            "Property" = "8:%CE2%"
+                "Folders"
+                {
+                    "{5943FCFD-5B64-4EE4-96C9-4618EC95352A}:_DF1B9452CCC54BC89629D5048926AE2D"
+                    {
+                    "Name" = "8:Desktop"
+                    "Condition" = "8:"
+                    "Property" = "8:_2BF4A4EE5A3C4FB79B8E97621C1AD7F6"
+                        "Folders"
+                        {
+                        }
+                    }
+                }
+            }
             "{F6DFDB62-1DD1-498B-89B7-27BAC542EE5A}:_2793E8292B2141AB9C6EA2DC55014448"
             {
             "Name" = "8:#1911"
             "Condition" = "8:"
             "Property" = "8:%CE1%"
+                "Folders"
+                {
+                }
+            }
+            "{27CA7284-31D3-408F-812A-1EF9ACCDB822}:_358C36EC40BA45509682710A357F259D"
+            {
+            "Name" = "8:%CE3%"
+            "Condition" = "8:"
+            "Property" = "8:CUSTOMFOLDER1"
                 "Folders"
                 {
                 }
@@ -536,7 +587,7 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:JlcScanSetup"
+        "ProductName" = "8:JlcScan"
         "Manufacturer" = "8:RE Media"
         "OSVersionMin" = "8:4.0"
         "OSVersionMax" = "8:6.99"
@@ -548,7 +599,7 @@
         {
             "{605BE39E-5046-48BD-AEC0-63C3A46626D5}:_2729D96BAB0349B3B3D5FDBBC8F19E73"
             {
-            "SourcePath" = "8:..\\JlcScan\\obj\\Debug\\JlcScan.exe"
+            "SourcePath" = "8:..\\JlcScan\\obj\\Release\\JlcScan.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_C228A2EDFACE460885DE4E10D3754128"
@@ -618,6 +669,16 @@
             "Folder" = "8:_4C0BB6DB16A940CC9160A1AE61FEFB58"
             "WorkingFolder" = "8:_C228A2EDFACE460885DE4E10D3754128"
             }
+            "{971D45E9-E38C-49AC-B36E-4C5BEA533350}:_3A455A92ED344FDEB1F7B780C39FE946"
+            {
+            "Name" = "8:JLC Scan"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "Target" = "8:_2729D96BAB0349B3B3D5FDBBC8F19E73"
+            "Folder" = "8:_DF1B9452CCC54BC89629D5048926AE2D"
+            "WorkingFolder" = "8:_C228A2EDFACE460885DE4E10D3754128"
+            }
             "{971D45E9-E38C-49AC-B36E-4C5BEA533350}:_701E32502F1A451BA6FC1DD4757C75A2"
             {
             "Name" = "8:JLC Scan"
@@ -626,6 +687,16 @@
             "ShowCmd" = "3:1"
             "Target" = "8:_2729D96BAB0349B3B3D5FDBBC8F19E73"
             "Folder" = "8:_072A22C57A2142A785A50FCC4CB1FA3C"
+            "WorkingFolder" = "8:_C228A2EDFACE460885DE4E10D3754128"
+            }
+            "{971D45E9-E38C-49AC-B36E-4C5BEA533350}:_F2E481ED75E24F32B4C3F71B76E77CCC"
+            {
+            "Name" = "8:JLC Scan"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "Target" = "8:_2729D96BAB0349B3B3D5FDBBC8F19E73"
+            "Folder" = "8:_358C36EC40BA45509682710A357F259D"
             "WorkingFolder" = "8:_C228A2EDFACE460885DE4E10D3754128"
             }
         }
