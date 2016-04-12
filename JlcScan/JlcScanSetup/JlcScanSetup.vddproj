@@ -535,15 +535,6 @@
             "Property" = "8:%CE2%"
                 "Folders"
                 {
-                    "{5943FCFD-5B64-4EE4-96C9-4618EC95352A}:_DF1B9452CCC54BC89629D5048926AE2D"
-                    {
-                    "Name" = "8:Desktop"
-                    "Condition" = "8:"
-                    "Property" = "8:_2BF4A4EE5A3C4FB79B8E97621C1AD7F6"
-                        "Folders"
-                        {
-                        }
-                    }
                 }
             }
             "{F6DFDB62-1DD1-498B-89B7-27BAC542EE5A}:_2793E8292B2141AB9C6EA2DC55014448"
@@ -555,20 +546,20 @@
                 {
                 }
             }
-            "{27CA7284-31D3-408F-812A-1EF9ACCDB822}:_358C36EC40BA45509682710A357F259D"
-            {
-            "Name" = "8:%CE3%"
-            "Condition" = "8:"
-            "Property" = "8:CUSTOMFOLDER1"
-                "Folders"
-                {
-                }
-            }
             "{F6DFDB62-1DD1-498B-89B7-27BAC542EE5A}:_4C0BB6DB16A940CC9160A1AE61FEFB58"
             {
             "Name" = "8:#1919"
             "Condition" = "8:"
             "Property" = "8:%CE17%"
+                "Folders"
+                {
+                }
+            }
+            "{27CA7284-31D3-408F-812A-1EF9ACCDB822}:_BBE2BEF6ECF64D4CA275F8FF86B5635E"
+            {
+            "Name" = "8:%CE3%"
+            "Condition" = "8:"
+            "Property" = "8:CUSTOMFOLDER1"
                 "Folders"
                 {
                 }
@@ -669,16 +660,6 @@
             "Folder" = "8:_4C0BB6DB16A940CC9160A1AE61FEFB58"
             "WorkingFolder" = "8:_C228A2EDFACE460885DE4E10D3754128"
             }
-            "{971D45E9-E38C-49AC-B36E-4C5BEA533350}:_3A455A92ED344FDEB1F7B780C39FE946"
-            {
-            "Name" = "8:JLC Scan"
-            "Arguments" = "8:"
-            "Description" = "8:"
-            "ShowCmd" = "3:1"
-            "Target" = "8:_2729D96BAB0349B3B3D5FDBBC8F19E73"
-            "Folder" = "8:_DF1B9452CCC54BC89629D5048926AE2D"
-            "WorkingFolder" = "8:_C228A2EDFACE460885DE4E10D3754128"
-            }
             "{971D45E9-E38C-49AC-B36E-4C5BEA533350}:_701E32502F1A451BA6FC1DD4757C75A2"
             {
             "Name" = "8:JLC Scan"
@@ -689,14 +670,14 @@
             "Folder" = "8:_072A22C57A2142A785A50FCC4CB1FA3C"
             "WorkingFolder" = "8:_C228A2EDFACE460885DE4E10D3754128"
             }
-            "{971D45E9-E38C-49AC-B36E-4C5BEA533350}:_F2E481ED75E24F32B4C3F71B76E77CCC"
+            "{971D45E9-E38C-49AC-B36E-4C5BEA533350}:_AE0BFA394E7E4BDCA6307A52504202B3"
             {
             "Name" = "8:JLC Scan"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
             "Target" = "8:_2729D96BAB0349B3B3D5FDBBC8F19E73"
-            "Folder" = "8:_358C36EC40BA45509682710A357F259D"
+            "Folder" = "8:_BBE2BEF6ECF64D4CA275F8FF86B5635E"
             "WorkingFolder" = "8:_C228A2EDFACE460885DE4E10D3754128"
             }
         }
