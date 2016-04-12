@@ -23,8 +23,8 @@ namespace REMedia.JlcScan {
 		private static extern void Barcode1D_free();
 
 		// properties
-		private List<Registration> RegistrationsList = new List<Registration>();
-		private List<Event> EventsList = new List<Event>();
+		private List<Registration> RegistrationsLoaded = new List<Registration>();
+		private List<Event> EventsLoaded = new List<Event>();
 		private List<SocialEventOption> SocialEventOptionsList = new List<SocialEventOption>();
 		private string EventID;
 		private string EventTitle;
@@ -32,12 +32,15 @@ namespace REMedia.JlcScan {
 		private int NumValidScans;
 		private int NumFailedScans;
 		private int NumEvents = 0;
-		private List<Registration> RegScanned_OnList = new List<Registration>();
+		private List<string> RegScannedTally = new List<string>();
+
+		private List<Registration> RegScanned_OK = new List<Registration>();
 		private List<Registration> RegScanned_Overrides = new List<Registration>();
 		private List<Registration> RegScanned_Rejected = new List<Registration>();
 		private List<Registration> RegScanned_Temp = new List<Registration>();
-		private List<Registration> RegScanned_Quick = new List<Registration>();
-		private List<string> RegScanned_NotOnList = new List<string>();
+		private List<string> idRegScanned_Quick = new List<string>();
+		private List<string> idRegScanned_NotOnList = new List<string>();
+
 		public bool Online = false;
 		public bool ScannerActive;
 		private int SelectedSocialEventId;
@@ -92,12 +95,12 @@ namespace REMedia.JlcScan {
 			this.UpdateScanCounts();
 			this.SelectedSocialEventId = 0;
 			this.LastScannedId = String.Empty;
-			RegScanned_OnList.Clear();
-			RegScanned_NotOnList.Clear();
-			RegScanned_Overrides.Clear();
-			RegScanned_Rejected.Clear();
-			RegScanned_Temp.Clear();
-			RegScanned_Quick.Clear();
+			this.RegScanned_OK.Clear();
+			this.idRegScanned_NotOnList.Clear();
+			this.RegScanned_Overrides.Clear();
+			this.RegScanned_Rejected.Clear();
+			this.RegScanned_Temp.Clear();
+			this.RegScannedTally.Clear();
 			this.DataSaved = false;
 			this.lblSaveToVenture.Text = "";
 		}
@@ -162,11 +165,6 @@ namespace REMedia.JlcScan {
 			this.NumValidScans++;
 			this.UpdateScanCounts();
 		}
-		private void IncrementScanOverride() {
-			this.NumValidScans++;
-			this.NumFailedScans--;
-			this.UpdateScanCounts();
-		}
 		private void IncrementScanFail() {
 			this.NumTotalScans++;
 			this.NumFailedScans++;
@@ -213,8 +211,8 @@ namespace REMedia.JlcScan {
 			}
 		}
 		private void PopulateEventsDropdown() {
-			this.EventsList.Insert(0, new Event() { id = 0, display_name = "Choose Event..." });
-			this.menuEvents.DataSource = EventsList;
+			this.EventsLoaded.Insert(0, new Event() { id = 0, display_name = "Choose Event..." });
+			this.menuEvents.DataSource = EventsLoaded;
 			this.menuEvents.ValueMember = "id";
 			this.menuEvents.DisplayMember = "display_name";
 			this.btnLoadFromVenture.Focus();
@@ -222,7 +220,7 @@ namespace REMedia.JlcScan {
 		private void PopulateSocialEventsOptionsDropdown() {
 			this.SocialEventOptionsList.Insert(0, new SocialEventOption() { id = 0, display_name = "Choose Social Event..." });
 			this.menuSocialEvents.DataSource = SocialEventOptionsList;
-			menuSocialEvents.ValueMember = "id";
+			this.menuSocialEvents.ValueMember = "id";
 			this.menuSocialEvents.DisplayMember = "display_name";
 		}
 		private void DisplayOfflineText() {
@@ -259,7 +257,7 @@ namespace REMedia.JlcScan {
 		public void CheckSEAccess(Registration reg) {
 			int seoId = GetSelectedSocialEventId();
 			Log("Selected SE: " + seoId); // DEBUG
-			if (reg.social_events_booked!=null && reg.social_events_booked.Contains(seoId)) {
+			if (reg.social_events_booked.Contains(seoId)) {
 				this.SE_RegOk(reg);
 			} else {
 				this.SE_RegNotOk(reg.id);
@@ -267,7 +265,8 @@ namespace REMedia.JlcScan {
 		}
 		public void SE_RegOk(Registration reg) {
 			reg.timestamp = "" + DateTime.Now.ToString("u");
-			RegScanned_OnList.Add(reg);
+			this.RegScanned_OK.Add(reg);
+			this.RegScannedTally.Add(reg.id);
 			C.PlaySound(@"\windows\beep.wav");
 			this.ShowScanResult("ok");
 			this.UpdateScanResultMsg(reg.first_name + " " + reg.last_name + "\n" + C.VALID_SE_REG_MSG);
@@ -275,21 +274,24 @@ namespace REMedia.JlcScan {
 		}
 		public void RegOk(Registration reg) {
 			reg.timestamp = DateTime.Now.ToString("u");
-			RegScanned_OnList.Add(reg);
+			this.RegScanned_OK.Add(reg);
+			this.RegScannedTally.Add(reg.id);
 			C.PlaySound(@"\windows\beep.wav");
 			this.ShowScanResult("ok");
 			this.UpdateScanResultMsg(reg.first_name + " " + reg.last_name + "\n" + C.VALID_REG_MSG);
 			this.IncrementScanValid();
 		}
-		public void RegNotOk(string r) {
-			RegScanned_NotOnList.Add(r);
+		public void RegNotOk(string rid) {
+			this.idRegScanned_NotOnList.Add(rid);
+			this.RegScannedTally.Add(rid);
 			C.PlaySound(@"\windows\exclam.wav");
 			this.ShowScanResult("no");
 			this.UpdateScanResultMsg(C.INVALID_REG_MSG);
 			this.IncrementScanFail();
 		}
 		public void SE_RegNotOk(string rid) {
-			RegScanned_NotOnList.Add(rid);
+			this.idRegScanned_NotOnList.Add(rid);
+			this.RegScannedTally.Add(rid);
 			C.PlaySound(@"\windows\exclam.wav");
 			this.ShowScanResult("no");
 			this.UpdateScanResultMsg(C.INVALID_SE_REG_MSG);
@@ -297,13 +299,13 @@ namespace REMedia.JlcScan {
 		}
 		public void ProcessTempReg(string rid) {
 			// check if already scanned
-			Registration tmp = this.RegScanned_OnList.FirstOrDefault(r => r.id == rid);
-			if (tmp != null) {
+			if (this.RegScannedTally.Contains(rid)) {
 				this.RegAlreadyScanned();
 			} else {
 				Registration r = new Registration() { id = rid, timestamp = DateTime.Now.ToString("u") };
-				RegScanned_OnList.Add(r);
-				RegScanned_Temp.Add(r);
+				this.RegScanned_OK.Add(r);
+				this.RegScanned_Temp.Add(r);
+				this.RegScannedTally.Add(rid);
 				C.PlaySound(@"\windows\beep.wav");
 				this.ShowScanResult("ok");
 				this.UpdateScanResultMsg(C.VALID_TEMP_REG_MSG);
@@ -330,9 +332,9 @@ namespace REMedia.JlcScan {
 		}
 		public void ScanFail() {
 			C.PlaySound(@"\windows\critical.wav");
-			ShowScanResult("fail");
-			UpdateScanResultMsg(C.SCAN_FAIL_MSG);
-			IncrementScanFail();
+			this.ShowScanResult("fail");
+			this.UpdateScanResultMsg(C.SCAN_FAIL_MSG);
+			this.IncrementScanFail();
 		}
 
 
@@ -350,15 +352,15 @@ namespace REMedia.JlcScan {
 						last_name = FixNullString(el.Element("last_name").Value),
 						social_events_booked = new List<int>()
 					};
-					this.RegistrationsList.Add(r);
+					this.RegistrationsLoaded.Add(r);
 				} catch (Exception ex) {
 					Log(ex.StackTrace);
 					Log(el.ToString());
 				}
 			}
-			Log("XML count=" + count + ", read=" + RegistrationsList.Count()); // DEBUG
+			Log("XML count=" + count + ", read=" + RegistrationsLoaded.Count()); // DEBUG
 
-			// read in social EventsList
+			// read in social EventsLoaded
 			foreach (XElement el_se in xdoc.Descendants("socialevent")) {
 				try {
 					Log("SE: #" + el_se.Attribute("id").Value + " " + el_se.Attribute("name").Value); // DEBUG
@@ -377,7 +379,7 @@ namespace REMedia.JlcScan {
 								try {
 									string booked_reg = el_seb.Value;
 									Log("Booked: " + booked_reg); // DEBUG
-									Registration regBooked = RegistrationsList.FirstOrDefault(r => r.id == booked_reg);
+									Registration regBooked = RegistrationsLoaded.FirstOrDefault(r => r.id == booked_reg);
 									if (regBooked != null) {
 										regBooked.social_events_booked.Add(Convert.ToInt32(el_seo.Attribute("id").Value));
 									}
@@ -396,7 +398,7 @@ namespace REMedia.JlcScan {
 					Log(el_se.ToString());
 				}
 			}
-			return this.RegistrationsList.Count();
+			return this.RegistrationsLoaded.Count();
 		}
 		private int ReadXMLEvents(XDocument xdoc) {
 			foreach (XElement el in xdoc.Descendants("event")) {
@@ -406,17 +408,17 @@ namespace REMedia.JlcScan {
 						name = FixNullString(el.Attribute("name").Value),
 						city = FixNullString(el.Attribute("city").Value),
 						event_code = FixNullString(el.Attribute("event_code").Value),
-						display_name = (FixNullString(el.Attribute("event_code").Value) + " " + 
-							FixNullString(el.Attribute("name").Value) + " " + 
+						display_name = (FixNullString(el.Attribute("event_code").Value) + " " +
+							FixNullString(el.Attribute("name").Value) + " " +
 							FixNullString(el.Attribute("city").Value)).Trim()
 					};
-					this.EventsList.Add(ev);
+					this.EventsLoaded.Add(ev);
 				} catch (Exception ex) {
 					Log(ex.StackTrace);
 					Log(el.ToString());
 				}
 			}
-			return this.EventsList.Count();
+			return this.EventsLoaded.Count();
 		}
 		private void SaveCsvFile() {
 			this.LogResults();
@@ -429,9 +431,9 @@ namespace REMedia.JlcScan {
 			File.Create(filePath).Close();
 			using (TextWriter writer = File.CreateText(filePath)) {
 				writer.WriteLine("#File Saved At: " + DateTime.Now.ToString());
-				RegScanned_OnList.ForEach(x => writer.WriteLine("\"" + x.id + "\",\"" + x.timestamp + "\",\"" + ((x.id.StartsWith("X"))?"TEMP":"OK") + "\""));
-				RegScanned_Overrides.ForEach(x => writer.WriteLine("\"" + x.id + "\",\"" + x.timestamp + "\",\"OVERRIDE\""));
-				RegScanned_Rejected.ForEach(x => writer.WriteLine("\"" + x.id + "\",\"" + x.timestamp + "\",\"REJECTED\""));
+				this.RegScanned_OK.ForEach(x => writer.WriteLine("\"" + x.id + "\",\"" + x.timestamp + "\",\"" + ((x.id.StartsWith("X")) ? "TEMP" : "OK") + "\""));
+				this.RegScanned_Overrides.ForEach(x => writer.WriteLine("\"" + x.id + "\",\"" + x.timestamp + "\",\"OVERRIDE\""));
+				this.RegScanned_Rejected.ForEach(x => writer.WriteLine("\"" + x.id + "\",\"" + x.timestamp + "\",\"REJECTED\""));
 				this.DataSaved = true;
 				C.PlaySound(@"\windows\beep.wav");
 				MessageBox.Show(String.Format(C.REG_SAVED_MSG, NumValidScans));
@@ -469,7 +471,7 @@ namespace REMedia.JlcScan {
 			try {
 				xdoc = new XDocument(
 					new XElement("event", new XAttribute("id", EventID), new XAttribute("type", "registration"), new XAttribute("created", DateTime.Now.ToString("u")),
-						new XElement("valid", new XAttribute("count", NumValidScans), RegScanned_OnList.Select(x => new XElement("registration", new XAttribute("id", x.id), new XAttribute("timestamp", x.timestamp)))
+						new XElement("valid", new XAttribute("count", NumValidScans), RegScanned_OK.Select(x => new XElement("registration", new XAttribute("id", x.id), new XAttribute("timestamp", x.timestamp)))
 						),
 						new XElement("overrides", new XAttribute("count", RegScanned_Overrides.Count), RegScanned_Overrides.Select(x => new XElement("registration", new XAttribute("id", x.id), new XAttribute("timestamp", x.timestamp)))
 							),
@@ -488,7 +490,7 @@ namespace REMedia.JlcScan {
 			try {
 				xdoc = new XDocument(
 					new XElement("socialevent", new XAttribute("id", this.EventID), new XAttribute("type", "socialevent"), new XAttribute("social_event_option_id", this.GetSelectedSocialEventId()), new XAttribute("created", DateTime.Now.ToString("u")),
-						new XElement("valid", new XAttribute("count", NumValidScans), RegScanned_OnList.Select(x => new XElement("registration", new XAttribute("id", x.id), new XAttribute("timestamp", x.timestamp)))
+						new XElement("valid", new XAttribute("count", NumValidScans), RegScanned_OK.Select(x => new XElement("registration", new XAttribute("id", x.id), new XAttribute("timestamp", x.timestamp)))
 						),
 						new XElement("overrides", new XAttribute("count", RegScanned_Overrides.Count), RegScanned_Overrides.Select(x => new XElement("registration", new XAttribute("id", x.id), new XAttribute("timestamp", x.timestamp)))
 						),
@@ -503,16 +505,16 @@ namespace REMedia.JlcScan {
 			return xdoc;
 		}
 		private void LogResults() { // DEBUG
-			Log("On List:");
-			RegScanned_OnList.ForEach(x => Log(Convert.ToString(x.id) + "," + x.timestamp));
+			Log("OK:");
+			this.RegScanned_OK.ForEach(x => Log(Convert.ToString(x.id) + "," + x.timestamp));
 			Log("Overrides:");
-			RegScanned_Overrides.ForEach(x => Log(Convert.ToString(x.id) + "," + x.timestamp));
+			this.RegScanned_Overrides.ForEach(x => Log(Convert.ToString(x.id) + "," + x.timestamp));
 			Log("Rejected:");
-			RegScanned_Rejected.ForEach(x => Log(Convert.ToString(x.id) + "," + x.timestamp));
+			this.RegScanned_Rejected.ForEach(x => Log(Convert.ToString(x.id) + "," + x.timestamp));
 			Log("Temp:");
-			RegScanned_Temp.ForEach(x => Log(Convert.ToString(x.id) + "," + x.timestamp));
+			this.RegScanned_Temp.ForEach(x => Log(Convert.ToString(x.id) + "," + x.timestamp));
 			Log("Quick:");
-			RegScanned_Quick.ForEach(x => Log(Convert.ToString(x.id) + "," + x.timestamp));
+			this.idRegScanned_Quick.ForEach(x => Log(x));
 		}
 
 
@@ -676,7 +678,7 @@ namespace REMedia.JlcScan {
 			this.resultPanel.Hide();
 			this.btnSaveToFile.Enabled = true;
 			this.btnSaveToVenture.Enabled = (IsServerAvailable());
-			this.lblNumScannedInfo.Text = String.Format(C.REG_SCANNED_MSG, RegScanned_OnList.Count);
+			this.lblNumScannedInfo.Text = String.Format(C.REG_SCANNED_MSG, RegScanned_OK.Count);
 			this.btnStartOver.Enabled = (this.SocialEventOptionsList.Count > 0);
 			this.savePanel.Show();
 		}
@@ -698,7 +700,7 @@ namespace REMedia.JlcScan {
 			}
 		}
 		private void btnLoadFromVenture_Click(object sender, EventArgs e) {
-			this.RegistrationsList.Clear();
+			this.RegistrationsLoaded.Clear();
 			if (this.Online) {
 				try {
 					int id = (int)menuEvents.SelectedValue;
@@ -729,10 +731,10 @@ namespace REMedia.JlcScan {
 				string regID = String.Empty;
 				try {
 					String[] parts = barCode.Split(' ');
-					//Log("Event Code: " + parts[0]); // DEBUG
-					//Log("Reg ID: " + parts[1]); // DEBUG
-					evID = parts[0];
-					regID = parts[1];
+					evID = parts[0].Trim();
+					regID = parts[1].Trim();
+					Log("Event Code: " + evID + "."); // DEBUG
+					Log("Reg ID: " + regID + "."); // DEBUG
 					// check event code matches
 					if (evID != EventID) {
 						BadEventCode();
@@ -746,37 +748,27 @@ namespace REMedia.JlcScan {
 					// check for quick reg badges
 					if (regID.StartsWith("Q")) {
 						regID = regID.Remove(0, 1);
-						Registration qreg = this.RegistrationsList.FirstOrDefault(r => r.id == regID);
-						if (qreg == null) {
-							Registration qr = new Registration() { id = regID, timestamp = DateTime.Now.ToString("u") };
-							this.RegistrationsList.Add(qr); // the quick reg will be in venture so we add it to reg list
-							RegScanned_Quick.Add(qr);
-						}
+						this.idRegScanned_Quick.Add(regID);
+					}
+					// check already scanned
+					if(this.RegScannedTally.Contains(regID)){
+						this.RegAlreadyScanned();
+						return;
 					}
 					// event ok, check reg id against list
 					this.LastScannedId = regID;
-					Registration reg = this.RegistrationsList.FirstOrDefault(r => r.id == regID);
+					Registration reg = this.RegistrationsLoaded.FirstOrDefault(r => r.id == regID);
 					if (reg != null) {
-						// on the list
-						if (RegScanned_OnList.Contains(reg)) {
-							this.RegAlreadyScanned();
+						// reg exists on the loaded list
+						if (GetSelectedSocialEventId() != 0) {
+							this.CheckSEAccess(reg);
 						} else {
-							if (GetSelectedSocialEventId() != 0) {
-								this.CheckSEAccess(reg);
-							} else {
-								this.RegOk(reg);
-							}
+							this.RegOk(reg);
 						}
 					} else {
-						if (RegScanned_Overrides.Contains(reg)) {
-							// was overridden and allowed in
-							this.RegAlreadyScanned();
-						} else {
-							// not on the list
-							this.RegNotOk(regID);
-						}
+						// not on the list
+						this.RegNotOk(regID);
 					}
-
 				} catch (Exception ex) {
 					Log(ex.Message);
 					this.BadFormat();
@@ -786,7 +778,7 @@ namespace REMedia.JlcScan {
 			}
 		}
 		private void btnScanDone_Click(object sender, EventArgs e) {
-			if (RegScanned_OnList.Count > 0) {
+			if (RegScanned_OK.Count > 0) {
 				this.GotoSaveScreen();
 			} else {
 				if (MessageBox.Show(C.NO_REG_SAVED_MSG, "ALERT", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1) == DialogResult.Yes) {
@@ -812,9 +804,11 @@ namespace REMedia.JlcScan {
 		private void btnOverrideYes_Click(object sender, EventArgs e) {
 			if (MessageBox.Show(C.OVERRIDE_CONFIRM, "ATTENTION", MessageBoxButtons.YesNo, MessageBoxIcon.None, MessageBoxDefaultButton.Button1) == DialogResult.Yes) {
 				C.PlaySound(@"\windows\beep.wav");
-				RegScanned_Overrides.Add(new Registration() { id = GetLastScannedId(), timestamp = DateTime.Now.ToString("u") });
-				RegScanned_OnList.Add(new Registration() { id = GetLastScannedId(), timestamp = DateTime.Now.ToString("u") });
-				this.IncrementScanOverride();
+				this.RegScannedTally.Add(GetLastScannedId());
+				Registration r = new Registration() { id = GetLastScannedId(), timestamp = DateTime.Now.ToString("u") };
+				RegScanned_Overrides.Add(r);
+				RegScanned_OK.Add(r);
+				this.IncrementScanValid();
 			}
 			this.resultPanel.Hide();
 			this.btnScan.Enabled = true;
@@ -867,7 +861,7 @@ namespace REMedia.JlcScan {
 		public string timestamp { get; set; }
 	}
 
-	// EventsList class populated from Venture
+	// EventsLoaded class populated from Venture
 	public class Event {
 		public int id { get; set; }
 		public string name { get; set; }
@@ -876,7 +870,7 @@ namespace REMedia.JlcScan {
 		public string display_name { get; set; }
 	}
 
-	// social EventsList class populated from Venture
+	// social EventsLoaded class populated from Venture
 	public class SocialEventOption {
 		public int id { get; set; }
 		public string name { get; set; }
