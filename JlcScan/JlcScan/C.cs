@@ -9,7 +9,6 @@ namespace REMedia.JlcScan {
 
 	public class C {
 
-
 		//UI messages
 		public const string VALID_REG_MSG = "VALID REGISTRATION";
 		public const string VALID_TEMP_REG_MSG = "VALID TEMP REGISTRATION";
@@ -23,11 +22,12 @@ namespace REMedia.JlcScan {
 
 		public const string NO_EVENT_SELECTED = "No event selected!";
 		public const string NO_SOCIAL_EVENT_SELECTED = "No social event selected!";
-		public const string OVERRIDE_CONFIRM = "Allow Event Access for this Registration?\nPress ENT key to confirm";
+		public const string OVERRIDE_CONFIRM = "Allow Event Access for this Registration?\nPress ENT key to confirm.";
+		public const string OFFLINE_MSG = "No Internet Connection!";
+		public const string NO_EVENTS_MSG = "No barcode events found in Venture.";
 		public const string NO_CONNECTION_MSG = "No Internet connection.\nPlease load data file from PDA.";
 		public const string WEBSVC_FAIL_MSG = "Cannot get data from Venture server.\nPlease load data file from PDA.";
-		public const string CHECK_URL = "http://jlcventure.com/websvc/check.html";
-		public const string SELECT_FILE_MSG = "Please select an Event Data file";
+		public const string SELECT_FILE_MSG = "Please select an Event Data file!";
 		public const string DATA_LOADED_MSG = "Event Data loaded for {0}\n({1} Registrations)";
 		public const string NO_REG_SAVED_MSG = "No Registrations to save!\nExit the program?";
 		public const string REG_SCANNED_MSG = "{0} Registrations scanned.";
@@ -40,6 +40,7 @@ namespace REMedia.JlcScan {
 		// constants
 		public const string INITIAL_DIR = "\\My Documents";
 		public const string LOG_DIR = INITIAL_DIR + "\\VentureScan Logs";
+		public const string CHECK_URL = "http://jlcventure.com/websvc/check.html";
 		public const string WEBSVC_EVENTS_ENDPOINT = "http://jlcventure.com/websvc/pda_event.php";
 		public const string WEBSVC_EVENT_ENDPOINT = "http://jlcventure.com/websvc/pda_events.php";
 		public const string WEBSVC_SAVE_ENDPOINT = "http://jlcventure.com/websvc/save.php";

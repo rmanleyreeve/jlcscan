@@ -79,7 +79,7 @@ namespace REMedia.JlcScan {
 						this.menuEvents.Show();
 						this.btnLoadFromVenture.Show();
 					} else {
-						this.DisplayOfflineText();
+						this.lblLoadFromVenture.Text = C.NO_EVENTS_MSG;
 					}
 				} else {
 					this.DisplayOfflineText();
@@ -132,6 +132,7 @@ namespace REMedia.JlcScan {
 		}
 		public static void Log(String msg) {
 			System.Diagnostics.Debug.WriteLine(msg);
+			//Console.WriteLine(msg);
 		}
 		public string FixNullString(string s) {
 			return (s != null) ? s : String.Empty;
@@ -224,7 +225,7 @@ namespace REMedia.JlcScan {
 			this.menuSocialEvents.DisplayMember = "display_name";
 		}
 		private void DisplayOfflineText() {
-			this.lblLoadFromVenture.Text = "No Internet Connection";
+			this.lblLoadFromVenture.Text = C.OFFLINE_MSG;
 		}
 		private void DrawBorder(object sender, PaintEventArgs e) {
 			e.Graphics.DrawRectangle(
